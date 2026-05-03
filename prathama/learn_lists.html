@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Lists - Bhujanga Abhyāsa</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Sora:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg:#f5f4f0;
+            --bg2:#eeecea;
+            --surface:#ffffff;
+            --surface2:#fafaf8;
+            --border:#e2dfd9;
+            --border2:#cdc9c2;
+            --text:#1e1c18;
+            --text2:#6b6760;
+            --text3:#9e9b96;
+            --text-inv:#ffffff;
+
+            --blue:#3b6fd4;
+            --blue-bg:#eef2fb;
+            --green:#2e7d52;
+            --green-bg:#edf5f0;
+            --amber:#b45309;
+            --amber-bg:#fef6ec;
+            --red:#c0392b;
+            --red-bg:#fdf0ee;
+            --purple:#6d4fc2;
+            --purple-bg:#f2eefb;
+            --teal:#1a7a7a;
+
+            --list-color:#6d4fc2;
+            --code-bg:#1e1c18;
+            --code-text:#e8e4db;
+            --shadow-sm:0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Sora', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        .top-nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .nav-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--list-color);
+        }
+
+        .back-link {
+            color: var(--text2);
+            text-decoration: none;
+            font-size: 0.95rem;
+            padding: 0.5rem 1rem;
+            border-radius: 0.4rem;
+            transition: all 0.2s ease;
+        }
+
+        .back-link:hover {
+            background: var(--purple-bg);
+            color: var(--list-color);
+        }
+
+        /* Layout */
+        .container {
+            display: flex;
+            min-height: calc(100vh - 4rem);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            padding: 2rem 1.5rem;
+            position: sticky;
+            top: 4rem;
+            height: calc(100vh - 4rem);
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .sidebar-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .sidebar-nav a {
+            color: var(--text2);
+            text-decoration: none;
+            padding: 0.6rem 1rem;
+            border-radius: 0.4rem;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-nav a:hover {
+            background: var(--purple-bg);
+            color: var(--list-color);
+            border-left-color: var(--list-color);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 3rem 4rem;
+            overflow-y: auto;
+        }
+
+        .section {
+            margin-bottom: 4rem;
+            scroll-margin-top: 5rem;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--list-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-title .icon {
+            font-size: 2rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: var(--text2);
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        /* Code Blocks */
+        .code-block {
+            background: var(--code-bg);
+            border-radius: 0.6rem;
+            overflow: hidden;
+            margin: 1.5rem 0;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .code-block-header {
+            background: var(--surface2);
+            padding: 0.8rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .code-dot {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+
+        .code-dot.d1 { background: #ff605c; }
+        .code-dot.d2 { background: #ffbd44; }
+        .code-dot.d3 { background: #00ca4e; }
+
+        .code-block-header span:last-child {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--text2);
+        }
+
+        .code-content {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--code-text);
+            padding: 1.5rem;
+            overflow-x: auto;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        /* Syntax Highlighting */
+        .kw { color: #ff6b6b; }
+        .fn-name { color: #51cf66; }
+        .str { color: #ffa94d; }
+        .num { color: #b197fc; }
+        .comment { color: #8a8a8a; font-style: italic; }
+        .var { color: var(--code-text); }
+        .op { color: #00d9ff; }
+
+        /* Callouts */
+        .callout {
+            border-left: 4px solid var(--border);
+            background: var(--surface2);
+            padding: 1rem 1.5rem;
+            border-radius: 0.4rem;
+            margin: 1.5rem 0;
+        }
+
+        .callout.info {
+            border-left-color: var(--blue);
+            background: var(--blue-bg);
+        }
+
+        .callout.warning {
+            border-left-color: var(--amber);
+            background: var(--amber-bg);
+        }
+
+        .callout.tip {
+            border-left-color: var(--green);
+            background: var(--green-bg);
+        }
+
+        .callout strong {
+            color: var(--text);
+        }
+
+        /* Diagrams */
+        .diagram-box {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 0.6rem;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 150px;
+        }
+
+        .diagram-title {
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        /* List Visualization */
+        .list-vis {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .list-row {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .list-bracket {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.5rem;
+            color: var(--text2);
+        }
+
+        .list-items {
+            display: flex;
+            gap: 0;
+            border-radius: 0.4rem;
+            overflow: hidden;
+        }
+
+        .list-item {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 0.8rem 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text);
+            min-width: 50px;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+
+        .list-item.hi1 {
+            background: var(--green-bg);
+            border-color: var(--green);
+            color: var(--green);
+            font-weight: 600;
+        }
+
+        .list-item.hi2 {
+            background: var(--purple-bg);
+            border-color: var(--list-color);
+            color: var(--list-color);
+            font-weight: 600;
+        }
+
+        .list-item.hi3 {
+            background: var(--amber-bg);
+            border-color: var(--amber);
+            color: var(--amber);
+            font-weight: 600;
+        }
+
+        .list-indices {
+            display: flex;
+            gap: 0;
+            border-radius: 0.4rem;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .list-idx {
+            flex: 1;
+            text-align: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--text2);
+            padding: 0.3rem;
+        }
+
+        .str-vis {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .str-cells {
+            display: flex;
+            gap: 0;
+            border-radius: 0.4rem;
+            overflow: hidden;
+        }
+
+        .str-cell {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 0.8rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text);
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .str-indices {
+            display: flex;
+            gap: 0;
+        }
+
+        .str-idx {
+            flex: 1;
+            text-align: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--text2);
+            padding: 0.3rem;
+        }
+
+        .str-neg {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--text2);
+            padding: 0.3rem;
+            text-align: center;
+        }
+
+        /* Compare Table */
+        .compare-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            border: 1px solid var(--border);
+            border-radius: 0.6rem;
+            overflow: hidden;
+        }
+
+        .compare-table th,
+        .compare-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .compare-table th {
+            background: var(--surface2);
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .compare-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--surface2);
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.3rem;
+            color: var(--text);
+        }
+
+        /* Practice CTA */
+        .practice-cta {
+            background: linear-gradient(135deg, var(--purple-bg) 0%, var(--surface2) 100%);
+            border: 2px solid var(--list-color);
+            border-radius: 0.8rem;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 4rem;
+            gap: 2rem;
+        }
+
+        .cta-text {
+            flex: 1;
+        }
+
+        .cta-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+
+        .cta-sub {
+            color: var(--text2);
+            font-size: 1rem;
+        }
+
+        .cta-btn {
+            background: var(--list-color);
+            color: var(--text-inv);
+            padding: 0.8rem 1.5rem;
+            border-radius: 0.4rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .cta-btn:hover {
+            background: #5a3ba8;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 240px;
+            }
+            .main-content {
+                padding: 2rem 2.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: static;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+                padding: 1rem;
+            }
+            .main-content {
+                padding: 1.5rem;
+            }
+            .section {
+                margin-bottom: 3rem;
+            }
+            .practice-cta {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        /* Scrollbar Styling */
+        .sidebar::-webkit-scrollbar,
+        .main-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar::-webkit-scrollbar-track,
+        .main-content::-webkit-scrollbar-track {
+            background: var(--bg2);
+            border-radius: 3px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb,
+        .main-content::-webkit-scrollbar-thumb {
+            background: var(--border2);
+            border-radius: 3px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb:hover,
+        .main-content::-webkit-scrollbar-thumb:hover {
+            background: var(--list-color);
+        }
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-logo">📋 Python Lists</div>
+        <a href="abhyasa_prathama.html" class="back-link">← Back to Prathama</a>
+    </nav>
+
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-title">
+                <span>📚</span>
+                Topics
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#creating-lists">Creating Lists</a>
+                <a href="#indexing">Indexing & Negative</a>
+                <a href="#slicing">Slicing</a>
+                <a href="#mutability">Mutability</a>
+                <a href="#methods">Common Methods</a>
+                <a href="#operations">List Operations</a>
+                <a href="#nested">Nested Lists (2D)</a>
+                <a href="#comprehensions">Comprehensions</a>
+                <a href="#sorting">Sorting</a>
+                <a href="#patterns">Common Patterns</a>
+                <a href="#two-pointer">Two-Pointer & Window</a>
+                <a href="#advanced">Advanced Algorithms</a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+
+            <!-- Section 1: Creating Lists -->
+            <section id="creating-lists" class="section">
+                <h1 class="section-title">
+                    <span class="icon">📍</span>
+                    Creating Lists
+                </h1>
+                <p class="section-subtitle">
+                    Lists are ordered, mutable collections that can hold any type of data. There are several ways to create them.
+                </p>
+
+                <p>
+                    A list is created using square brackets <span class="mono">[]</span> with comma-separated values, or by using the <span class="mono">list()</span> constructor. Lists are the most flexible data structure in Python—you can mix types, modify them after creation, and access elements by position.
+                </p>
+
+                <div class="code-block">
+                    <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>create_lists.py</span></div>
+                    <pre class="code-content"><span class="comment"># List literal with mixed types</span>
+<span class="var">fruits</span> = [<span class="str">'apple'</span>, <span class="str">'banana'</span>, <span class="str">'cherry'</span>]
+
+<span class="comment"># Empty list</span>
+<span class="var">empty</span> = []
+
+<span class="comment"># List with numbers</span>
+<span class="var">numbers</span> = [<span class="num">10</span>, <span class="num">20</span>, <span class="num">30</span>, <span class="num">40</span>]
+
+<span class="comment"># Mixed types</span>
+<span class="var">mixed</span> = [<span class="num">1</span>, <span class="str">'hello'</span>, <span class="num">3.14</span>, <span class="kw">True</span>]
+
+<span class="comment"># Using list() constructor</span>
+<span class="var">from_range</span> = <span class="fn-name">list</span>(<span class="fn-name">range</span>(<span class="num">5</span>))  <span class="comment"># [0, 1, 2, 3, 4]</span>
+
+<span class="comment"># Convert string to list of characters</span>
+<span class="var">chars</span> = <span class="fn-name">list</span>(<span class="str">'hello'</span>)  <span class="comment"># ['h', 'e', 'l', 'l', 'o']</span></pre>
+                </div>
+
+                <div class="callout info">
+                    <strong>Key Point:</strong> Lists maintain insertion order and allow duplicate values. Unlike sets or dictionaries, order matters in lists.
+                </div>
+            </section>
+
+            <!-- Section 2: Indexing & Negative Indexing -->
+            <section id="indexing" class="section">
+                <h1 class="section-title">
+                    <span class="icon">🔢</span>
+                    Indexing & Negative Indexing
+                </h1>
+                <p class="section-subtitle">
+                    Access individual elements by their position, from the start (positive index) or from the end (negative index).
+                </p>
+
+                <p>
+                    Python uses zero-based indexing: the first element is at index 0. You can also use negative indices to count from the end: -1 is the last element, -2 is second-to-last, etc. Accessing an index that doesn't exist raises an <span class="mono">IndexError</span>.
+                </p>
+
+                <div class="diagram-box">
+                    <div style="width: 100%;">
+                        <div class="diagram-title">List Indexing Visualization</div>
+                        <div class="list-vis">
+                            <div class="list-row">
+                                <span class="list-bracket">[</span>
+                                <div class="list-items">
+                                    <div class="list-item">'a'</div>
+                                    <div class="list-item">'b'</div>
+                                    <div class="list-item">'c'</div>
+                                    <div class="list-item">'d'</div>
+                                </div>
+                                <span class="list-bracket">]</span>
+                            </div>
+                            <div class="list-row">
+                                <div style="display: flex; gap: 0; flex: 1; justify-content: center;">
+                                    <div style="flex: 1; border: 1px solid transparent; display: flex; gap: 0;">
+                                        <div class="list-idx">0</div>
+                                        <div class="list-idx">1</div>
+                                        <div class="list-idx">2</div>
+                                        <div class="list-idx">3</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list-row">
+                                <div style="display: flex; gap: 0; flex: 1; justify-content: center;">
+                                    <div style="flex: 1; border: 1px solid transparent; display: flex; gap: 0;">
+                                        <div class="list-idx">-4</div>
+                                        <div class="list-idx">-3</div>
+                                        <div class="list-idx">-2</div>
+                                        <div class="list-idx">-1</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>indexing.py</span></div>
+                    <pre class="code-content"><span class="var">lst</span> = [<span class="str">'a'</span>, <span class="str">'b'</span>, <span class="str">'c'</span>, <span class="str">'d'</span>]
+
+<span class="comment"># Positive indexing</span>
+<span class="fn-name">print</span>(<span class="var">lst</span>[<span class="num">0</span>])      <span class="comment"># 'a' (first element)</span>
+<span class="fn-name">print</span>(<span class="var">lst</span>[<span class="num">3</span>])      <span class="comment"># 'd' (fourth element)</span>
+
+<span class="comment"># Negative indexing</span>
+<span class="fn-name">print</span>(<span class="var">lst</span>[<span class="num">-1</span>])     <span class="comment"># 'd' (last element)</span>
+<span class="fn-name">print</span>(<span class="var">lst</span>[<span class="num">-2</span>])     <span class="comment"># 'c' (second-to-last)</span>
+
+<span class="comment"># IndexError</span>
+<span class="comment"># print(lst[10])  # IndexError: list index out of range</span></pre>
+                </div>
+
+                <div class="callout warning">
+                    <strong>Common Mistake:</strong> Trying to access an index that doesn't exist. Always check the list length with <span class="mono">len(lst)</span> or use safe indexing techniques.
+                </div>
+            </section>
+
+            <!-- Section 3: Slicing -->
+            <section id="slicing" class="section">
+                <h1 class="section-title">
+                    <span class="icon">✂️</span>
+                    Slicing
+                </h1>
+                <p class="section-subtitle">
+                    Extract a subset of a list using the slice syntax <span class="mono">[start:stop:step]</span>.
+                </p>
+
+                <p>
+                    Slicing creates a new list without modifying the original. The syntax <span class="mono">lst[start:stop:step]</span> means: start at index <span class="mono">start</span>, go up to (but not including) index <span class="mono">stop</span>, incrementing by <span class="mono">step</span>. Omitting parameters uses defaults: start=0, stop=len(lst), step=1.
+                </p>
+
+                <div class="diagram-box">
+                    <div style="width: 100%;">
+                        <div class="diagram-title">Slicing Example: lst[1:3]</div>
+                        <div class="list-vis">
+                            <div class="list-row">
+                                <span class="list-bracket">[</span>
+                                <div class="list-items">
+                                    <div class="list-item">0</div>
+                                    <div class="list-item hi2">1</div>
+                                    <div class="list-item hi2">2</div>
+                                    <div class="list-item">3</div>
+                                </div>
+                                <span class="list-bracket">]</span>
+                            </div>
+                            <div class="list-row" style="margin-top: 1rem; font-size: 0.9rem; color: var(--text2);">
+                                <span>Result: <span class="mono">[1, 2]</span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>slicing.py</span></div>
+                    <pre class="code-content"><span class="var">lst</span> = [<span class="num">10</span>, <span class="num">20</span>, <span class="num">30</span>, <span class="num">40</span>, <span class="num">50</span>]
+
+<span class="comment"># Basic slicing</span>
+<span class="fn-name">print</span>(<span class="var">lst</span>[<span class="num">1</span>:<span class="num">4</span>])       <span class="comment"># [20, 30, 40]</span>
+
+<span class="comment"># From start</span>
+<span class="fn-name">print</span>(<span class="var">lst</span>[:<span class="num">3</span>])        <span class="comment"># [10, 20, 30]</span>
+
+<span class="comment"># To end</span>
+<span class="fn-name">print</span>(<span class="var">lst</span>[<span class="num">2</span>:])        <span class="comment"># [30, 40, 50]</span>
+
+<span class="comment"># With step</span>
+<span class="fn-name">print</span>(<span class="var">lst</span>[<span class="num">0</span>:<span class="num">5</span>:<span class="num">2</span>])   <span class="comment"># [10, 30, 50]</span>
+
+<span class="comment"># Reverse list</span>
+<span class="fn-name">print</span>(<span class="var">lst</span>[::<span class="num">-1</span>])      <span class="comment"># [50, 40, 30, 20, 10]</span>
+
+<span class="comment"># Negative indices in slice</span>
+<span class="fn-name">print</span>(<span class="var">lst</span>[<span class="num">-3</span>:<span class="num">-1</span>])   <span class="comment"># [30, 40]</span></pre>
+                </div>
+
+                <div class="callout tip">
+                    <strong>Pro Tip:</strong> Use <span class="mono">lst[::-1]</span> to reverse a list. It's a classic Python idiom and very readable.
+                </div>
+            </section>
+
+            <!-- Section 4: Mutability -->
+            <section id="mutability" class="section">
+                <h1 class="section-title">
+                    <span class="icon">♻️</span>
+                    Mutability
+                </h1>
+                <p class="section-subtitle">
+                    Lists are mutable, meaning they can be changed after creation. Understand in-place vs. new-list operations.
+                </p>
+
+                <p>
+                    A key characteristic of lists is mutability: you can modify elements, add new ones, or remove existing ones without creating a new list. This is different from strings, which are immutable. In-place operations modify the list directly (and return None), while operations like slicing create new lists.
+                </p>
+
+                <div class="code-block">
+                    <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>mutability.py</span></div>
+                    <pre class="code-content"><span class="var">lst</span> = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>]
+
+<span class="comment"># Modify in-place</span>
+<span class="var">lst</span>[<span class="num">0</span>] = <span class="num">99</span>           <span class="comment"># lst is now [99, 2, 3]</span>
+
+<span class="comment"># Methods modify in-place and return None</span>
+<span class="var">result</span> = <span class="var">lst</span>.<span class="fn-name">append</span>(<span class="num">4</span>)
+<span class="fn-name">print</span>(<span class="var">result</span>)              <span class="comment"># None</span>
+<span class="fn-name">print</span>(<span class="var">lst</span>)                <span class="comment"># [99, 2, 3, 4]</span>
+
+<span class="comment"># Slicing creates a NEW list</span>
+<span class="var">lst2</span> = <span class="var">lst</span>[<span class="num">1</span>:<span class="num">3</span>]        <span class="comment"># NEW list [2, 3]</span>
+<span class="var">lst2</span>[<span class="num">0</span>] = <span class="num">100</span>         <span class="comment"># Doesn't affect lst</span>
+<span class="fn-name">print</span>(<span class="var">lst</span>)                <span class="comment"># Still [99, 2, 3, 4]</span>
+
+<span class="comment"># Copy vs reference</span>
+<span class="var">lst3</span> = <span class="var">lst</span>              <span class="comment"># Reference, not copy</span>
+<span class="var">lst3</span>[<span class="num">0</span>] = <span class="num">777</span>         <span class="comment"># Also changes lst!</span>
+
+<span class="var">lst4</span> = <span class="var">lst</span>.<span class="fn-name">copy</span>()        <span class="comment"># True copy</span>
+<span class="var">lst4</span>[<span class="num">0</span>] = <span class="num">0</span>            <span class="comment"># Doesn't affect lst</span></pre>
+                </div>
+
+                <div class="callout warning">
+                    <strong>Gotcha:</strong> Assignment with <span class="mono">=</span> creates a reference, not a copy. Use <span class="mono">.copy()</span> or slicing <span class="mono">[:]</span> to create a true copy.
+                </div>
+            </section>
+
+            <!-- Section 5: Common Methods -->
+            <section id="methods" class="section">
+                <h1 class="section-title">
+                    <span class="icon">🔧</span>
+                    Common Methods
+                </h1>
+                <p class="section-subtitle">
+                    Lists come with powerful built-in methods for adding, removing, and manipulating elements.
+                </p>
+
+                <p>
+                    Python lists provide many methods that modify the list in-place. These are essential tools for day-to-day list manipulation. Key methods include append, extend, insert, pop, remove, sort, reverse, count, index, and copy.
+                </p>
+
+                <table class="compare-table">
+                    <thead>
+                        <tr>
+                            <th>Method</th>
+                            <th>Description</th>
+                            <th>Example</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="mono">append(x)</span></td>
+                            <td>Add item to end</td>
+                            <td><span class="mono">lst.append(4)</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="mono">extend(iter)</span></td>
+                            <td>Add all items from iterable</td>
+                            <td><span class="mono">lst.extend([4, 5])</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="mono">insert(i, x)</span></td>
+                            <td>Insert at index i</td>
+                            <td><span class="mono">lst.insert(1, 99)</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="mono">pop([i])</span></td>
+                            <td>Remove and return item at i (-1 default)</td>
+                            <td><span class="mono">lst.pop()</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="mono">remove(x)</span></td>
+                            <td>Remove first occurrence of x</td>
+                            <td><span class="mono">lst.remove(3)</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="mono">sort()</span></td>
+                            <td>Sort in-place</td>
+                            <td><span class="mono">lst.sort()</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="mono">reverse()</span></td>
+                            <td>Reverse in-place</td>
+                            <td><span class="mono">lst.reverse()</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="mono">count(x)</span></td>
+                            <td>Count occurrences of x</td>
+                            <td><span class="mono">lst.count(3)</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="mono">index(x)</span></td>
+                            <td>Find first index of x</td>
+                            <td><span class="mono">lst.index(3)</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="mono">copy()</span></td>
+                            <td>Create shallow copy</td>
+                            <td><span class="mono">lst2 = lst.copy()</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="code-block">
+                    <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>list_methods.py</span></div>
+                    <pre class="code-content"><span class="var">lst</span> = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">2</span>]
+
+<span class="comment"># Add and remove</span>
+<span class="var">lst</span>.<span class="fn-name">append</span>(<span class="num">4</span>)           <span class="comment"># [1, 2, 3, 2, 4]</span>
+<span class="var">lst</span>.<span class="fn-name">extend</span>([<span class="num">5</span>, <span class="num">6</span>])   <span class="comment"># [1, 2, 3, 2, 4, 5, 6]</span>
+<span class="var">lst</span>.<span class="fn-name">insert</span>(<span class="num">1</span>, <span class="num">99</span>)    <span class="comment"># [1, 99, 2, 3, 2, 4, 5, 6]</span>
+
+<span class="var">x</span> = <span class="var">lst</span>.<span class="fn-name">pop</span>()           <span class="comment"># x=6, lst loses last element</span>
+<span class="var">lst</span>.<span class="fn-name">remove</span>(<span class="num">99</span>)       <span class="comment"># Remove first occurrence of 99</span>
+
+<span class="comment"># Search</span>
+<span class="var">count</span> = <span class="var">lst</span>.<span class="fn-name">count</span>(<span class="num">2</span>)    <span class="comment"># 2 (appears twice)</span>
+<span class="var">idx</span> = <span class="var">lst</span>.<span class="fn-name">index</span>(<span class="num">2</span>)     <span class="comment"># 1 (first index of 2)</span>
+
+<span class="comment"># Sort and reverse</span>
+<span class="var">lst</span>.<span class="fn-name">sort</span>()             <span class="comment"># Sort in ascending order</span>
+<span class="var">lst</span>.<span class="fn-name">reverse</span>()        <span class="comment"># Reverse in-place</span></pre>
+                </div>
+
+                <div class="callout info">
+                    <strong>Remember:</strong> Methods like <span class="mono">append</span>, <span class="mono">sort</span>, and <span class="mono">reverse</span> return <span class="mono">None</span>. Don't assign their result to a variable.
+                </div>
+            </section>
+
+            <!-- Section 6: List Operations -->
+            <section id="operations" class="section">
+                <h1 class="section-title">
+                    <span class="icon">➕</span>
+                    List Operations
+                </h1>
+                <p class="section-subtitle">
+                    Use operators like <span class="mono">+</span>, <span class="mono">*</span>, <span class="mono">in</span>, and <span class="mono">len()</span> to work with lists.
+                </p>
+
+                <p>
+                    Lists support several operators for concatenation, repetition, membership testing, and length checking. These operators create new lists (in the case of <span class="mono">+</span> and <span class="mono">*</span>) rather than modifying existing ones, making them safe and predictable.
+                </p>
+
+                <div class="code-block">
+                    <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>list_operations.py</span></div>
+                    <pre class="code-content"><span class="var">lst1</span> = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>]
+<span class="var">lst2</span> = [<span class="num">4</span>, <span class="num">5</span>]
+
+<span class="comment"># Concatenation with +</span>
+<span class="var">combined</span> = <span class="var">lst1</span> <span class="op">+</span> <span class="var">lst2</span>   <span class="comment"># [1, 2, 3, 4, 5]</span>
+
+<span class="comment"># Repetition with *</span>
+<span class="var">repeated</span> = [<span class="num">0</span>] <span class="op">*</span> <span class="num">5</span>        <span class="comment"># [0, 0, 0, 0, 0]</span>
+<span class="var">pattern</span> = [<span class="str">'a'</span>, <span class="str">'b'</span>] <span class="op">*</span> <span class="num">2</span>  <span class="comment"># ['a', 'b', 'a', 'b']</span>
+
+<span class="comment"># Membership testing with in</span>
+<span class="kw">if</span> <span class="num">2</span> <span class="kw">in</span> <span class="var">lst1</span>:
+    <span class="fn-name">print</span>(<span class="str">'2 is in lst1'</span>)
+
+<span class="comment"># Length</span>
+<span class="var">length</span> = <span class="fn-name">len</span>(<span class="var">lst1</span>)         <span class="comment"># 3</span>
+
+<span class="comment"># Iterate</span>
+<span class="kw">for</span> <span class="var">item</span> <span class="kw">in</span> <span class="var">lst1</span>:
+    <span class="fn-name">print</span>(<span class="var">item</span>)</pre>
+                </div>
+
+                <div class="callout warning">
+                    <strong>Caution with Repetition:</strong> <span class="mono">[[0]*3]*2</span> creates references to the same list, not independent copies. For nested list creation, use list comprehension: <span class="mono">[[0]*3 for _ in range(2)]</span>.
+                </div>
+            </section>
+
+            <!-- Section 7: Nested Lists (2D) -->
+            <section id="nested" class="section">
+                <h1 class="section-title">
+                    <span class="icon">📊</span>
+                    Nested Lists (2D)
+                </h1>
+                <p class="section-subtitle">
+                    Create and manipulate lists of lists, useful for matrices and grids.
+                </p>
+
+                <p>
+                    A nested list is a list that contains other lists. This is commonly used to represent matrices (2D arrays) or tables. You access elements using double indexing: <span class="mono">matrix[row][col]</span>.
+                </p>
+
+                <div class="diagram-box">
+                    <div style="width: 100%;">
+                        <div class="diagram-title">2D List (Matrix) Structure</div>
+                        <div style="display: flex; flex-direction: column; gap: 1rem; align-items: center;">
+                            <div style="display: flex; gap: 1rem;">
+                                <div style="display: flex; flex-direction: column; gap: 0; border: 1px solid var(--border); border-radius: 0.4rem; overflow: hidden;">
+                                    <div style="background: var(--surface); border: 1px solid var(--border); padding: 0.6rem 0.8rem; font-family: 'JetBrains Mono'; text-align: center;">1</div>
+                                    <div style="background: var(--surface); border: 1px solid var(--border); padding: 0.6rem 0.8rem; font-family: 'JetBrains Mono'; text-align: center;">4</div>
+                                    <div style="background: var(--surface); border: 1px solid var(--border); padding: 0.6rem 0.8rem; font-family: 'JetBrains Mono'; text-align: center;">7</div>
+                                </div>
+                                <div style="display: flex; flex-direction: column; gap: 0; border: 1px solid var(--border); border-radius: 0.4rem; overflow: hidden;">
+                                    <div style="background: var(--surface); border: 1px solid var(--border); padding: 0.6rem 0.8rem; font-family: 'JetBrains Mono'; text-align: center;">2</div>
+                                    <div style="background: var(--surface); border: 1px solid var(--border); padding: 0.6rem 0.8rem; font-family: 'JetBrains Mono'; text-align: center;">5</div>
+                                    <div style="background: var(--surface); border: 1px solid var(--border); padding: 0.6rem 0.8rem; font-family: 'JetBrains Mono'; text-align: center;">8</div>
+                                </div>
+                                <div style="display: flex; flex-direction: column; gap: 0; border: 1px solid var(--border); border-radius: 0.4rem; overflow: hidden;">
+                                    <div style="background: var(--surface); border: 1px solid var(--border); padding: 0.6rem 0.8rem; font-family: 'JetBrains Mono'; text-align: center;">3</div>
+                                    <div style="background: var(--surface); border: 1px solid var(--border); padding: 0.6rem 0.8rem; font-family: 'JetBrains Mono'; text-align: center;">6</div>
+                                    <div style="background: var(--surface); border: 1px solid var(--border); padding: 0.6rem 0.8rem; font-family: 'JetBrains Mono'; text-align: center;">9</div>
+                                </div>
+                            </div>
+                            <div style="font-size: 0.9rem; color: var(--text2);">3 rows × 3 columns (matrix[2][1] = 8)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>nested_lists.py</span></div>
+                    <pre class="code-content"><span class="comment"># Create a 3x3 matrix</span>
+<span class="var">matrix</span> = [
+    [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>],
+    [<span class="num">4</span>, <span class="num">5</span>, <span class="num">6</span>],
+    [<span class="num">7</span>, <span class="num">8</span>, <span class="num">9</span>]
+]
+
+<span class="comment"># Access elements</span>
+<span class="fn-name">print</span>(<span class="var">matrix</span>[<span class="num">0</span>][<span class="num">0</span>])    <span class="comment"># 1 (first row, first column)</span>
+<span class="fn-name">print</span>(<span class="var">matrix</span>[<span class="num">2</span>][<span class="num">1</span>])    <span class="comment"># 8 (third row, second column)</span>
+
+<span class="comment"># Modify element</span>
+<span class="var">matrix</span>[<span class="num">1</span>][<span class="num">1</span>] = <span class="num">50</span>
+
+<span class="comment"># Iterate through rows</span>
+<span class="kw">for</span> <span class="var">row</span> <span class="kw">in</span> <span class="var">matrix</span>:
+    <span class="kw">for</span> <span class="var">cell</span> <span class="kw">in</span> <span class="var">row</span>:
+        <span class="fn-name">print</span>(<span class="var">cell</span>, <span class="fn-name">end</span>=<span class="str">' '</span>)
+    <span class="fn-name">print</span>()
+
+<span class="comment"># Create matrix using list comprehension</span>
+<span class="var">zeros</span> = [[<span class="num">0</span> <span class="kw">for</span> <span class="var">_</span> <span class="kw">in</span> <span class="fn-name">range</span>(<span class="num">3</span>)] <span class="kw">for</span> <span class="var">_</span> <span class="kw">in</span> <span class="fn-name">range</span>(<span class="num">3</span>)]</pre>
+                </div>
+
+                <div class="callout tip">
+                    <strong>Transpose a Matrix:</strong> Use <span class="mono">list(zip(*matrix))</span> to swap rows and columns. This is a Python idiom worth knowing.
+                </div>
+            </section>
+
+            <!-- Section 8: List Comprehensions -->
+            <section id="comprehensions" class="section">
+                <h1 class="section-title">
+                    <span class="icon">🧬</span>
+                    List Comprehensions
+                </h1>
+                <p class="section-subtitle">
+                    Create lists concisely using the syntax <span class="mono">[expr for x in seq]</span> with optional conditions.
+                </p>
+
+                <p>
+                    List comprehensions are a powerful Python feature that allow you to create lists in a single line. They're readable, efficient, and often faster than using loops with append. The general syntax is <span class="mono">[expression for item in iterable if condition]</span>.
+                </p>
+
+                <div class="code-block">
+                    <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>comprehensions.py</span></div>
+                    <pre class="code-content"><span class="comment"># Simple list comprehension</span>
+<span class="var">squares</span> = [<span class="var">x</span><span class="op">**</span><span class="num">2</span> <span class="kw">for</span> <span class="var">x</span> <span class="kw">in</span> <span class="fn-name">range</span>(<span class="num">5</span>)]
+<span class="comment"># [0, 1, 4, 9, 16]</span>
+
+<span class="comment"># With condition (filter)</span>
+<span class="var">evens</span> = [<span class="var">x</span> <span class="kw">for</span> <span class="var">x</span> <span class="kw">in</span> <span class="fn-name">range</span>(<span class="num">10</span>) <span class="kw">if</span> <span class="var">x</span> <span class="op">%</span> <span class="num">2</span> <span class="op">==</span> <span class="num">0</span>]
+<span class="comment"># [0, 2, 4, 6, 8]</span>
+
+<span class="comment"># Nested comprehension (flatten)</span>
+<span class="var">matrix</span> = [[<span class="num">1</span>, <span class="num">2</span>], [<span class="num">3</span>, <span class="num">4</span>], [<span class="num">5</span>, <span class="num">6</span>]]
+<span class="var">flat</span> = [<span class="var">x</span> <span class="kw">for</span> <span class="var">row</span> <span class="kw">in</span> <span class="var">matrix</span> <span class="kw">for</span> <span class="var">x</span> <span class="kw">in</span> <span class="var">row</span>]
+<span class="comment"># [1, 2, 3, 4, 5, 6]</span>
+
+<span class="comment"># String operations</span>
+<span class="var">words</span> = [<span class="str">'hello'</span>, <span class="str">'world'</span>, <span class="str">'python'</span>]
+<span class="var">lengths</span> = [<span class="fn-name">len</span>(<span class="var">w</span>) <span class="kw">for</span> <span class="var">w</span> <span class="kw">in</span> <span class="var">words</span>]
+<span class="comment"># [5, 5, 6]</span>
+
+<span class="comment"># Multiple conditions</span>
+<span class="var">result</span> = [<span class="var">x</span> <span class="kw">for</span> <span class="var">x</span> <span class="kw">in</span> <span class="fn-name">range</span>(<span class="num">20</span>)
+           <span class="kw">if</span> <span class="var">x</span> <span class="op">%</span> <span class="num">3</span> <span class="op">==</span> <span class="num">0</span> <span class="kw">if</span> <span class="var">x</span> <span class="op">%</span> <span class="num">2</span> <span class="op">==</span> <span class="num">0</span>]
+<span class="comment"># [0, 6, 12, 18]</span></pre>
+                </div>
+
+                <div class="callout tip">
+                    <strong>When to Use:</strong> List comprehensions are ideal when you want to transform or filter a list. For simple iterations without list creation, use regular loops for clarity.
+                </div>
+            </section>
+
+            <!-- Section 9: Sorting -->
+            <section id="sorting" class="section">
+                <h1 class="section-title">
+                    <span class="icon">📈</span>
+                    Sorting
+                </h1>
+                <p class="section-subtitle">
+                    Understand <span class="mono">sort()</span> vs <span class="mono">sorted()</span> and customize with the <span class="mono">key</span> parameter.
+                </p>
+
+                <p>
+                    Python provides two ways to sort: the <span class="mono">sort()</span> method (in-place) and the <span class="mono">sorted()</span> function (returns new list). Both support a <span class="mono">key</span> parameter for custom sorting logic and a <span class="mono">reverse</span> parameter for descending order.
+                </p>
+
+                <div class="code-block">
+                    <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>sorting.py</span></div>
+                    <pre class="code-content"><span class="var">numbers</span> = [<span class="num">3</span>, <span class="num">1</span>, <span class="num">4</span>, <span class="num">1</span>, <span class="num">5</span>, <span class="num">9</span>]
+
+<span class="comment"># sort() modifies list in-place, returns None</span>
+<span class="var">numbers</span>.<span class="fn-name">sort</span>()
+<span class="fn-name">print</span>(<span class="var">numbers</span>)      <span class="comment"># [1, 1, 3, 4, 5, 9]</span>
+
+<span class="comment"># sorted() returns new list</span>
+<span class="var">numbers2</span> = [<span class="num">3</span>, <span class="num">1</span>, <span class="num">4</span>]
+<span class="var">sorted_nums</span> = <span class="fn-name">sorted</span>(<span class="var">numbers2</span>)
+<span class="fn-name">print</span>(<span class="var">numbers2</span>)    <span class="comment"># [3, 1, 4] (unchanged)</span>
+<span class="fn-name">print</span>(<span class="var">sorted_nums</span>)  <span class="comment"># [1, 3, 4]</span>
+
+<span class="comment"># Reverse sort</span>
+<span class="var">numbers</span>.<span class="fn-name">sort</span>(<span class="var">reverse</span>=<span class="kw">True</span>)
+<span class="fn-name">print</span>(<span class="var">numbers</span>)      <span class="comment"># [9, 5, 4, 3, 1, 1]</span>
+
+<span class="comment"># Sort strings by length</span>
+<span class="var">words</span> = [<span class="str">'apple'</span>, <span class="str">'pie'</span>, <span class="str">'python'</span>]
+<span class="var">words</span>.<span class="fn-name">sort</span>(<span class="var">key</span>=<span class="fn-name">len</span>)
+<span class="fn-name">print</span>(<span class="var">words</span>)      <span class="comment"># ['pie', 'apple', 'python']</span>
+
+<span class="comment"># Sort tuples by second element</span>
+<span class="var">pairs</span> = [(<span class="num">1</span>, <span class="str">'z'</span>), (<span class="num">2</span>, <span class="str">'a'</span>), (<span class="num">3</span>, <span class="str">'m'</span>)]
+<span class="var">pairs</span>.<span class="fn-name">sort</span>(<span class="var">key</span>=<span class="kw">lambda</span> <span class="var">x</span>: <span class="var">x</span>[<span class="num">1</span>])
+<span class="fn-name">print</span>(<span class="var">pairs</span>)     <span class="comment"># [(2, 'a'), (3, 'm'), (1, 'z')]</span></pre>
+                </div>
+
+                <div class="callout info">
+                    <strong>Performance Note:</strong> Python's sort (Timsort) is highly optimized for real-world data. Use <span class="mono">sort()</span> when you don't need the original list afterward, and <span class="mono">sorted()</span> when you do.
+                </div>
+            </section>
+
+            <!-- Section 10: Common Patterns -->
+            <section id="patterns" class="section">
+                <h1 class="section-title">
+                    <span class="icon">🎯</span>
+                    Common Patterns
+                </h1>
+                <p class="section-subtitle">
+                    Practical techniques for frequency counting, deduplication, merging, and partitioning.
+                </p>
+
+                <p>
+                    Certain list manipulation patterns appear frequently in programming. Understanding these patterns—like counting frequencies, removing duplicates, merging sorted lists, and partitioning—will make you more efficient and solve problems faster.
+                </p>
+
+                <div class="code-block">
+                    <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>list_patterns.py</span></div>
+                    <pre class="code-content"><span class="comment"># Frequency counting</span>
+<span class="var">lst</span> = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">3</span>, <span class="num">3</span>]
+<span class="var">freq</span> = {}
+<span class="kw">for</span> <span class="var">x</span> <span class="kw">in</span> <span class="var">lst</span>:
+    <span class="var">freq</span>[<span class="var">x</span>] = <span class="var">freq</span>.<span class="fn-name">get</span>(<span class="var">x</span>, <span class="num">0</span>) <span class="op">+</span> <span class="num">1</span>
+<span class="comment"># freq = {1: 1, 2: 2, 3: 3}</span>
+
+<span class="comment"># Remove duplicates (preserve order: Python 3.7+)</span>
+<span class="var">lst</span> = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">1</span>]
+<span class="var">unique</span> = <span class="fn-name">list</span>(<span class="fn-name">dict</span>.<span class="fn-name">fromkeys</span>(<span class="var">lst</span>))
+<span class="comment"># [1, 2, 3]</span>
+
+<span class="comment"># Or convert to set (order not preserved)</span>
+<span class="var">unique2</span> = <span class="fn-name">list</span>(<span class="fn-name">set</span>(<span class="var">lst</span>))
+
+<span class="comment"># Merge two sorted lists</span>
+<span class="var">lst1</span> = [<span class="num">1</span>, <span class="num">3</span>, <span class="num">5</span>]
+<span class="var">lst2</span> = [<span class="num">2</span>, <span class="num">4</span>, <span class="num">6</span>]
+<span class="var">merged</span> = <span class="fn-name">sorted</span>(<span class="var">lst1</span> <span class="op">+</span> <span class="var">lst2</span>)
+<span class="comment"># [1, 2, 3, 4, 5, 6]</span>
+
+<span class="comment"># Partition into groups (every n elements)</span>
+<span class="var">lst</span> = <span class="fn-name">list</span>(<span class="fn-name">range</span>(<span class="num">10</span>))
+<span class="var">n</span> = <span class="num">3</span>
+<span class="var">chunks</span> = [<span class="var">lst</span>[<span class="var">i</span>:<span class="var">i</span><span class="op">+</span><span class="var">n</span>] <span class="kw">for</span> <span class="var">i</span> <span class="kw">in</span> <span class="fn-name">range</span>(<span class="num">0</span>, <span class="fn-name">len</span>(<span class="var">lst</span>), <span class="var">n</span>)]
+<span class="comment"># [[0,1,2], [3,4,5], [6,7,8], [9]]</span>
+
+<span class="comment"># Find max/min with custom key</span>
+<span class="var">students</span> = [(<span class="str">'Alice'</span>, <span class="num">85</span>), (<span class="str">'Bob'</span>, <span class="num">90</span>)]
+<span class="var">top</span> = <span class="fn-name">max</span>(<span class="var">students</span>, <span class="var">key</span>=<span class="kw">lambda</span> <span class="var">x</span>: <span class="var">x</span>[<span class="num">1</span>])
+<span class="comment"># ('Bob', 90)</span></pre>
+                </div>
+
+                <div class="callout tip">
+                    <strong>Pattern Mastery:</strong> These patterns solve 80% of common list problems. Practice recognizing which pattern fits your problem, then customize as needed.
+                </div>
+            </section>
+
+            <!-- Section 11: Two-Pointer & Sliding Window -->
+            <section id="two-pointer" class="section">
+                <h1 class="section-title">
+                    <span class="icon">🎲</span>
+                    Two-Pointer & Sliding Window
+                </h1>
+                <p class="section-subtitle">
+                    Efficient in-place techniques for modifying lists and solving range-based problems.
+                </p>
+
+                <p>
+                    Two-pointer and sliding window techniques are powerful tools for solving problems involving subarrays or ranges with O(n) time complexity. They work by maintaining pointers or indices that move in a coordinated manner rather than brute-force checking all possibilities.
+                </p>
+
+                <div class="code-block">
+                    <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>two_pointer.py</span></div>
+                    <pre class="code-content"><span class="comment"># Two-pointer: reverse list in-place</span>
+<span class="kw">def</span> <span class="fn-name">reverse_inplace</span>(<span class="var">lst</span>):
+    <span class="var">left</span>, <span class="var">right</span> = <span class="num">0</span>, <span class="fn-name">len</span>(<span class="var">lst</span>) <span class="op">-</span> <span class="num">1</span>
+    <span class="kw">while</span> <span class="var">left</span> <span class="op">&lt;</span> <span class="var">right</span>:
+        <span class="var">lst</span>[<span class="var">left</span>], <span class="var">lst</span>[<span class="var">right</span>] = <span class="var">lst</span>[<span class="var">right</span>], <span class="var">lst</span>[<span class="var">left</span>]
+        <span class="var">left</span> <span class="op">+=</span> <span class="num">1</span>
+        <span class="var">right</span> <span class="op">-=</span> <span class="num">1</span>
+
+<span class="comment"># Sliding window: max sum of subarray of size k</span>
+<span class="kw">def</span> <span class="fn-name">max_sum_window</span>(<span class="var">lst</span>, <span class="var">k</span>):
+    <span class="var">current_sum</span> = <span class="fn-name">sum</span>(<span class="var">lst</span>[:<span class="var">k</span>])
+    <span class="var">max_sum</span> = <span class="var">current_sum</span>
+    <span class="kw">for</span> <span class="var">i</span> <span class="kw">in</span> <span class="fn-name">range</span>(<span class="fn-name">len</span>(<span class="var">lst</span>) <span class="op">-</span> <span class="var">k</span>):
+        <span class="var">current_sum</span> = <span class="var">current_sum</span> <span class="op">-</span> <span class="var">lst</span>[<span class="var">i</span>] <span class="op">+</span> <span class="var">lst</span>[<span class="var">i</span> <span class="op">+</span> <span class="var">k</span>]
+        <span class="var">max_sum</span> = <span class="fn-name">max</span>(<span class="var">max_sum</span>, <span class="var">current_sum</span>)
+    <span class="kw">return</span> <span class="var">max_sum</span>
+
+<span class="comment"># Two-pointer: remove duplicates in-place</span>
+<span class="kw">def</span> <span class="fn-name">remove_duplicates</span>(<span class="var">lst</span>):
+    <span class="var">j</span> = <span class="num">0</span>
+    <span class="kw">for</span> <span class="var">i</span> <span class="kw">in</span> <span class="fn-name">range</span>(<span class="num">1</span>, <span class="fn-name">len</span>(<span class="var">lst</span>)):
+        <span class="kw">if</span> <span class="var">lst</span>[<span class="var">i</span>] <span class="op">!=</span> <span class="var">lst</span>[<span class="var">j</span>]:
+            <span class="var">j</span> <span class="op">+=</span> <span class="num">1</span>
+            <span class="var">lst</span>[<span class="var">j</span>] = <span class="var">lst</span>[<span class="var">i</span>]
+    <span class="kw">return</span> <span class="var">j</span> <span class="op">+</span> <span class="num">1</span></pre>
+                </div>
+
+                <div class="callout info">
+                    <strong>Complexity:</strong> Both techniques achieve O(n) time complexity with O(1) or O(k) space, much better than nested loops which would be O(n²) or O(n²k).
+                </div>
+            </section>
+
+            <!-- Section 12: Advanced Algorithms -->
+            <section id="advanced" class="section">
+                <h1 class="section-title">
+                    <span class="icon">🔬</span>
+                    Advanced List Algorithms
+                </h1>
+                <p class="section-subtitle">
+                    Tackle complex problems like Dutch Flag, majority element, subarray sums, and permutations.
+                </p>
+
+                <p>
+                    Advanced list algorithms build on fundamental techniques to solve harder problems. These algorithms appear frequently in technical interviews and real-world applications. Understanding their logic trains you to think algorithmically about list problems.
+                </p>
+
+                <div class="code-block">
+                    <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>advanced_algorithms.py</span></div>
+                    <pre class="code-content"><span class="comment"># Dutch Flag: partition array into 0s, 1s, 2s</span>
+<span class="kw">def</span> <span class="fn-name">sort_colors</span>(<span class="var">lst</span>):
+    <span class="var">low</span>, <span class="var">mid</span>, <span class="var">high</span> = <span class="num">0</span>, <span class="num">0</span>, <span class="fn-name">len</span>(<span class="var">lst</span>) <span class="op">-</span> <span class="num">1</span>
+    <span class="kw">while</span> <span class="var">mid</span> <span class="op">&lt;=</span> <span class="var">high</span>:
+        <span class="kw">if</span> <span class="var">lst</span>[<span class="var">mid</span>] <span class="op">==</span> <span class="num">0</span>:
+            <span class="var">lst</span>[<span class="var">low</span>], <span class="var">lst</span>[<span class="var">mid</span>] = <span class="var">lst</span>[<span class="var">mid</span>], <span class="var">lst</span>[<span class="var">low</span>]
+            <span class="var">low</span> <span class="op">+=</span> <span class="num">1</span>
+            <span class="var">mid</span> <span class="op">+=</span> <span class="num">1</span>
+        <span class="kw">elif</span> <span class="var">lst</span>[<span class="var">mid</span>] <span class="op">==</span> <span class="num">2</span>:
+            <span class="var">lst</span>[<span class="var">mid</span>], <span class="var">lst</span>[<span class="var">high</span>] = <span class="var">lst</span>[<span class="var">high</span>], <span class="var">lst</span>[<span class="var">mid</span>]
+            <span class="var">high</span> <span class="op">-=</span> <span class="num">1</span>
+        <span class="kw">else</span>:
+            <span class="var">mid</span> <span class="op">+=</span> <span class="num">1</span>
+
+<span class="comment"># Majority element: appears more than n/2 times</span>
+<span class="kw">def</span> <span class="fn-name">find_majority</span>(<span class="var">lst</span>):
+    <span class="var">candidate</span>, <span class="var">count</span> = <span class="kw">None</span>, <span class="num">0</span>
+    <span class="kw">for</span> <span class="var">x</span> <span class="kw">in</span> <span class="var">lst</span>:
+        <span class="kw">if</span> <span class="var">count</span> <span class="op">==</span> <span class="num">0</span>:
+            <span class="var">candidate</span> = <span class="var">x</span>
+        <span class="var">count</span> <span class="op">+=</span> <span class="num">1</span> <span class="kw">if</span> <span class="var">x</span> <span class="op">==</span> <span class="var">candidate</span> <span class="kw">else</span> <span class="op">-</span><span class="num">1</span>
+    <span class="kw">return</span> <span class="var">candidate</span>
+
+<span class="comment"># Max subarray sum (Kadane's algorithm)</span>
+<span class="kw">def</span> <span class="fn-name">max_subarray_sum</span>(<span class="var">lst</span>):
+    <span class="var">max_sum</span> = <span class="var">current_sum</span> = <span class="var">lst</span>[<span class="num">0</span>]
+    <span class="kw">for</span> <span class="var">x</span> <span class="kw">in</span> <span class="var">lst</span>[<span class="num">1</span>:]:
+        <span class="var">current_sum</span> = <span class="fn-name">max</span>(<span class="var">x</span>, <span class="var">current_sum</span> <span class="op">+</span> <span class="var">x</span>)
+        <span class="var">max_sum</span> = <span class="fn-name">max</span>(<span class="var">max_sum</span>, <span class="var">current_sum</span>)
+    <span class="kw">return</span> <span class="var">max_sum</span>
+
+<span class="comment"># Generate permutations</span>
+<span class="kw">def</span> <span class="fn-name">permutations</span>(<span class="var">lst</span>):
+    <span class="kw">if</span> <span class="fn-name">len</span>(<span class="var">lst</span>) <span class="op">==</span> <span class="num">1</span>:
+        <span class="kw">return</span> [<span class="var">lst</span>]
+    <span class="var">result</span> = []
+    <span class="kw">for</span> <span class="var">i</span>, <span class="var">x</span> <span class="kw">in</span> <span class="fn-name">enumerate</span>(<span class="var">lst</span>):
+        <span class="var">remaining</span> = <span class="var">lst</span>[:<span class="var">i</span>] <span class="op">+</span> <span class="var">lst</span>[<span class="var">i</span><span class="op">+</span><span class="num">1</span>:]
+        <span class="kw">for</span> <span class="var">perm</span> <span class="kw">in</span> <span class="fn-name">permutations</span>(<span class="var">remaining</span>):
+            <span class="var">result</span>.<span class="fn-name">append</span>([<span class="var">x</span>] <span class="op">+</span> <span class="var">perm</span>)
+    <span class="kw">return</span> <span class="var">result</span></pre>
+                </div>
+
+                <div class="callout tip">
+                    <strong>Interview Tip:</strong> These algorithms are classic interview questions. Practice implementing them from scratch to understand the logic, not just the code.
+                </div>
+            </section>
+
+            <!-- Practice CTA -->
+            <div class="practice-cta">
+                <div class="cta-text">
+                    <div class="cta-title">Ready to Practice?</div>
+                    <div class="cta-sub">50 list challenges from easy to hard await.</div>
+                </div>
+                <a href="challenges_lists.html" class="cta-btn">Start Challenges →</a>
+            </div>
+
+        </main>
+    </div>
+</body>
+</html>

@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python Visualization - Bhujanga Abhyāsa</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Sora:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f5f4f0;
+      --bg2: #eeecea;
+      --surface: #ffffff;
+      --surface2: #fafaf8;
+      --border: #e2dfd9;
+      --border2: #cdc9c2;
+      --text: #1e1c18;
+      --text2: #6b6760;
+      --text3: #9e9b96;
+      --text-inv: #ffffff;
+      --blue: #3b6fd4;
+      --blue-bg: #eef2fb;
+      --green: #2e7d52;
+      --green-bg: #edf5f0;
+      --amber: #b45309;
+      --amber-bg: #fef6ec;
+      --red: #c0392b;
+      --red-bg: #fdf0ee;
+      --purple: #6d4fc2;
+      --purple-bg: #f2eefb;
+      --teal: #1a7a7a;
+      --viz-color: #6d4fc2;
+      --code-bg: #1e1c18;
+      --code-text: #e8e4db;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Sora', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Top Navigation */
+    .top-nav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--viz-color);
+    }
+
+    .back-link {
+      color: var(--text2);
+      text-decoration: none;
+      font-size: 0.95rem;
+      padding: 0.5rem 1rem;
+      border-radius: 0.375rem;
+      transition: all 0.2s;
+    }
+
+    .back-link:hover {
+      background: var(--bg2);
+      color: var(--viz-color);
+    }
+
+    .container {
+      display: flex;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      position: sticky;
+      top: 64px;
+      width: 280px;
+      height: calc(100vh - 64px);
+      background: var(--surface2);
+      border-right: 1px solid var(--border);
+      overflow-y: auto;
+      padding: 1.5rem 0;
+    }
+
+    .sidebar-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--viz-color);
+      padding: 0 1.5rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .sidebar-nav {
+      list-style: none;
+    }
+
+    .sidebar-nav li {
+      border-left: 3px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .sidebar-nav a {
+      display: block;
+      padding: 0.75rem 1.5rem;
+      color: var(--text2);
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: all 0.2s;
+    }
+
+    .sidebar-nav li:hover {
+      border-left-color: var(--viz-color);
+      background: var(--bg);
+    }
+
+    .sidebar-nav a:hover {
+      color: var(--viz-color);
+      padding-left: 2rem;
+    }
+
+    .sidebar-nav li.active {
+      border-left-color: var(--viz-color);
+      background: var(--purple-bg);
+    }
+
+    .sidebar-nav li.active a {
+      color: var(--viz-color);
+      font-weight: 600;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      padding: 3rem 4rem;
+      max-width: 900px;
+    }
+
+    /* Section Styling */
+    .section {
+      margin-bottom: 4rem;
+      scroll-margin-top: 80px;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--viz-color);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .section-icon {
+      font-size: 2.25rem;
+    }
+
+    .section-intro {
+      color: var(--text2);
+      font-size: 1.05rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.8;
+    }
+
+    /* Code Block Styling */
+    .code-block {
+      background: var(--code-bg);
+      border-radius: 0.5rem;
+      margin: 1.5rem 0;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .code-block-header {
+      background: #16140f;
+      padding: 0.75rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #2a2722;
+      font-size: 0.85rem;
+      color: var(--text3);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .code-dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+    }
+
+    .code-dot.d1 { background: #ff605c; }
+    .code-dot.d2 { background: #ffbd44; }
+    .code-dot.d3 { background: #00ca4e; }
+
+    .code-content {
+      padding: 1.5rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      color: var(--code-text);
+      overflow-x: auto;
+      line-height: 1.7;
+    }
+
+    /* Syntax Highlighting */
+    .kw { color: #ff6b6b; font-weight: 500; }
+    .fn-name { color: #51cf66; }
+    .str { color: #ffa94d; }
+    .num { color: #b197fc; }
+    .comment { color: #909090; font-style: italic; }
+    .var { color: var(--code-text); }
+    .op { color: #74c0fc; }
+
+    /* Diagram Styling */
+    .diagram-box {
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: 0.5rem;
+      padding: 2rem;
+      margin: 1.5rem 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .diagram-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text2);
+      margin-bottom: 1rem;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Callouts */
+    .callout {
+      border-left: 4px solid var(--blue);
+      background: var(--blue-bg);
+      padding: 1rem 1.5rem;
+      border-radius: 0.375rem;
+      margin: 1.5rem 0;
+      color: var(--text);
+    }
+
+    .callout.info {
+      border-left-color: var(--blue);
+      background: var(--blue-bg);
+    }
+
+    .callout.warning {
+      border-left-color: var(--amber);
+      background: var(--amber-bg);
+    }
+
+    .callout.tip {
+      border-left-color: var(--viz-color);
+      background: var(--purple-bg);
+    }
+
+    .callout-title {
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      font-size: 0.95rem;
+    }
+
+    /* Comparison Table */
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+      overflow: hidden;
+    }
+
+    .compare-table th {
+      background: var(--bg2);
+      padding: 1rem;
+      text-align: left;
+      font-weight: 700;
+      border-bottom: 2px solid var(--border);
+      color: var(--text);
+    }
+
+    .compare-table td {
+      padding: 1rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--text2);
+    }
+
+    .compare-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Practice CTA */
+    .practice-cta {
+      background: linear-gradient(135deg, var(--purple-bg) 0%, var(--blue-bg) 100%);
+      border: 2px solid var(--viz-color);
+      border-radius: 0.75rem;
+      padding: 2rem;
+      margin-top: 4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .cta-text {
+      flex: 1;
+    }
+
+    .cta-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--viz-color);
+      margin-bottom: 0.5rem;
+    }
+
+    .cta-sub {
+      color: var(--text2);
+      font-size: 1rem;
+    }
+
+    .cta-btn {
+      background: var(--viz-color);
+      color: var(--text-inv);
+      padding: 0.875rem 1.75rem;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      transition: all 0.2s;
+      white-space: nowrap;
+      display: inline-block;
+      text-decoration: none;
+    }
+
+    .cta-btn:hover {
+      background: #5a3fa8;
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* SVG Chart Styling */
+    svg text {
+      font-family: 'Sora', sans-serif;
+    }
+
+    .chart-axis { stroke: var(--text2); stroke-width: 2; }
+    .chart-label { fill: var(--text2); font-size: 12px; }
+    .chart-title { fill: var(--text); font-size: 14px; font-weight: 600; }
+    .bar-color-1 { fill: var(--blue); }
+    .bar-color-2 { fill: var(--purple); }
+    .bar-color-3 { fill: var(--viz-color); }
+    .line-color-1 { stroke: var(--blue); }
+    .line-color-2 { stroke: var(--viz-color); }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg2);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border2);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--text2);
+    }
+
+    @media (max-width: 1024px) {
+      .sidebar {
+        width: 220px;
+      }
+      .main-content {
+        padding: 2rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+      .sidebar {
+        position: relative;
+        top: 0;
+        width: 100%;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        max-height: 200px;
+        overflow-x: auto;
+        padding: 1rem;
+      }
+      .sidebar-nav {
+        display: flex;
+        gap: 1rem;
+      }
+      .sidebar-nav li {
+        border-left: none;
+        border-bottom: 3px solid transparent;
+      }
+      .main-content {
+        padding: 1.5rem;
+      }
+      .practice-cta {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Top Navigation -->
+  <div class="top-nav">
+    <div class="nav-left">
+      <div class="logo">📊 Visualization</div>
+      <a href="abhyasa_tritiya.html" class="back-link">← Back to Tritiya</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+      <div class="sidebar-title">📊 Chapters</div>
+      <ul class="sidebar-nav">
+        <li><a href="#anatomy">Figure & Axes Anatomy</a></li>
+        <li><a href="#line-plots">Line Plots</a></li>
+        <li><a href="#bar-charts">Bar Charts</a></li>
+        <li><a href="#scatter">Scatter Plots</a></li>
+        <li><a href="#histograms">Histograms & Distributions</a></li>
+        <li><a href="#box-violin">Box & Violin Plots</a></li>
+        <li><a href="#heatmaps">Heatmaps</a></li>
+        <li><a href="#subplots">Subplots & Layouts</a></li>
+        <li><a href="#customization">Customization</a></li>
+        <li><a href="#seaborn">Seaborn Statistical Plots</a></li>
+        <li><a href="#pandas-plot">Pandas Plot Shorthand</a></li>
+        <li><a href="#best-practices">Best Practices</a></li>
+      </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <!-- Section 1: Figure & Axes Anatomy -->
+      <section class="section" id="anatomy">
+        <h2 class="section-title"><span class="section-icon">🖼️</span> Figure & Axes Anatomy</h2>
+        <p class="section-intro">
+          Understanding the structure of matplotlib plots is essential. A figure is the overall window or canvas, and axes are the individual plots where data is drawn. The Object-Oriented (OO) interface gives you explicit control over both.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>figure_axes_basics.py</span></div>
+          <pre class="code-content"><span class="kw">import</span> <span class="var">matplotlib.pyplot</span> <span class="kw">as</span> <span class="var">plt</span>
+
+<span class="comment"># Object-Oriented approach (recommended)</span>
+<span class="var">fig</span>, <span class="var">ax</span> <span class="op">=</span> <span class="var">plt</span>.<span class="fn-name">subplots</span>()
+<span class="var">ax</span>.<span class="fn-name">plot</span>([<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>], [<span class="num">1</span>, <span class="num">4</span>, <span class="num">9</span>])
+<span class="var">ax</span>.<span class="fn-name">set_xlabel</span>(<span class="str">'X Label'</span>)
+<span class="var">ax</span>.<span class="fn-name">set_ylabel</span>(<span class="str">'Y Label'</span>)
+<span class="var">ax</span>.<span class="fn-name">set_title</span>(<span class="str">'Plot Title'</span>)
+<span class="var">plt</span>.<span class="fn-name">show</span>()
+
+<span class="comment"># pyplot approach (quick, but less control)</span>
+<span class="var">plt</span>.<span class="fn-name">plot</span>([<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>], [<span class="num">1</span>, <span class="num">4</span>, <span class="num">9</span>])
+<span class="var">plt</span>.<span class="fn-name">xlabel</span>(<span class="str">'X Label'</span>)
+<span class="var">plt</span>.<span class="fn-name">ylabel</span>(<span class="str">'Y Label'</span>)
+<span class="var">plt</span>.<span class="fn-name">title</span>(<span class="str">'Plot Title'</span>)
+<span class="var">plt</span>.<span class="fn-name">show</span>()</span></pre>
+        </div>
+
+        <div class="diagram-box">
+          <div style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+            <div class="diagram-title">Figure & Axes Structure</div>
+            <svg viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg" style="max-width: 100%; max-height: 300px;">
+              <!-- Figure border -->
+              <rect x="30" y="20" width="540" height="360" fill="var(--bg)" stroke="var(--text)" stroke-width="3" stroke-dasharray="5,5"/>
+              <text x="40" y="40" font-size="12" font-weight="bold" fill="var(--text)">Figure</text>
+
+              <!-- Axes border -->
+              <rect x="80" y="60" width="440" height="280" fill="var(--surface)" stroke="var(--viz-color)" stroke-width="2"/>
+              <text x="90" y="80" font-size="12" font-weight="bold" fill="var(--viz-color)">Axes</text>
+
+              <!-- Title -->
+              <text x="300" y="105" font-size="14" font-weight="bold" fill="var(--text)" text-anchor="middle">Plot Title</text>
+
+              <!-- Y-axis -->
+              <line x1="100" y1="120" x2="100" y2="310" stroke="var(--text2)" stroke-width="2"/>
+              <text x="50" y="220" font-size="11" fill="var(--text2)" text-anchor="middle" transform="rotate(-90 50 220)">Y Label</text>
+
+              <!-- X-axis -->
+              <line x1="100" y1="310" x2="500" y2="310" stroke="var(--text2)" stroke-width="2"/>
+              <text x="300" y="340" font-size="11" fill="var(--text2)" text-anchor="middle">X Label</text>
+
+              <!-- Sample tick marks -->
+              <g font-size="10" fill="var(--text2)">
+                <line x1="100" y1="305" x2="100" y2="315"/>
+                <text x="100" y="325" text-anchor="middle">0</text>
+
+                <line x1="200" y1="305" x2="200" y2="315"/>
+                <text x="200" y="325" text-anchor="middle">1</text>
+
+                <line x1="300" y1="305" x2="300" y2="315"/>
+                <text x="300" y="325" text-anchor="middle">2</text>
+
+                <line x1="400" y1="305" x2="400" y2="315"/>
+                <text x="400" y="325" text-anchor="middle">3</text>
+
+                <line x1="500" y1="305" x2="500" y2="315"/>
+                <text x="500" y="325" text-anchor="middle">4</text>
+              </g>
+
+              <!-- Legend area -->
+              <rect x="350" y="150" width="120" height="60" fill="var(--surface2)" stroke="var(--border)" stroke-width="1"/>
+              <text x="360" y="168" font-size="10" fill="var(--text)" font-weight="bold">Legend</text>
+              <line x1="360" y1="175" x2="390" y2="175" stroke="var(--blue)" stroke-width="2"/>
+              <text x="400" y="178" font-size="9" fill="var(--text2)">Series 1</text>
+            </svg>
+          </div>
+        </div>
+
+        <div class="callout tip">
+          <div class="callout-title">Pro Tip: Use the OO Interface</div>
+          <p>The Object-Oriented interface <code>fig, ax = plt.subplots()</code> is more powerful and explicit. Use it for production code, especially when creating multiple subplots or saving figures.</p>
+        </div>
+      </section>
+
+      <!-- Section 2: Line Plots -->
+      <section class="section" id="line-plots">
+        <h2 class="section-title"><span class="section-icon">📈</span> Line Plots</h2>
+        <p class="section-intro">
+          Line plots show trends over time or continuous data. They connect data points with lines, making patterns easy to see. You can customize markers, line styles, colors, and legends.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>line_plots.py</span></div>
+          <pre class="code-content"><span class="kw">import</span> <span class="var">matplotlib.pyplot</span> <span class="kw">as</span> <span class="var">plt</span>
+
+<span class="comment"># Basic line plot</span>
+<span class="var">fig</span>, <span class="var">ax</span> <span class="op">=</span> <span class="var">plt</span>.<span class="fn-name">subplots</span>()
+<span class="var">x</span> <span class="op">=</span> [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>]
+<span class="var">y</span> <span class="op">=</span> [<span class="num">2</span>, <span class="num">4</span>, <span class="num">1</span>, <span class="num">5</span>, <span class="num">3</span>]
+<span class="var">ax</span>.<span class="fn-name">plot</span>(<span class="var">x</span>, <span class="var">y</span>, <span class="var">marker</span><span class="op">=</span><span class="str">'o'</span>, <span class="var">linestyle</span><span class="op">=</span><span class="str">'-'</span>, <span class="var">color</span><span class="op">=</span><span class="str">'blue'</span>)
+
+<span class="comment"># Multiple lines with legend</span>
+<span class="var">ax</span>.<span class="fn-name">plot</span>(<span class="var">x</span>, <span class="var">y</span>, <span class="var">label</span><span class="op">=</span><span class="str">'Series A'</span>, <span class="var">marker</span><span class="op">=</span><span class="str">'o'</span>)
+<span class="var">ax</span>.<span class="fn-name">plot</span>(<span class="var">x</span>, [<span class="num">1</span>, <span class="num">3</span>, <span class="num">2</span>, <span class="num">4</span>, <span class="num">2</span>], <span class="var">label</span><span class="op">=</span><span class="str">'Series B'</span>, <span class="var">marker</span><span class="op">=</span><span class="str">'s'</span>)
+<span class="var">ax</span>.<span class="fn-name">legend</span>()
+
+<span class="comment"># Different line styles</span>
+<span class="var">ax</span>.<span class="fn-name">plot</span>(<span class="var">x</span>, <span class="var">y</span>, <span class="var">linestyle</span><span class="op">=</span><span class="str">'-'</span>, <span class="var">label</span><span class="op">=</span><span class="str">'Solid'</span>)
+<span class="var">ax</span>.<span class="fn-name">plot</span>(<span class="var">x</span>, <span class="var">y</span>, <span class="var">linestyle</span><span class="op">=</span><span class="str">'--'</span>, <span class="var">label</span><span class="op">=</span><span class="str">'Dashed'</span>)
+<span class="var">ax</span>.<span class="fn-name">plot</span>(<span class="var">x</span>, <span class="var">y</span>, <span class="var">linestyle</span><span class="op">=</span><span class="str">':'</span>, <span class="var">label</span><span class="op">=</span><span class="str">'Dotted'</span>)</span></pre>
+        </div>
+
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th>Marker</th>
+              <th>Symbol</th>
+              <th>Linestyle</th>
+              <th>Pattern</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>'o'</code></td>
+              <td>Circle</td>
+              <td><code>'-'</code></td>
+              <td>Solid line</td>
+            </tr>
+            <tr>
+              <td><code>'s'</code></td>
+              <td>Square</td>
+              <td><code>'--'</code></td>
+              <td>Dashed line</td>
+            </tr>
+            <tr>
+              <td><code>'^'</code></td>
+              <td>Triangle</td>
+              <td><code>':'</code></td>
+              <td>Dotted line</td>
+            </tr>
+            <tr>
+              <td><code>'*'</code></td>
+              <td>Star</td>
+              <td><code>'-.'</code></td>
+              <td>Dash-dot line</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Section 3: Bar Charts -->
+      <section class="section" id="bar-charts">
+        <h2 class="section-title"><span class="section-icon">📊</span> Bar Charts</h2>
+        <p class="section-intro">
+          Bar charts display categorical data as rectangular bars. Use <code>ax.bar()</code> for vertical bars and <code>ax.barh()</code> for horizontal bars. You can create grouped and stacked bar charts.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>bar_charts.py</span></div>
+          <pre class="code-content"><span class="kw">import</span> <span class="var">matplotlib.pyplot</span> <span class="kw">as</span> <span class="var">plt</span>
+
+<span class="comment"># Simple bar chart</span>
+<span class="var">fig</span>, <span class="var">ax</span> <span class="op">=</span> <span class="var">plt</span>.<span class="fn-name">subplots</span>()
+<span class="var">categories</span> <span class="op">=</span> [<span class="str">'A'</span>, <span class="str">'B'</span>, <span class="str">'C'</span>, <span class="str">'D'</span>]
+<span class="var">values</span> <span class="op">=</span> [<span class="num">10</span>, <span class="num">24</span>, <span class="num">36</span>, <span class="num">18</span>]
+<span class="var">ax</span>.<span class="fn-name">bar</span>(<span class="var">categories</span>, <span class="var">values</span>, <span class="var">color</span><span class="op">=</span><span class="str">'steelblue'</span>)
+
+<span class="comment"># Horizontal bars</span>
+<span class="var">ax</span>.<span class="fn-name">barh</span>(<span class="var">categories</span>, <span class="var">values</span>)
+
+<span class="comment"># Grouped bars</span>
+<span class="var">x</span> <span class="op">=</span> <span class="fn-name">range</span>(<span class="fn-name">len</span>(<span class="var">categories</span>))
+<span class="var">width</span> <span class="op">=</span> <span class="num">0.35</span>
+<span class="var">ax</span>.<span class="fn-name">bar</span>([<span class="var">i</span> <span class="op">-</span> <span class="var">width</span><span class="op">/</span><span class="num">2</span> <span class="kw">for</span> <span class="var">i</span> <span class="kw">in</span> <span class="var">x</span>], <span class="var">values</span>, <span class="var">width</span>, <span class="var">label</span><span class="op">=</span><span class="str">'2023'</span>)
+<span class="var">ax</span>.<span class="fn-name">bar</span>([<span class="var">i</span> <span class="op">+</span> <span class="var">width</span><span class="op">/</span><span class="num">2</span> <span class="kw">for</span> <span class="var">i</span> <span class="kw">in</span> <span class="var">x</span>], [<span class="num">14</span>, <span class="num">20</span>, <span class="num">32</span>, <span class="num">22</span>], <span class="var">width</span>, <span class="var">label</span><span class="op">=</span><span class="str">'2024'</span>)
+<span class="var">ax</span>.<span class="fn-name">legend</span>()</span></pre>
+        </div>
+
+        <div class="diagram-box">
+          <div style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+            <div class="diagram-title">Grouped vs. Stacked Bars</div>
+            <svg viewBox="0 0 700 300" xmlns="http://www.w3.org/2000/svg" style="max-width: 100%; max-height: 250px;">
+              <!-- Grouped bars section -->
+              <text x="100" y="25" font-size="12" font-weight="bold" fill="var(--text)">Grouped Bars</text>
+              <line x1="40" y1="50" x2="40" y2="220" stroke="var(--text2)" stroke-width="2"/>
+              <line x1="40" y1="220" x2="220" y2="220" stroke="var(--text2)" stroke-width="2"/>
+
+              <!-- Grouped bar group 1 -->
+              <rect x="50" y="160" width="25" height="60" fill="var(--blue)"/>
+              <rect x="80" y="140" width="25" height="80" fill="var(--purple)"/>
+              <text x="65" y="235" font-size="10" fill="var(--text2)" text-anchor="middle">A</text>
+
+              <!-- Grouped bar group 2 -->
+              <rect x="130" y="120" width="25" height="100" fill="var(--blue)"/>
+              <rect x="160" y="100" width="25" height="120" fill="var(--purple)"/>
+              <text x="145" y="235" font-size="10" fill="var(--text2)" text-anchor="middle">B</text>
+
+              <!-- Stacked bars section -->
+              <text x="480" y="25" font-size="12" font-weight="bold" fill="var(--text)">Stacked Bars</text>
+              <line x1="410" y1="50" x2="410" y2="220" stroke="var(--text2)" stroke-width="2"/>
+              <line x1="410" y1="220" x2="590" y2="220" stroke="var(--text2)" stroke-width="2"/>
+
+              <!-- Stacked bar group 1 -->
+              <rect x="440" y="160" width="35" height="60" fill="var(--blue)"/>
+              <rect x="440" y="100" width="35" height="60" fill="var(--purple)"/>
+              <text x="457" y="235" font-size="10" fill="var(--text2)" text-anchor="middle">A</text>
+
+              <!-- Stacked bar group 2 -->
+              <rect x="510" y="120" width="35" height="100" fill="var(--blue)"/>
+              <rect x="510" y="80" width="35" height="40" fill="var(--purple)"/>
+              <text x="527" y="235" font-size="10" fill="var(--text2)" text-anchor="middle">B</text>
+
+              <!-- Legend -->
+              <rect x="300" y="250" width="100" height="40" fill="var(--surface)" stroke="var(--border)" stroke-width="1" rx="4"/>
+              <rect x="310" y="260" width="12" height="12" fill="var(--blue)"/>
+              <text x="330" y="268" font-size="10" fill="var(--text)">2023</text>
+              <rect x="310" y="278" width="12" height="12" fill="var(--purple)"/>
+              <text x="330" y="286" font-size="10" fill="var(--text)">2024</text>
+            </svg>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Scatter Plots -->
+      <section class="section" id="scatter">
+        <h2 class="section-title"><span class="section-icon">⚫</span> Scatter Plots</h2>
+        <p class="section-intro">
+          Scatter plots show the relationship between two continuous variables. Each point represents an observation. You can encode additional dimensions using color and size.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>scatter_plots.py</span></div>
+          <pre class="code-content"><span class="kw">import</span> <span class="var">matplotlib.pyplot</span> <span class="kw">as</span> <span class="var">plt</span>
+<span class="kw">import</span> <span class="var">numpy</span> <span class="kw">as</span> <span class="var">np</span>
+
+<span class="comment"># Basic scatter plot</span>
+<span class="var">fig</span>, <span class="var">ax</span> <span class="op">=</span> <span class="var">plt</span>.<span class="fn-name">subplots</span>()
+<span class="var">x</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">random</span>.<span class="fn-name">randn</span>(<span class="num">100</span>)
+<span class="var">y</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">random</span>.<span class="fn-name">randn</span>(<span class="num">100</span>)
+<span class="var">ax</span>.<span class="fn-name">scatter</span>(<span class="var">x</span>, <span class="var">y</span>)
+
+<span class="comment"># Color mapping (continuous variable)</span>
+<span class="var">colors</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">random</span>.<span class="fn-name">rand</span>(<span class="num">100</span>)
+<span class="var">ax</span>.<span class="fn-name">scatter</span>(<span class="var">x</span>, <span class="var">y</span>, <span class="var">c</span><span class="op">=</span><span class="var">colors</span>, <span class="var">cmap</span><span class="op">=</span><span class="str">'viridis'</span>)
+
+<span class="comment"># Size mapping (bubble chart)</span>
+<span class="var">sizes</span> <span class="op">=</span> <span class="num">100</span> <span class="op">*</span> <span class="var">np</span>.<span class="fn-name">random</span>.<span class="fn-name">rand</span>(<span class="num">100</span>)
+<span class="var">ax</span>.<span class="fn-name">scatter</span>(<span class="var">x</span>, <span class="var">y</span>, <span class="var">s</span><span class="op">=</span><span class="var">sizes</span>, <span class="var">alpha</span><span class="op">=</span><span class="num">0.6</span>)
+
+<span class="comment"># Combined: color and size encoding</span>
+<span class="var">ax</span>.<span class="fn-name">scatter</span>(<span class="var">x</span>, <span class="var">y</span>, <span class="var">s</span><span class="op">=</span><span class="var">sizes</span>, <span class="var">c</span><span class="op">=</span><span class="var">colors</span>, <span class="var">cmap</span><span class="op">=</span><span class="str">'plasma'</span>, <span class="var">alpha</span><span class="op">=</span><span class="num">0.7</span>)</span></pre>
+        </div>
+      </section>
+
+      <!-- Section 5: Histograms & Distributions -->
+      <section class="section" id="histograms">
+        <h2 class="section-title"><span class="section-icon">📉</span> Histograms & Distributions</h2>
+        <p class="section-intro">
+          Histograms display the distribution of a single continuous variable by binning data into ranges. You can customize bin count, add density estimates, and overlay kernel density estimates.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>histograms.py</span></div>
+          <pre class="code-content"><span class="kw">import</span> <span class="var">matplotlib.pyplot</span> <span class="kw">as</span> <span class="var">plt</span>
+<span class="kw">import</span> <span class="var">numpy</span> <span class="kw">as</span> <span class="var">np</span>
+
+<span class="var">data</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">random</span>.<span class="fn-name">normal</span>(<span class="num">100</span>, <span class="num">15</span>, <span class="num">1000</span>)
+
+<span class="comment"># Basic histogram</span>
+<span class="var">fig</span>, <span class="var">ax</span> <span class="op">=</span> <span class="var">plt</span>.<span class="fn-name">subplots</span>()
+<span class="var">ax</span>.<span class="fn-name">hist</span>(<span class="var">data</span>, <span class="var">bins</span><span class="op">=</span><span class="num">30</span>)
+
+<span class="comment"># Normalized (density=True)</span>
+<span class="var">ax</span>.<span class="fn-name">hist</span>(<span class="var">data</span>, <span class="var">bins</span><span class="op">=</span><span class="num">30</span>, <span class="var">density</span><span class="op">=</span><span class="kw">True</span>, <span class="var">alpha</span><span class="op">=</span><span class="num">0.7</span>)
+
+<span class="comment"># Multiple distributions</span>
+<span class="var">ax</span>.<span class="fn-name">hist</span>(<span class="var">data</span>, <span class="var">bins</span><span class="op">=</span><span class="num">30</span>, <span class="var">label</span><span class="op">=</span><span class="str">'Data A'</span>, <span class="var">alpha</span><span class="op">=</span><span class="num">0.6</span>)
+<span class="var">ax</span>.<span class="fn-name">hist</span>(<span class="var">np</span>.<span class="fn-name">random</span>.<span class="fn-name">normal</span>(<span class="num">95</span>, <span class="num">10</span>, <span class="num">1000</span>), <span class="var">bins</span><span class="op">=</span><span class="num">30</span>, <span class="var">label</span><span class="op">=</span><span class="str">'Data B'</span>, <span class="var">alpha</span><span class="op">=</span><span class="num">0.6</span>)
+<span class="var">ax</span>.<span class="fn-name">legend</span>()</span></pre>
+        </div>
+
+        <div class="callout info">
+          <div class="callout-title">Understanding Bins</div>
+          <p>The <code>bins</code> parameter controls how many ranges to divide the data into. More bins = more detail but less smoothing. Start with ~30 bins and adjust based on your data.</p>
+        </div>
+      </section>
+
+      <!-- Section 6: Box & Violin Plots -->
+      <section class="section" id="box-violin">
+        <h2 class="section-title"><span class="section-icon">📦</span> Box & Violin Plots</h2>
+        <p class="section-intro">
+          Box plots show quartiles, median, and outliers. Violin plots extend this by showing the full distribution shape. Both are excellent for comparing distributions across groups.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>box_violin.py</span></div>
+          <pre class="code-content"><span class="kw">import</span> <span class="var">matplotlib.pyplot</span> <span class="kw">as</span> <span class="var">plt</span>
+<span class="kw">import</span> <span class="var">numpy</span> <span class="kw">as</span> <span class="var">np</span>
+
+<span class="var">data1</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">random</span>.<span class="fn-name">normal</span>(<span class="num">100</span>, <span class="num">15</span>, <span class="num">500</span>)
+<span class="var">data2</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">random</span>.<span class="fn-name">normal</span>(<span class="num">110</span>, <span class="num">20</span>, <span class="num">500</span>)
+
+<span class="var">fig</span>, (<span class="var">ax1</span>, <span class="var">ax2</span>) <span class="op">=</span> <span class="var">plt</span>.<span class="fn-name">subplots</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="var">figsize</span><span class="op">=</span>(<span class="num">12</span>, <span class="num">5</span>))
+
+<span class="comment"># Box plot</span>
+<span class="var">ax1</span>.<span class="fn-name">boxplot</span>([<span class="var">data1</span>, <span class="var">data2</span>], <span class="var">labels</span><span class="op">=</span>[<span class="str">'Group A'</span>, <span class="str">'Group B'</span>])
+<span class="var">ax1</span>.<span class="fn-name">set_ylabel</span>(<span class="str">'Value'</span>)
+<span class="var">ax1</span>.<span class="fn-name">set_title</span>(<span class="str">'Box Plot'</span>)
+
+<span class="comment"># Violin plot</span>
+<span class="var">ax2</span>.<span class="fn-name">violinplot</span>([<span class="var">data1</span>, <span class="var">data2</span>])
+<span class="var">ax2</span>.<span class="fn-name">set_ylabel</span>(<span class="str">'Value'</span>)
+<span class="var">ax2</span>.<span class="fn-name">set_title</span>(<span class="str">'Violin Plot'</span>)</span></pre>
+        </div>
+
+        <div class="diagram-box">
+          <div style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+            <div class="diagram-title">Box Plot Anatomy</div>
+            <svg viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg" style="max-width: 100%; max-height: 300px;">
+              <!-- Y-axis -->
+              <line x1="50" y1="50" x2="50" y2="350" stroke="var(--text2)" stroke-width="2"/>
+              <line x1="50" y1="350" x2="550" y2="350" stroke="var(--text2)" stroke-width="2"/>
+
+              <!-- Y-axis labels -->
+              <g font-size="11" fill="var(--text2)" text-anchor="end">
+                <text x="45" y="355">0</text>
+                <text x="45" y="288">Q1</text>
+                <text x="45" y="215">Q2 (Median)</text>
+                <text x="45" y="142">Q3</text>
+                <text x="45" y="55">Max</text>
+              </g>
+
+              <!-- Whiskers and box -->
+              <line x1="270" y1="55" x2="270" y2="85" stroke="var(--text2)" stroke-width="2"/>
+              <line x1="270" y1="85" x2="270" y2="140" stroke="var(--viz-color)" stroke-width="2"/>
+              <rect x="220" y="140" width="100" height="75" fill="var(--purple-bg)" stroke="var(--viz-color)" stroke-width="2"/>
+              <line x1="270" y1="215" x2="270" y2="280" stroke="var(--text2)" stroke-width="2"/>
+              <line x1="270" y1="280" x2="270" y2="330" stroke="var(--viz-color)" stroke-width="2"/>
+
+              <!-- Median line -->
+              <line x1="220" y1="215" x2="320" y2="215" stroke="var(--red)" stroke-width="2.5"/>
+
+              <!-- Outlier points -->
+              <circle cx="270" cy="35" r="4" fill="var(--red)"/>
+
+              <!-- Annotations -->
+              <g font-size="11" fill="var(--text)">
+                <text x="350" y="60">Max (non-outlier)</text>
+                <text x="350" y="100">Upper whisker</text>
+                <text x="350" y="160">Q3 (75th percentile)</text>
+                <text x="350" y="220">Q2 (Median)</text>
+                <text x="350" y="280">Q1 (25th percentile)</text>
+                <text x="350" y="320">Min (non-outlier)</text>
+                <text x="350" y="40">Outlier</text>
+              </g>
+            </svg>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 7: Heatmaps -->
+      <section class="section" id="heatmaps">
+        <h2 class="section-title"><span class="section-icon">🔥</span> Heatmaps</h2>
+        <p class="section-intro">
+          Heatmaps visualize 2D numerical data using colors. Use <code>imshow()</code> for image-like data or seaborn's <code>heatmap()</code> for annotated matrices with dendrograms.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>heatmaps.py</span></div>
+          <pre class="code-content"><span class="kw">import</span> <span class="var">matplotlib.pyplot</span> <span class="kw">as</span> <span class="var">plt</span>
+<span class="kw">import</span> <span class="var">seaborn</span> <span class="kw">as</span> <span class="var">sns</span>
+<span class="kw">import</span> <span class="var">numpy</span> <span class="kw">as</span> <span class="var">np</span>
+
+<span class="comment"># Using imshow()</span>
+<span class="var">data</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">random</span>.<span class="fn-name">rand</span>(<span class="num">10</span>, <span class="num">10</span>)
+<span class="var">fig</span>, <span class="var">ax</span> <span class="op">=</span> <span class="var">plt</span>.<span class="fn-name">subplots</span>()
+<span class="var">im</span> <span class="op">=</span> <span class="var">ax</span>.<span class="fn-name">imshow</span>(<span class="var">data</span>, <span class="var">cmap</span><span class="op">=</span><span class="str">'coolwarm'</span>)
+<span class="var">plt</span>.<span class="fn-name">colorbar</span>(<span class="var">im</span>)
+
+<span class="comment"># Using seaborn heatmap (with annotations)</span>
+<span class="var">corr_matrix</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">random</span>.<span class="fn-name">rand</span>(<span class="num">5</span>, <span class="num">5</span>)
+<span class="var">sns</span>.<span class="fn-name">heatmap</span>(<span class="var">corr_matrix</span>, <span class="var">annot</span><span class="op">=</span><span class="kw">True</span>, <span class="var">fmt</span><span class="op">=</span><span class="str">'.2f'</span>, <span class="var">cmap</span><span class="op">=</span><span class="str">'viridis'</span>)</span></pre>
+        </div>
+      </section>
+
+      <!-- Section 8: Subplots & Layouts -->
+      <section class="section" id="subplots">
+        <h2 class="section-title"><span class="section-icon">⚡</span> Subplots & Layouts</h2>
+        <p class="section-intro">
+          Combine multiple plots in one figure using <code>subplots()</code> for a grid layout, <code>GridSpec</code> for complex arrangements, or <code>constrained_layout</code> for automatic spacing.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>subplots.py</span></div>
+          <pre class="code-content"><span class="kw">import</span> <span class="var">matplotlib.pyplot</span> <span class="kw">as</span> <span class="var">plt</span>
+
+<span class="comment"># 2x2 grid of subplots</span>
+<span class="var">fig</span>, <span class="var">axes</span> <span class="op">=</span> <span class="var">plt</span>.<span class="fn-name">subplots</span>(<span class="num">2</span>, <span class="num">2</span>, <span class="var">figsize</span><span class="op">=</span>(<span class="num">10</span>, <span class="num">8</span>))
+<span class="var">axes</span>[<span class="num">0</span>, <span class="num">0</span>].<span class="fn-name">plot</span>([<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>], [<span class="num">1</span>, <span class="num">4</span>, <span class="num">9</span>])
+<span class="var">axes</span>[<span class="num">0</span>, <span class="num">1</span>].<span class="fn-name">scatter</span>([<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>], [<span class="num">1</span>, <span class="num">4</span>, <span class="num">9</span>])
+
+<span class="comment"># Shared axes</span>
+<span class="var">fig</span>, <span class="var">axes</span> <span class="op">=</span> <span class="var">plt</span>.<span class="fn-name">subplots</span>(<span class="num">1</span>, <span class="num">3</span>, <span class="var">sharex</span><span class="op">=</span><span class="kw">True</span>, <span class="var">sharey</span><span class="op">=</span><span class="kw">True</span>)
+
+<span class="comment"># GridSpec for complex layouts</span>
+<span class="var">gs</span> <span class="op">=</span> <span class="var">fig</span>.<span class="fn-name">add_gridspec</span>(<span class="num">3</span>, <span class="num">3</span>, <span class="var">hspace</span><span class="op">=</span><span class="num">0.3</span>, <span class="var">wspace</span><span class="op">=</span><span class="num">0.3</span>)
+<span class="var">ax1</span> <span class="op">=</span> <span class="var">fig</span>.<span class="fn-name">add_subplot</span>(<span class="var">gs</span>[<span class="num">0</span>:<span class="num">2</span>, <span class="num">0</span>:<span class="num">2</span>])
+<span class="var">ax2</span> <span class="op">=</span> <span class="var">fig</span>.<span class="fn-name">add_subplot</span>(<span class="var">gs</span>[<span class="num">0</span>, <span class="num">2</span>])</span></pre>
+        </div>
+
+        <div class="diagram-box">
+          <div style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+            <div class="diagram-title">Subplot Grid Layouts</div>
+            <svg viewBox="0 0 700 300" xmlns="http://www.w3.org/2000/svg" style="max-width: 100%; max-height: 280px;">
+              <!-- 2x2 Grid -->
+              <text x="100" y="20" font-size="12" font-weight="bold" fill="var(--text)">2x2 subplots(2, 2)</text>
+              <rect x="40" y="35" width="60" height="60" fill="var(--blue-bg)" stroke="var(--blue)" stroke-width="2"/>
+              <rect x="110" y="35" width="60" height="60" fill="var(--blue-bg)" stroke="var(--blue)" stroke-width="2"/>
+              <rect x="40" y="105" width="60" height="60" fill="var(--blue-bg)" stroke="var(--blue)" stroke-width="2"/>
+              <rect x="110" y="105" width="60" height="60" fill="var(--blue-bg)" stroke="var(--blue)" stroke-width="2"/>
+
+              <text x="70" y="130" font-size="9" fill="var(--text2)" text-anchor="middle">[0,0]</text>
+              <text x="140" y="130" font-size="9" fill="var(--text2)" text-anchor="middle">[0,1]</text>
+              <text x="70" y="200" font-size="9" fill="var(--text2)" text-anchor="middle">[1,0]</text>
+              <text x="140" y="200" font-size="9" fill="var(--text2)" text-anchor="middle">[1,1]</text>
+
+              <!-- 1x3 Grid -->
+              <text x="380" y="20" font-size="12" font-weight="bold" fill="var(--text)">1x3 subplots(1, 3)</text>
+              <rect x="290" y="35" width="50" height="60" fill="var(--purple-bg)" stroke="var(--viz-color)" stroke-width="2"/>
+              <rect x="350" y="35" width="50" height="60" fill="var(--purple-bg)" stroke="var(--viz-color)" stroke-width="2"/>
+              <rect x="410" y="35" width="50" height="60" fill="var(--purple-bg)" stroke="var(--viz-color)" stroke-width="2"/>
+
+              <!-- Complex GridSpec -->
+              <text x="200" y="220" font-size="12" font-weight="bold" fill="var(--text)">GridSpec (complex)</text>
+              <rect x="120" y="240" width="100" height="50" fill="var(--amber-bg)" stroke="var(--amber)" stroke-width="2"/>
+              <rect x="230" y="240" width="40" height="25" fill="var(--amber-bg)" stroke="var(--amber)" stroke-width="2"/>
+              <rect x="230" y="270" width="40" height="20" fill="var(--amber-bg)" stroke="var(--amber)" stroke-width="2"/>
+
+              <text x="170" y="280" font-size="9" fill="var(--text2)" text-anchor="middle">Large</text>
+              <text x="250" y="255" font-size="8" fill="var(--text2)" text-anchor="middle">Top</text>
+              <text x="250" y="287" font-size="8" fill="var(--text2)" text-anchor="middle">Bot</text>
+            </svg>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 9: Customization -->
+      <section class="section" id="customization">
+        <h2 class="section-title"><span class="section-icon">🎨</span> Customization</h2>
+        <p class="section-intro">
+          Fine-tune every aspect of your plots: titles, labels, ticks, spines, colors, and styles. Use <code>rcParams</code> for global settings or <code>set_*</code> methods for per-plot customization.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>customization.py</span></div>
+          <pre class="code-content"><span class="kw">import</span> <span class="var">matplotlib.pyplot</span> <span class="kw">as</span> <span class="var">plt</span>
+<span class="kw">import</span> <span class="var">matplotlib</span> <span class="kw">as</span> <span class="var">mpl</span>
+
+<span class="comment"># Global rcParams</span>
+<span class="var">mpl</span>.<span class="var">rcParams</span>[<span class="str">'figure.figsize'</span>] <span class="op">=</span> (<span class="num">12</span>, <span class="num">6</span>)
+<span class="var">mpl</span>.<span class="var">rcParams</span>[<span class="str">'font.size'</span>] <span class="op">=</span> <span class="num">12</span>
+<span class="var">mpl</span>.<span class="var">rcParams</span>[<span class="str">'lines.linewidth'</span>] <span class="op">=</span> <span class="num">2</span>
+
+<span class="var">fig</span>, <span class="var">ax</span> <span class="op">=</span> <span class="var">plt</span>.<span class="fn-name">subplots</span>()
+
+<span class="comment"># Titles and labels</span>
+<span class="var">ax</span>.<span class="fn-name">set_title</span>(<span class="str">'Chart Title'</span>, <span class="var">fontsize</span><span class="op">=</span><span class="num">16</span>, <span class="var">fontweight</span><span class="op">=</span><span class="str">'bold'</span>)
+<span class="var">ax</span>.<span class="fn-name">set_xlabel</span>(<span class="str">'X Axis'</span>, <span class="var">fontsize</span><span class="op">=</span><span class="num">12</span>)
+<span class="var">ax</span>.<span class="fn-name">set_ylabel</span>(<span class="str">'Y Axis'</span>, <span class="var">fontsize</span><span class="op">=</span><span class="num">12</span>)
+
+<span class="comment"># Remove spines</span>
+<span class="var">ax</span>.<span class="fn-name">spines</span>[<span class="str">'top'</span>].<span class="fn-name">set_visible</span>(<span class="kw">False</span>)
+<span class="var">ax</span>.<span class="fn-name">spines</span>[<span class="str">'right'</span>].<span class="fn-name">set_visible</span>(<span class="kw">False</span>)
+
+<span class="comment"># Grid</span>
+<span class="var">ax</span>.<span class="fn-name">grid</span>(<span class="kw">True</span>, <span class="var">alpha</span><span class="op">=</span><span class="num">0.3</span>, <span class="var">linestyle</span><span class="op">=</span><span class="str">'--'</span>)
+
+<span class="comment"># Tick customization</span>
+<span class="var">ax</span>.<span class="fn-name">tick_params</span>(<span class="var">labelsize</span><span class="op">=</span><span class="num">10</span>)
+<span class="var">ax</span>.<span class="fn-name">set_xticks</span>([<span class="num">0</span>, <span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>])
+<span class="var">ax</span>.<span class="fn-name">set_xticklabels</span>([<span class="str">'A'</span>, <span class="str">'B'</span>, <span class="str">'C'</span>, <span class="str">'D'</span>])</span></pre>
+        </div>
+      </section>
+
+      <!-- Section 10: Seaborn Statistical Plots -->
+      <section class="section" id="seaborn">
+        <h2 class="section-title"><span class="section-icon">📈</span> Seaborn Statistical Plots</h2>
+        <p class="section-intro">
+          Seaborn is built on matplotlib and provides high-level functions for statistical plots. Use it for categorical plots, relational plots, distributions, and pairwise relationships.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>seaborn_plots.py</span></div>
+          <pre class="code-content"><span class="kw">import</span> <span class="var">seaborn</span> <span class="kw">as</span> <span class="var">sns</span>
+<span class="kw">import</span> <span class="var">matplotlib.pyplot</span> <span class="kw">as</span> <span class="var">plt</span>
+
+<span class="var">df</span> <span class="op">=</span> <span class="var">sns</span>.<span class="fn-name">load_dataset</span>(<span class="str">'iris'</span>)
+
+<span class="comment"># Categorical plot</span>
+<span class="var">sns</span>.<span class="fn-name">catplot</span>(<span class="var">data</span><span class="op">=</span><span class="var">df</span>, <span class="var">x</span><span class="op">=</span><span class="str">'species'</span>, <span class="var">y</span><span class="op">=</span><span class="str">'sepal_length'</span>, <span class="var">kind</span><span class="op">=</span><span class="str">'box'</span>)
+
+<span class="comment"># Relational plot (scatter with hue)</span>
+<span class="var">sns</span>.<span class="fn-name">relplot</span>(<span class="var">data</span><span class="op">=</span><span class="var">df</span>, <span class="var">x</span><span class="op">=</span><span class="str">'sepal_length'</span>, <span class="var">y</span><span class="op">=</span><span class="str">'sepal_width'</span>, <span class="var">hue</span><span class="op">=</span><span class="str">'species'</span>)
+
+<span class="comment"># Pairplot (all pairwise relationships)</span>
+<span class="var">sns</span>.<span class="fn-name">pairplot</span>(<span class="var">df</span>, <span class="var">hue</span><span class="op">=</span><span class="str">'species'</span>)
+
+<span class="comment"># Distribution plot with KDE</span>
+<span class="var">sns</span>.<span class="fn-name">displot</span>(<span class="var">df</span>[<span class="str">'sepal_length'</span>], <span class="var">kde</span><span class="op">=</span><span class="kw">True</span>)</span></pre>
+        </div>
+
+        <div class="callout tip">
+          <div class="callout-title">Seaborn Themes</div>
+          <p>Use <code>sns.set_theme(style="darkgrid")</code> to change the overall appearance. Available styles: darkgrid, whitegrid, dark, white, ticks.</p>
+        </div>
+      </section>
+
+      <!-- Section 11: Pandas Plot Shorthand -->
+      <section class="section" id="pandas-plot">
+        <h2 class="section-title"><span class="section-icon">🐼</span> Pandas Plot Shorthand</h2>
+        <p class="section-intro">
+          Pandas DataFrames have a <code>.plot()</code> method that creates matplotlib plots directly from your data. Use the <code>kind</code> parameter for different chart types.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>pandas_plotting.py</span></div>
+          <pre class="code-content"><span class="kw">import</span> <span class="var">pandas</span> <span class="kw">as</span> <span class="var">pd</span>
+
+<span class="var">df</span> <span class="op">=</span> <span class="var">pd</span>.<span class="fn-name">DataFrame</span>({
+    <span class="str">'A'</span>: [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>],
+    <span class="str">'B'</span>: [<span class="num">5</span>, <span class="num">6</span>, <span class="num">7</span>, <span class="num">8</span>]
+})
+
+<span class="comment"># Line plot (default)</span>
+<span class="var">df</span>.<span class="fn-name">plot</span>()
+
+<span class="comment"># Different kinds</span>
+<span class="var">df</span>.<span class="fn-name">plot</span>(<span class="var">kind</span><span class="op">=</span><span class="str">'bar'</span>)
+<span class="var">df</span>.<span class="fn-name">plot</span>(<span class="var">kind</span><span class="op">=</span><span class="str">'scatter'</span>, <span class="var">x</span><span class="op">=</span><span class="str">'A'</span>, <span class="var">y</span><span class="op">=</span><span class="str">'B'</span>)
+<span class="var">df</span>.<span class="fn-name">plot</span>(<span class="var">kind</span><span class="op">=</span><span class="str">'hist'</span>, <span class="var">bins</span><span class="op">=</span><span class="num">20</span>)
+<span class="var">df</span>.<span class="fn-name">plot</span>(<span class="var">kind</span><span class="op">=</span><span class="str">'box'</span>)
+
+<span class="comment"># With customization</span>
+<span class="var">df</span>.<span class="fn-name">plot</span>(<span class="var">kind</span><span class="op">=</span><span class="str">'bar'</span>, <span class="var">figsize</span><span class="op">=</span>(<span class="num">10</span>, <span class="num">5</span>), <span class="var">title</span><span class="op">=</span><span class="str">'My Chart'</span>)</span></pre>
+        </div>
+
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th>kind Parameter</th>
+              <th>Plot Type</th>
+              <th>Use Case</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>'line'</code></td>
+              <td>Line plot</td>
+              <td>Time series, trends</td>
+            </tr>
+            <tr>
+              <td><code>'bar'</code></td>
+              <td>Bar chart</td>
+              <td>Categorical comparison</td>
+            </tr>
+            <tr>
+              <td><code>'scatter'</code></td>
+              <td>Scatter plot</td>
+              <td>Correlation analysis</td>
+            </tr>
+            <tr>
+              <td><code>'hist'</code></td>
+              <td>Histogram</td>
+              <td>Distribution shape</td>
+            </tr>
+            <tr>
+              <td><code>'box'</code></td>
+              <td>Box plot</td>
+              <td>Outliers and quartiles</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Section 12: Best Practices -->
+      <section class="section" id="best-practices">
+        <h2 class="section-title"><span class="section-icon">✅</span> Best Practices</h2>
+        <p class="section-intro">
+          Creating effective visualizations requires more than syntax. Choose the right chart type, ensure accessibility, and follow design principles.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>best_practices.py</span></div>
+          <pre class="code-content"><span class="kw">import</span> <span class="var">matplotlib.pyplot</span> <span class="kw">as</span> <span class="var">plt</span>
+
+<span class="comment"># 1. Use colorblind-friendly palettes</span>
+<span class="var">plt</span>.<span class="fn-name">set_cmap</span>(<span class="str">'viridis'</span>)  <span class="comment"># or cividis, turbo</span>
+
+<span class="comment"># 2. Add meaningful titles and labels</span>
+<span class="var">ax</span>.<span class="fn-name">set_title</span>(<span class="str">'Sales Growth by Region (2024)'</span>)
+<span class="var">ax</span>.<span class="fn-name">set_xlabel</span>(<span class="str">'Month'</span>)
+<span class="var">ax</span>.<span class="fn-name">set_ylabel</span>(<span class="str">'Revenue ($1000s)'</span>)
+
+<span class="comment"># 3. Remove chart junk (unnecessary decorations)</span>
+<span class="var">ax</span>.<span class="fn-name">spines</span>[<span class="str">'top'</span>].<span class="fn-name">set_visible</span>(<span class="kw">False</span>)
+<span class="var">ax</span>.<span class="fn-name">spines</span>[<span class="str">'right'</span>].<span class="fn-name">set_visible</span>(<span class="kw">False</span>)
+
+<span class="comment"># 4. Use appropriate chart types</span>
+<span class="comment"># Time series? Use line plot</span>
+<span class="comment"># Comparison? Use bar chart</span>
+<span class="comment"># Distribution? Use histogram or box plot</span>
+
+<span class="comment"># 5. Save figures with high DPI for print</span>
+<span class="var">fig</span>.<span class="fn-name">savefig</span>(<span class="str">'chart.png'</span>, <span class="var">dpi</span><span class="op">=</span><span class="num">300</span>, <span class="var">bbox_inches</span><span class="op">=</span><span class="str">'tight'</span>)</span></pre>
+        </div>
+
+        <div class="diagram-box">
+          <div style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+            <div class="diagram-title">Chart Type Selection Guide</div>
+            <svg viewBox="0 0 700 500" xmlns="http://www.w3.org/2000/svg" style="max-width: 100%; max-height: 450px;">
+              <!-- Start -->
+              <rect x="275" y="10" width="150" height="50" rx="25" fill="var(--blue-bg)" stroke="var(--blue)" stroke-width="2"/>
+              <text x="350" y="40" font-size="13" font-weight="bold" fill="var(--text)" text-anchor="middle">What is your data?</text>
+
+              <!-- First decision -->
+              <line x1="350" y1="60" x2="350" y2="90"/>
+              <polygon points="350,90 345,80 355,80" fill="var(--text2)"/>
+
+              <!-- Time series -->
+              <rect x="50" y="110" width="140" height="50" rx="5" fill="var(--green-bg)" stroke="var(--green)" stroke-width="2"/>
+              <text x="120" y="135" font-size="12" font-weight="bold" fill="var(--text)" text-anchor="middle">Time Series</text>
+              <text x="120" y="155" font-size="10" fill="var(--text2)" text-anchor="middle">→ Line Plot</text>
+
+              <!-- Categorical -->
+              <rect x="280" y="110" width="140" height="50" rx="5" fill="var(--purple-bg)" stroke="var(--viz-color)" stroke-width="2"/>
+              <text x="350" y="135" font-size="12" font-weight="bold" fill="var(--text)" text-anchor="middle">Categorical</text>
+              <text x="350" y="155" font-size="10" fill="var(--text2)" text-anchor="middle">→ Bar Chart</text>
+
+              <!-- Relationships -->
+              <rect x="510" y="110" width="140" height="50" rx="5" fill="var(--amber-bg)" stroke="var(--amber)" stroke-width="2"/>
+              <text x="580" y="135" font-size="12" font-weight="bold" fill="var(--text)" text-anchor="middle">Relationships</text>
+              <text x="580" y="155" font-size="10" fill="var(--text2)" text-anchor="middle">→ Scatter Plot</text>
+
+              <!-- Distribution -->
+              <line x1="350" y1="200" x2="350" y2="230"/>
+              <polygon points="350,230 345,220 355,220" fill="var(--text2)"/>
+
+              <rect x="250" y="250" width="200" height="50" rx="5" fill="var(--red-bg)" stroke="var(--red)" stroke-width="2"/>
+              <text x="350" y="275" font-size="12" font-weight="bold" fill="var(--text)" text-anchor="middle">Distribution (single variable)</text>
+              <text x="350" y="295" font-size="10" fill="var(--text2)" text-anchor="middle">→ Histogram or KDE</text>
+
+              <!-- Comparison -->
+              <line x1="350" y1="340" x2="350" y2="370"/>
+              <polygon points="350,370 345,360 355,360" fill="var(--text2)"/>
+
+              <rect x="200" y="390" width="140" height="50" rx="5" fill="var(--blue-bg)" stroke="var(--blue)" stroke-width="2"/>
+              <text x="270" y="415" font-size="12" font-weight="bold" fill="var(--text)" text-anchor="middle">Group Comparison</text>
+              <text x="270" y="435" font-size="10" fill="var(--text2)" text-anchor="middle">→ Box/Violin Plot</text>
+
+              <rect x="360" y="390" width="140" height="50" rx="5" fill="var(--blue-bg)" stroke="var(--blue)" stroke-width="2"/>
+              <text x="430" y="415" font-size="12" font-weight="bold" fill="var(--text)" text-anchor="middle">2D Matrix Data</text>
+              <text x="430" y="435" font-size="10" fill="var(--text2)" text-anchor="middle">→ Heatmap</text>
+            </svg>
+          </div>
+        </div>
+
+        <div class="callout warning">
+          <div class="callout-title">Accessibility Matters</div>
+          <p>Always use colorblind-friendly palettes (viridis, cividis). Don't rely on color alone to convey information. Include patterns, shapes, or labels.</p>
+        </div>
+
+        <div class="callout info">
+          <div class="callout-title">Saving Figures</div>
+          <p>Use <code>fig.savefig('file.png', dpi=300, bbox_inches='tight')</code> for publication quality. PNG is good for screen, PDF/SVG for print.</p>
+        </div>
+      </section>
+
+      <!-- Practice CTA -->
+      <div class="practice-cta">
+        <div class="cta-text">
+          <div class="cta-title">Ready to Practice?</div>
+          <div class="cta-sub">25 visualization challenges await.</div>
+        </div>
+        <a href="challenges_visualization.html" class="cta-btn">Start Challenges →</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Sidebar navigation active state
+    const links = document.querySelectorAll('.sidebar-nav a');
+    const sections = document.querySelectorAll('.section');
+
+    function updateActiveLink() {
+      let current = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        if (pageYOffset >= sectionTop - 100) {
+          current = section.getAttribute('id');
+        }
+      });
+
+      links.forEach(link => {
+        link.parentElement.classList.remove('active');
+        if (link.getAttribute('href').slice(1) === current) {
+          link.parentElement.classList.add('active');
+        }
+      });
+    }
+
+    window.addEventListener('scroll', updateActiveLink);
+    updateActiveLink();
+  </script>
+</body>
+</html>

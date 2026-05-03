@@ -1,0 +1,2319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bhujanga Abhyāsa — Loops Challenges</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Sora:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<style>
+
+:root {
+  /* Base palette — warm off-white light theme */
+  --bg:        #f5f4f0;
+  --bg2:       #eeecea;
+  --surface:   #ffffff;
+  --surface2:  #fafaf8;
+  --border:    #e2dfd9;
+  --border2:   #cdc9c2;
+
+  /* Text */
+  --text:      #1e1c18;
+  --text2:     #6b6760;
+  --text3:     #9e9b96;
+  --text-inv:  #ffffff;
+
+  /* Accents — muted, professional */
+  --blue:      #3b6fd4;
+  --blue-bg:   #eef2fb;
+  --blue-mid:  #c3d2f2;
+  --green:     #2e7d52;
+  --green-bg:  #edf5f0;
+  --green-mid: #b5d9c5;
+  --amber:     #b45309;
+  --amber-bg:  #fef6ec;
+  --amber-mid: #f5d49a;
+  --red:       #c0392b;
+  --red-bg:    #fdf0ee;
+  --red-mid:   #f1b8b2;
+  --purple:    #6d4fc2;
+  --purple-bg: #f2eefb;
+  --purple-mid:#cfc0ee;
+  --teal:      #1a7a7a;
+  --teal-bg:   #e8f6f6;
+
+  /* Topic colours — desaturated, ink-like */
+  --loop-color:   #2e7d52;
+  --list-color:   #6d4fc2;
+  --fn-color:     #b45309;
+  --str-color:    #c0392b;
+  --dict-color:   #1a7a7a;
+
+  /* Code */
+  --code-bg:   #1e1c18;
+  --code-text: #e8e4db;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.1), 0 4px 8px rgba(0,0,0,0.05);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Sora', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* ── LAYOUT ───────────────────────────────────── */
+.app { display:flex; flex-direction:column; min-height:100vh; }
+
+/* ── TOP NAV ──────────────────────────────────── */
+.topnav {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding: 0 28px;
+  height: 56px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  position:sticky; top:0; z-index:100;
+  box-shadow: var(--shadow-sm);
+}
+
+.logo {
+  font-family:'Playfair Display', serif;
+  font-size:1.25rem;
+  font-weight:700;
+  letter-spacing:0.5px;
+  color: var(--text);
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.logo-dot {
+  width:8px; height:8px; border-radius:50%;
+  background: var(--green);
+  display:inline-block;
+}
+
+.nav-tabs { display:flex; gap:2px; }
+.nav-tab {
+  padding: 6px 16px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text2);
+  cursor: pointer;
+  font-family: 'Sora', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  border-radius: 6px;
+  transition: all 0.15s;
+}
+.nav-tab:hover { background:var(--bg); color:var(--text); }
+.nav-tab.active { background:var(--blue-bg); color:var(--blue); border-color:var(--blue-mid); font-weight:600; }
+
+.nav-stats { display:flex; gap:18px; align-items:center; }
+.nav-stat {
+  font-family:'JetBrains Mono', monospace;
+  font-size:0.72rem;
+  color:var(--text2);
+  display:flex; align-items:center; gap:5px;
+}
+.nav-stat span { color:var(--blue); font-weight:600; }
+
+/* ── PAGE VIEWS ───────────────────────────────── */
+.page { display:none; }
+.page.active { display:block; }
+
+/* ── HOME PAGE ────────────────────────────────── */
+.home-hero {
+  padding: 64px 40px 48px;
+  max-width: 680px;
+  margin: 0 auto;
+  text-align: center;
+}
+.hero-eyebrow {
+  font-size:0.72rem;
+  font-weight:600;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color: var(--green);
+  margin-bottom:14px;
+  display:flex; align-items:center; justify-content:center; gap:8px;
+}
+.hero-eyebrow::before, .hero-eyebrow::after {
+  content:''; width:32px; height:1px; background:var(--green-mid);
+}
+.hero-title {
+  font-family:'Playfair Display', serif;
+  font-size: clamp(2.4rem, 5vw, 3.6rem);
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--text);
+  margin-bottom: 16px;
+  letter-spacing:-0.5px;
+}
+.hero-title em { color:var(--blue); font-style:normal; }
+.hero-sub {
+  font-size:0.95rem;
+  color: var(--text2);
+  max-width: 440px;
+  margin: 0 auto 48px;
+  line-height:1.8;
+  font-weight:300;
+}
+
+.topic-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 14px;
+  max-width: 1060px;
+  margin: 0 auto;
+  padding: 0 28px 64px;
+}
+
+.topic-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 22px 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: var(--shadow-sm);
+}
+.topic-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--border2);
+}
+.tc-icon { font-size:1.8rem; margin-bottom:12px; display:block; }
+.tc-name {
+  font-family:'Sora', sans-serif;
+  font-size:0.9rem;
+  font-weight:700;
+  letter-spacing:0.3px;
+  margin-bottom:6px;
+}
+.tc-loops .tc-name  { color:var(--loop-color); }
+.tc-lists .tc-name  { color:var(--list-color); }
+.tc-functions .tc-name { color:var(--fn-color); }
+.tc-strings .tc-name { color:var(--str-color); }
+.tc-dicts .tc-name  { color:var(--dict-color); }
+.tc-desc { font-size:0.77rem; color:var(--text2); line-height:1.55; margin-bottom:14px; font-weight:300; }
+.tc-meta {
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.65rem;
+  color:var(--text3);
+  letter-spacing:0.5px;
+}
+
+/* ── LEARN PAGE ───────────────────────────────── */
+.learn-layout {
+  display:grid;
+  grid-template-columns: 220px 1fr;
+  min-height: calc(100vh - 56px);
+}
+@media(max-width:768px) { .learn-layout { grid-template-columns:1fr; } }
+
+.learn-sidebar {
+  border-right: 1px solid var(--border);
+  background: var(--surface);
+  padding: 24px 0;
+  position: sticky;
+  top: 56px;
+  height: calc(100vh - 56px);
+  overflow-y: auto;
+}
+
+.sidebar-label {
+  padding: 0 20px 10px;
+  font-size:0.65rem;
+  font-weight:700;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:var(--text3);
+}
+
+.sidebar-topic {
+  padding: 10px 20px;
+  cursor: pointer;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  transition: all 0.15s;
+  border-left: 3px solid transparent;
+  margin: 1px 0;
+}
+.sidebar-topic:hover { background:var(--bg); }
+.sidebar-topic.active {
+  background:var(--blue-bg);
+  border-left-color:var(--blue);
+}
+.st-icon { font-size:1rem; }
+.st-label {
+  font-size:0.82rem;
+  font-weight:500;
+  color:var(--text2);
+}
+.sidebar-topic.active .st-label { color:var(--blue); font-weight:600; }
+
+.learn-content {
+  padding: 48px 56px;
+  max-width: 820px;
+  background: var(--bg);
+}
+@media(max-width:900px) { .learn-content { padding:24px 20px; } }
+
+/* Section header */
+.section-eyebrow {
+  font-size:0.65rem;
+  font-weight:700;
+  letter-spacing:2.5px;
+  color: var(--text3);
+  text-transform:uppercase;
+  margin-bottom:8px;
+}
+.section-title {
+  font-family:'Playfair Display', serif;
+  font-size:2.4rem;
+  font-weight:700;
+  letter-spacing:-0.5px;
+  margin-bottom:14px;
+  line-height:1.1;
+}
+.section-intro {
+  font-size:0.95rem;
+  color:var(--text2);
+  line-height:1.8;
+  margin-bottom:36px;
+  max-width:580px;
+  font-weight:300;
+}
+.section-intro strong { color:var(--text); font-weight:600; }
+
+/* Content blocks */
+.learn-block { margin-bottom:40px; }
+.block-title {
+  font-size:0.72rem;
+  font-weight:700;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:var(--text3);
+  margin-bottom:14px;
+  display:flex; align-items:center; gap:12px;
+}
+.block-title::after { content:''; flex:1; height:1px; background:var(--border); }
+.block-text {
+  font-size:0.88rem;
+  color:var(--text2);
+  line-height:1.8;
+  margin-bottom:16px;
+  font-weight:300;
+}
+.block-text strong { color:var(--text); font-weight:600; }
+.block-text code {
+  background:var(--bg2);
+  border:1px solid var(--border);
+  padding:1px 6px;
+  border-radius:4px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.82em;
+  color:var(--blue);
+}
+
+/* Code block */
+.code-block {
+  background: var(--code-bg);
+  border-radius:8px;
+  overflow:hidden;
+  margin-bottom:16px;
+  box-shadow: var(--shadow-md);
+}
+.code-block-header {
+  padding:10px 16px;
+  background: rgba(255,255,255,0.04);
+  border-bottom:1px solid rgba(255,255,255,0.06);
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.65rem;
+  letter-spacing:0.5px;
+  color: rgba(255,255,255,0.3);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.code-dot { width:9px; height:9px; border-radius:50%; display:inline-block; margin-right:5px; }
+.d1{background:#ff5f57;} .d2{background:#febc2e;} .d3{background:#28c840;}
+pre.code-content {
+  padding:18px 20px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.82rem;
+  line-height:1.75;
+  overflow-x:auto;
+  color:var(--code-text);
+}
+/* Syntax colours — warm, muted */
+.kw    { color:#e06c75; }
+.fn-name { color:#98c379; }
+.str   { color:#d19a66; }
+.num   { color:#c678dd; }
+.comment { color:#636d83; font-style:italic; }
+.var   { color:#abb2bf; }
+.op    { color:#56b6c2; }
+
+/* Visual diagrams */
+.diagram-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius:8px;
+  padding:22px;
+  margin-bottom:20px;
+  box-shadow: var(--shadow-sm);
+  overflow-x:auto;
+}
+.diagram-title {
+  font-family:'JetBrains Mono', monospace;
+  font-size:0.65rem;
+  letter-spacing:1.5px;
+  color:var(--text3);
+  text-transform:uppercase;
+  margin-bottom:16px;
+  font-weight:500;
+}
+
+/* Loop iteration visualizer */
+.iter-vis { display:flex; flex-direction:column; gap:8px; }
+.iter-row { display:flex; align-items:center; gap:12px; font-family:'JetBrains Mono',monospace; font-size:0.78rem; }
+.iter-step { width:28px; text-align:right; color:var(--text3); font-size:0.65rem; }
+.iter-cells { display:flex; gap:4px; }
+.iter-cell {
+  width:38px; height:38px;
+  border:1px solid var(--border);
+  border-radius:5px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:0.82rem;
+  transition: all 0.2s;
+  background:var(--bg);
+  color:var(--text2);
+  font-weight:500;
+}
+.iter-cell.active { border-color:var(--blue); background:var(--blue-bg); color:var(--blue); font-weight:700; box-shadow:0 0 0 2px var(--blue-mid); }
+.iter-cell.done   { background:var(--bg2); color:var(--text3); border-color:var(--border); opacity:0.5; }
+.iter-info { color:var(--text2); font-size:0.72rem; }
+.iter-info .hi { color:var(--blue); font-weight:600; }
+
+/* Flow diagram */
+.flow-diagram { display:flex; flex-direction:column; align-items:center; gap:0; }
+.flow-node {
+  padding:10px 24px;
+  border-radius:6px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.78rem;
+  text-align:center;
+  min-width:200px;
+}
+.flow-start { background:var(--green-bg); border:1px solid var(--green-mid); color:var(--green); font-weight:600; }
+.flow-cond  { background:var(--amber-bg); border:1px solid var(--amber-mid); color:var(--amber); font-weight:600; padding:10px 24px; }
+.flow-body  { background:var(--purple-bg); border:1px solid var(--purple-mid); color:var(--purple); font-weight:600; }
+.flow-end   { background:var(--red-bg); border:1px solid var(--red-mid); color:var(--red); font-weight:600; }
+.flow-arrow { font-size:1rem; color:var(--text3); margin:3px 0; }
+.flow-label { font-size:0.65rem; color:var(--text2); font-family:'JetBrains Mono',monospace; }
+.flow-side  { font-size:0.65rem; color:var(--red); font-family:'JetBrains Mono',monospace; white-space:nowrap; margin-left:8px; }
+
+/* String/List index vis */
+.str-vis  { overflow-x:auto; padding-bottom:4px; }
+.str-cells { display:flex; gap:0; margin-bottom:6px; }
+.str-cell {
+  min-width:38px; height:38px;
+  border:1px solid var(--border); margin-right:-1px;
+  display:flex; align-items:center; justify-content:center;
+  font-family:'JetBrains Mono',monospace; font-size:0.88rem;
+  color:var(--blue); background:var(--surface); font-weight:600;
+}
+.str-indices, .str-neg-row { display:flex; }
+.str-idx {
+  min-width:38px; text-align:center;
+  font-family:'JetBrains Mono',monospace; font-size:0.62rem;
+  color:var(--text3); margin-right:-1px;
+}
+.str-neg { color:var(--red); }
+
+/* List vis */
+.list-vis { overflow-x:auto; }
+.list-row { display:flex; align-items:stretch; gap:0; margin-bottom:4px; }
+.list-bracket { font-size:1.8rem; color:var(--text3); font-family:'JetBrains Mono',monospace; display:flex; align-items:center; padding:0 4px; }
+.list-items { display:flex; gap:0; }
+.list-item {
+  min-width:80px; height:40px;
+  border:1px solid var(--border); margin-right:-1px;
+  display:flex; align-items:center; justify-content:center;
+  font-family:'JetBrains Mono',monospace; font-size:0.78rem;
+  background:var(--surface); color:var(--text2);
+}
+.list-item.hi1 { border-color:var(--green-mid); background:var(--green-bg); color:var(--green); font-weight:600; }
+.list-item.hi2 { border-color:var(--purple-mid); background:var(--purple-bg); color:var(--purple); font-weight:600; }
+.list-item.hi3 { border-color:var(--amber-mid); background:var(--amber-bg); color:var(--amber); font-weight:600; }
+
+/* Memory model */
+.mem-model { display:flex; flex-direction:column; gap:6px; }
+.mem-row { display:flex; align-items:stretch; gap:0; border:1px solid var(--border); border-radius:6px; overflow:hidden; }
+.mem-key {
+  background:var(--purple-bg); border-right:1px solid var(--purple-mid);
+  padding:9px 14px; font-family:'JetBrains Mono',monospace; font-size:0.78rem;
+  color:var(--purple); min-width:110px; display:flex; align-items:center; font-weight:600;
+}
+.mem-val {
+  padding:9px 14px; font-family:'JetBrains Mono',monospace; font-size:0.78rem;
+  color:var(--amber); flex:1; display:flex; align-items:center;
+  background:var(--surface); font-weight:500;
+}
+.mem-type {
+  padding:9px 12px; font-family:'JetBrains Mono',monospace; font-size:0.65rem;
+  color:var(--text3); display:flex; align-items:center; background:var(--bg);
+  border-left:1px solid var(--border);
+}
+
+/* Dict vis */
+.dict-vis { display:flex; flex-direction:column; gap:5px; }
+.dict-pair { display:flex; align-items:center; gap:0; border:1px solid var(--border); border-radius:6px; overflow:hidden; }
+.dict-k { background:var(--teal-bg); border-right:1px solid var(--border); padding:8px 14px; font-family:'JetBrains Mono',monospace; font-size:0.78rem; color:var(--teal); min-width:90px; font-weight:600; }
+.dict-arrow { padding:0 12px; color:var(--text3); font-family:'JetBrains Mono',monospace; background:var(--bg2); border-right:1px solid var(--border); font-size:0.8rem; }
+.dict-v { padding:8px 14px; font-family:'JetBrains Mono',monospace; font-size:0.78rem; color:var(--amber); background:var(--surface); flex:1; font-weight:500; }
+
+/* Callout boxes */
+.callout {
+  border-radius:8px;
+  padding:14px 18px;
+  margin-bottom:16px;
+  font-size:0.85rem;
+  line-height:1.7;
+  display:flex;
+  gap:12px;
+  border-width:1px;
+  border-style:solid;
+}
+.callout-icon { font-size:1.1rem; flex-shrink:0; margin-top:2px; }
+.callout-body { flex:1; }
+.callout-title { font-weight:700; margin-bottom:4px; font-size:0.75rem; letter-spacing:0.5px; text-transform:uppercase; }
+.callout.info    { background:var(--blue-bg); border-color:var(--blue-mid); color:var(--text2); }
+.callout.info .callout-title { color:var(--blue); }
+.callout.warning { background:var(--amber-bg); border-color:var(--amber-mid); color:var(--text2); }
+.callout.warning .callout-title { color:var(--amber); }
+.callout.tip     { background:var(--purple-bg); border-color:var(--purple-mid); color:var(--text2); }
+.callout.tip .callout-title { color:var(--purple); }
+.callout code { background:rgba(0,0,0,0.06); padding:1px 5px; border-radius:3px; font-family:'JetBrains Mono',monospace; font-size:0.82em; }
+
+/* Comparison table */
+.compare-table { width:100%; border-collapse:collapse; font-size:0.82rem; margin-bottom:16px; }
+.compare-table th {
+  background:var(--bg2); border:1px solid var(--border);
+  padding:9px 14px; font-size:0.65rem; font-weight:700;
+  letter-spacing:1.5px; color:var(--text3); text-align:left; text-transform:uppercase;
+}
+.compare-table td { border:1px solid var(--border); padding:9px 14px; color:var(--text2); vertical-align:top; }
+.compare-table tr:nth-child(even) td { background:var(--bg); }
+.compare-table .mono { font-family:'JetBrains Mono',monospace; color:var(--blue); font-size:0.78rem; font-weight:500; }
+
+/* Practice CTA */
+.practice-cta {
+  background: linear-gradient(135deg, var(--blue-bg), var(--green-bg));
+  border:1px solid var(--blue-mid);
+  border-radius:10px;
+  padding:24px 28px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-top:40px;
+  gap:20px;
+  flex-wrap:wrap;
+}
+.cta-text { }
+.cta-title { font-family:'Playfair Display',serif; font-size:1.3rem; font-weight:700; color:var(--text); margin-bottom:4px; }
+.cta-sub { font-size:0.82rem; color:var(--text2); font-weight:300; }
+.cta-btn {
+  background:var(--blue);
+  color:#fff;
+  border:none;
+  padding:11px 26px;
+  border-radius:7px;
+  cursor:pointer;
+  font-family:'Sora',sans-serif;
+  font-size:0.8rem;
+  font-weight:600;
+  letter-spacing:0.3px;
+  white-space:nowrap;
+  transition:all 0.15s;
+  box-shadow: 0 2px 8px rgba(59,111,212,0.3);
+}
+.cta-btn:hover { background:#2f5fc4; box-shadow:0 4px 14px rgba(59,111,212,0.35); transform:translateY(-1px); }
+
+/* ── PRACTICE PAGE ────────────────────────────── */
+.stats-strip {
+  display:flex;
+  gap:16px;
+  padding:10px 24px;
+  border-bottom:1px solid var(--border);
+  background:var(--surface);
+  flex-wrap:wrap;
+  box-shadow: var(--shadow-sm);
+}
+.ss-stat { display:flex; align-items:center; gap:8px; }
+.ss-icon { font-size:1rem; }
+.ss-label { font-size:0.62rem; font-weight:700; letter-spacing:1.5px; color:var(--text3); text-transform:uppercase; }
+.ss-val { font-family:'JetBrains Mono',monospace; font-size:1rem; color:var(--blue); font-weight:700; }
+.xp-strip { flex:1; min-width:200px; display:flex; flex-direction:column; justify-content:center; }
+.xp-row { display:flex; justify-content:space-between; font-family:'JetBrains Mono',monospace; font-size:0.62rem; color:var(--text3); margin-bottom:5px; font-weight:500; }
+.xp-bg { height:5px; background:var(--border); border-radius:99px; }
+.xp-fill { height:100%; background:linear-gradient(90deg,var(--purple),var(--blue)); border-radius:99px; transition:width 0.6s cubic-bezier(.34,1.56,.64,1); }
+
+.practice-layout {
+  display:grid;
+  grid-template-columns:260px 1fr;
+  min-height:calc(100vh - 102px);
+}
+@media(max-width:900px) { .practice-layout { grid-template-columns:1fr; } }
+
+.challenges-sidebar {
+  border-right:1px solid var(--border);
+  background:var(--surface);
+  position:sticky;
+  top:102px;
+  height:calc(100vh - 102px);
+  overflow-y:auto;
+}
+
+.cs-topic-tabs {
+  display:flex;
+  border-bottom:1px solid var(--border);
+  overflow-x:auto;
+  background:var(--bg);
+}
+.cs-tab {
+  padding:10px 14px;
+  font-size:1.1rem;
+  color:var(--text3);
+  cursor:pointer;
+  white-space:nowrap;
+  border-bottom:2px solid transparent;
+  transition:all 0.15s;
+  background:transparent;
+  border-top:none; border-left:none; border-right:none;
+}
+.cs-tab:hover { color:var(--text); }
+.cs-tab.active { color:var(--blue); border-bottom-color:var(--blue); background:var(--surface); }
+
+.cs-list { padding:8px 0; }
+.cs-item {
+  padding:11px 16px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  border-bottom:1px solid var(--bg);
+  transition:all 0.12s;
+}
+.cs-item:hover { background:var(--bg); }
+.cs-item.active { background:var(--blue-bg); border-left:3px solid var(--blue); padding-left:13px; }
+.cs-item.solved .cs-status { color:var(--green); }
+.cs-status { font-size:0.85rem; width:18px; flex-shrink:0; }
+.cs-info { flex:1; min-width:0; }
+.cs-name { font-size:0.8rem; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-bottom:2px; color:var(--text); }
+.cs-xp { font-family:'JetBrains Mono',monospace; font-size:0.62rem; color:var(--text3); }
+.diff-badge { font-family:'JetBrains Mono',monospace; font-size:0.58rem; font-weight:700; padding:2px 7px; border-radius:4px; flex-shrink:0; letter-spacing:0.5px; }
+.diff-easy   { background:var(--green-bg); color:var(--green); }
+.diff-medium { background:var(--amber-bg); color:var(--amber); }
+.diff-hard   { background:var(--red-bg);   color:var(--red); }
+
+/* Editor area */
+.editor-area { padding:28px 32px; max-width:820px; background:var(--bg); }
+.ch-header { margin-bottom:20px; }
+.ch-title { font-family:'Playfair Display',serif; font-size:1.7rem; font-weight:700; margin-bottom:8px; color:var(--text); letter-spacing:-0.3px; }
+.ch-desc { font-size:0.88rem; color:var(--text2); line-height:1.75; margin-bottom:12px; font-weight:300; }
+.ch-tags { display:flex; gap:6px; flex-wrap:wrap; }
+.ch-tag { font-family:'JetBrains Mono',monospace; font-size:0.6rem; font-weight:600; padding:3px 9px; background:var(--purple-bg); color:var(--purple); border-radius:4px; letter-spacing:0.5px; }
+
+.editor-wrap {
+  background:var(--code-bg);
+  border-radius:8px;
+  margin-bottom:12px;
+  overflow:hidden;
+  box-shadow:var(--shadow-md);
+}
+.editor-titlebar {
+  padding:9px 14px;
+  background:rgba(255,255,255,0.04);
+  border-bottom:1px solid rgba(255,255,255,0.06);
+  display:flex; align-items:center; gap:6px;
+}
+.editor-dots { display:flex; gap:5px; }
+.editor-filename { font-family:'JetBrains Mono',monospace; font-size:0.65rem; color:rgba(255,255,255,0.25); margin-left:8px; }
+
+.code-ta {
+  width:100%;
+  background:transparent;
+  border:none; outline:none;
+  color: #e8e4db;
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.83rem;
+  line-height:1.75;
+  resize:vertical;
+  min-height:180px;
+  padding:16px 18px;
+  caret-color:#98c379;
+}
+.code-ta::selection { background:var(--blue-bg); }
+
+.hint-wrap { margin-bottom:12px; }
+.hint-toggle {
+  background:var(--purple-bg);
+  border:1px solid var(--purple-mid);
+  color:var(--purple);
+  padding:7px 16px;
+  border-radius:6px;
+  cursor:pointer;
+  font-family:'Sora',sans-serif;
+  font-size:0.75rem;
+  font-weight:600;
+  transition:all 0.15s;
+}
+.hint-toggle:hover { background:var(--purple-mid); color:var(--surface); }
+.hint-body {
+  display:none;
+  margin-top:8px;
+  background:var(--purple-bg);
+  border-left:3px solid var(--purple);
+  padding:10px 14px;
+  font-size:0.82rem;
+  color:var(--text2);
+  line-height:1.65;
+  border-radius:0 6px 6px 0;
+  font-weight:300;
+}
+.hint-body.show { display:block; animation:fadeIn 0.2s ease; }
+
+.action-row { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:14px; }
+.btn {
+  padding:10px 22px;
+  border-radius:7px;
+  border:none;
+  cursor:pointer;
+  font-family:'Sora',sans-serif;
+  font-size:0.78rem;
+  font-weight:600;
+  letter-spacing:0.3px;
+  transition:all 0.15s;
+}
+.btn-run {
+  background:var(--blue);
+  color:#fff;
+  flex:1;
+  box-shadow:0 2px 8px rgba(59,111,212,0.25);
+}
+.btn-run:hover { background:#2f5fc4; box-shadow:0 4px 12px rgba(59,111,212,0.3); transform:translateY(-1px); }
+.btn-reset { background:var(--surface); color:var(--text2); border:1px solid var(--border); }
+.btn-reset:hover { border-color:var(--border2); color:var(--text); }
+.btn-sol { background:var(--surface); color:var(--text2); border:1px solid var(--border); }
+.btn-sol:hover { border-color:var(--amber-mid); color:var(--amber); }
+
+.output-wrap {
+  background:var(--code-bg);
+  border-radius:8px;
+  margin-bottom:12px;
+  overflow:hidden;
+  box-shadow:var(--shadow-sm);
+}
+.output-bar {
+  padding:8px 14px;
+  background:rgba(255,255,255,0.04);
+  border-bottom:1px solid rgba(255,255,255,0.06);
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.62rem;
+  letter-spacing:1px;
+  color:rgba(255,255,255,0.3);
+  display:flex; justify-content:space-between; align-items:center;
+}
+.out-status { font-size:0.62rem; padding:2px 9px; border-radius:4px; font-weight:700; letter-spacing:0.5px; }
+.out-pass { background:rgba(46,125,82,0.2); color:var(--green); }
+.out-fail { background:rgba(192,57,43,0.2); color:var(--red); }
+.out-run  { background:rgba(180,83,9,0.2);  color:var(--amber); }
+.output-text { padding:14px 16px; font-family:'JetBrains Mono',monospace; font-size:0.8rem; line-height:1.75; min-height:64px; color:rgba(255,255,255,0.45); }
+
+.tests-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(185px,1fr)); gap:8px; margin-bottom:20px; }
+.test-card {
+  background:var(--surface);
+  border:1px solid var(--border);
+  padding:10px 13px;
+  border-radius:7px;
+  font-size:0.72rem;
+  transition:all 0.18s;
+  box-shadow:var(--shadow-sm);
+}
+.test-card.pass { border-color:var(--green-mid); background:var(--green-bg); }
+.test-card.fail { border-color:var(--red-mid);   background:var(--red-bg); }
+.tc-label { color:var(--text3); margin-bottom:3px; font-family:'JetBrains Mono',monospace; font-size:0.62rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; }
+.tc-io { color:var(--text2); font-family:'JetBrains Mono',monospace; line-height:1.5; }
+.tc-res { margin-top:4px; font-family:'JetBrains Mono',monospace; font-weight:600; font-size:0.75rem; }
+.tc-res.pass { color:var(--green); }
+.tc-res.fail { color:var(--red); }
+
+/* ── MODALS ───────────────────────────────────── */
+.modal-bg { position:fixed; inset:0; background:rgba(0,0,0,0.25); display:none; align-items:center; justify-content:center; z-index:500; backdrop-filter:blur(3px); }
+.modal-bg.show { display:flex; animation:fadeIn 0.25s ease; }
+
+.modal-card {
+  background:var(--surface);
+  border-radius:12px;
+  padding:40px;
+  max-width:420px;
+  width:92%;
+  text-align:center;
+  box-shadow:var(--shadow-lg);
+  border:1px solid var(--green-mid);
+}
+.modal-emoji { font-size:2.6rem; margin-bottom:12px; }
+.modal-title { font-family:'Playfair Display',serif; font-size:2rem; font-weight:700; color:var(--text); margin-bottom:6px; }
+.modal-xp { font-family:'JetBrains Mono',monospace; font-size:1.1rem; color:var(--blue); font-weight:700; margin-bottom:14px; }
+.modal-msg { font-size:0.85rem; color:var(--text2); line-height:1.65; margin-bottom:24px; font-weight:300; }
+.btn-cont { background:var(--blue); color:#fff; padding:12px 30px; font-weight:700; font-size:0.82rem; letter-spacing:0.3px; box-shadow:0 2px 8px rgba(59,111,212,0.3); }
+.btn-cont:hover { background:#2f5fc4; }
+
+.sol-card {
+  background:var(--surface);
+  border:1px solid var(--amber-mid);
+  border-radius:12px;
+  padding:28px;
+  max-width:560px;
+  width:92%;
+  box-shadow:var(--shadow-lg);
+  text-align:left;
+  max-height:85vh;
+  overflow-y:auto;
+}
+.sol-title { font-family:'Playfair Display',serif; font-size:1.3rem; font-weight:700; color:var(--amber); margin-bottom:14px; }
+.sol-code {
+  background:var(--code-bg);
+  border-radius:6px;
+  padding:16px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:0.8rem;
+  color:var(--code-text);
+  line-height:1.7;
+  white-space:pre;
+  margin-bottom:14px;
+  overflow-x:auto;
+}
+.sol-exp { font-size:0.82rem; color:var(--text2); line-height:1.7; margin-bottom:20px; font-weight:300; }
+.btn-close {
+  background:transparent; border:1px solid var(--border);
+  color:var(--text2); padding:9px 20px; cursor:pointer;
+  font-family:'Sora',sans-serif; font-size:0.75rem; font-weight:600;
+  border-radius:6px; transition:all 0.15s;
+}
+.btn-close:hover { border-color:var(--border2); color:var(--text); }
+
+/* Toast */
+.toast {
+  position:fixed; top:68px; right:20px; z-index:600;
+  background:var(--surface);
+  border:1px solid var(--green-mid);
+  padding:14px 18px;
+  border-radius:8px;
+  box-shadow:var(--shadow-lg);
+  transform:translateX(140%);
+  transition:transform 0.4s cubic-bezier(.34,1.56,.64,1);
+  max-width:270px;
+}
+.toast.show { transform:translateX(0); }
+.toast.err { border-color:var(--amber-mid); }
+.toast-t { font-weight:700; font-size:0.85rem; color:var(--green); margin-bottom:3px; }
+.toast.err .toast-t { color:var(--amber); }
+.toast-m { font-size:0.72rem; color:var(--text2); font-family:'JetBrains Mono',monospace; }
+
+@keyframes fadeIn { from{opacity:0;transform:scale(0.97)} to{opacity:1;transform:scale(1)} }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+.running::after { content:'...'; animation:pulse 1s infinite; }
+
+@media(max-width:768px) {
+  .learn-sidebar { display:none; }
+  .learn-content { padding:20px 16px; }
+  .practice-layout { grid-template-columns:1fr; }
+  .challenges-sidebar { position:static; height:auto; border-right:none; border-bottom:1px solid var(--border); }
+  .cs-list { display:none; }
+  .topic-cards { grid-template-columns:repeat(2,1fr); }
+}
+
+/* ── TIMED MODE ───────────────────────────────── */
+.timer-ring-wrap { position:relative; width:64px; height:64px; flex-shrink:0; }
+.timer-svg { transform:rotate(-90deg); }
+.timer-bg { fill:none; stroke:var(--border); stroke-width:4; }
+.timer-arc { fill:none; stroke:var(--blue); stroke-width:4; stroke-linecap:round; transition:stroke-dashoffset 1s linear, stroke 0.3s; }
+.timer-arc.warn { stroke:var(--amber); }
+.timer-arc.crit { stroke:var(--red); }
+.timer-label { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-family:'JetBrains Mono',monospace; font-size:0.85rem; font-weight:700; color:var(--text); }
+
+.timed-banner {
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  padding:10px 24px;
+  display:flex;
+  align-items:center;
+  gap:16px;
+  box-shadow:var(--shadow-sm);
+  flex-wrap:wrap;
+}
+.timed-banner.hidden { display:none; }
+.tb-title { font-weight:700; font-size:0.85rem; color:var(--text); }
+.tb-stat { font-family:'JetBrains Mono',monospace; font-size:0.8rem; color:var(--text2); }
+.tb-stat span { color:var(--blue); font-weight:700; }
+.tb-spacer { flex:1; }
+.btn-sm {
+  padding:6px 14px; border-radius:6px; border:none; cursor:pointer;
+  font-family:'Sora',sans-serif; font-size:0.72rem; font-weight:600;
+  transition:all 0.15s;
+}
+.btn-sm-green { background:var(--green-bg); color:var(--green); border:1px solid var(--green-mid); }
+.btn-sm-green:hover { background:var(--green-mid); }
+.btn-sm-red { background:var(--red-bg); color:var(--red); border:1px solid var(--red-mid); }
+.btn-sm-red:hover { background:var(--red-mid); }
+.btn-sm-blue { background:var(--blue-bg); color:var(--blue); border:1px solid var(--blue-mid); }
+.btn-sm-blue:hover { background:var(--blue-mid); color:#fff; }
+
+/* timed mode start modal */
+.timed-start-card {
+  background:var(--surface); border-radius:12px; padding:40px;
+  max-width:440px; width:92%; box-shadow:var(--shadow-lg);
+  border:1px solid var(--border); text-align:center;
+}
+.tsc-title { font-family:'Playfair Display',serif; font-size:1.8rem; font-weight:700; color:var(--text); margin-bottom:8px; }
+.tsc-sub { font-size:0.85rem; color:var(--text2); margin-bottom:28px; line-height:1.7; font-weight:300; }
+.tsc-options { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-bottom:28px; }
+.tsc-opt {
+  background:var(--bg); border:2px solid var(--border); border-radius:8px;
+  padding:14px 20px; cursor:pointer; transition:all 0.15s; min-width:90px;
+}
+.tsc-opt:hover { border-color:var(--blue-mid); background:var(--blue-bg); }
+.tsc-opt.selected { border-color:var(--blue); background:var(--blue-bg); }
+.tsc-opt-time { font-family:'JetBrains Mono',monospace; font-size:1.3rem; font-weight:700; color:var(--blue); display:block; }
+.tsc-opt-label { font-size:0.72rem; color:var(--text2); }
+.tsc-difficulty { display:flex; gap:8px; justify-content:center; margin-bottom:28px; }
+.tsc-diff-btn {
+  padding:7px 16px; border-radius:6px; border:1px solid var(--border);
+  cursor:pointer; font-size:0.75rem; font-weight:600; background:var(--bg);
+  color:var(--text2); transition:all 0.15s;
+}
+.tsc-diff-btn.active-easy   { background:var(--green-bg);  border-color:var(--green-mid);  color:var(--green);  }
+.tsc-diff-btn.active-medium { background:var(--amber-bg);  border-color:var(--amber-mid);  color:var(--amber);  }
+.tsc-diff-btn.active-hard   { background:var(--red-bg);    border-color:var(--red-mid);    color:var(--red);    }
+.tsc-diff-btn.active-level1 { background:var(--green-bg);  border-color:var(--green-mid);  color:var(--green);  }
+.tsc-diff-btn.active-level2 { background:var(--red-bg);    border-color:var(--red-mid);    color:var(--red);    }
+.tsc-diff-btn.active-mixed  { background:var(--purple-bg); border-color:var(--purple-mid); color:var(--purple); }
+
+/* Timed results */
+.timed-results-card {
+  background:var(--surface); border-radius:12px; padding:40px;
+  max-width:500px; width:92%; box-shadow:var(--shadow-lg);
+  border:1px solid var(--border);
+}
+.tr-title { font-family:'Playfair Display',serif; font-size:2rem; font-weight:700; color:var(--text); margin-bottom:20px; text-align:center; }
+.tr-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:24px; }
+.tr-stat { background:var(--bg); border-radius:8px; padding:14px; text-align:center; border:1px solid var(--border); }
+.tr-stat-val { font-family:'JetBrains Mono',monospace; font-size:1.6rem; font-weight:700; color:var(--blue); display:block; }
+.tr-stat-label { font-size:0.72rem; color:var(--text3); text-transform:uppercase; letter-spacing:1px; font-weight:700; margin-top:2px; }
+.tr-breakdown { margin-bottom:20px; }
+.tr-row { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--border); font-size:0.82rem; }
+.tr-row:last-child { border-bottom:none; }
+
+/* ── SPACED REPETITION ────────────────────────── */
+.review-queue-card {
+  background:var(--surface); border:1px solid var(--amber-mid);
+  border-radius:10px; padding:20px 22px; margin:0 32px 20px;
+  display:flex; align-items:center; gap:16px; box-shadow:var(--shadow-sm);
+}
+.rq-icon { font-size:1.6rem; }
+.rq-info { flex:1; }
+.rq-title { font-weight:700; font-size:0.9rem; color:var(--text); margin-bottom:2px; }
+.rq-sub { font-size:0.78rem; color:var(--text2); font-weight:300; }
+.rq-items { display:flex; gap:6px; margin-top:8px; flex-wrap:wrap; }
+.rq-item {
+  font-family:'JetBrains Mono',monospace; font-size:0.65rem; font-weight:700;
+  padding:3px 8px; border-radius:4px; cursor:pointer; transition:all 0.12s;
+}
+.rq-due   { background:var(--amber-bg);  color:var(--amber);  border:1px solid var(--amber-mid); }
+.rq-new   { background:var(--blue-bg);   color:var(--blue);   border:1px solid var(--blue-mid); }
+.rq-due:hover { background:var(--amber-mid); }
+.rq-new:hover { background:var(--blue-mid); color:#fff; }
+
+/* SR rating buttons */
+.sr-rating {
+  display:flex; gap:8px; padding:0 32px 16px; flex-wrap:wrap;
+}
+.sr-btn {
+  flex:1; min-width:80px; padding:10px 8px; border-radius:7px; border:none;
+  cursor:pointer; font-family:'Sora',sans-serif; font-size:0.75rem; font-weight:600;
+  transition:all 0.15s;
+}
+.sr-again  { background:var(--red-bg);    color:var(--red);    border:1px solid var(--red-mid); }
+.sr-hard   { background:var(--amber-bg);  color:var(--amber);  border:1px solid var(--amber-mid); }
+.sr-good   { background:var(--blue-bg);   color:var(--blue);   border:1px solid var(--blue-mid); }
+.sr-easy   { background:var(--green-bg);  color:var(--green);  border:1px solid var(--green-mid); }
+.sr-again:hover  { background:var(--red-mid);    color:#fff; }
+.sr-hard:hover   { background:var(--amber-mid);  color:#fff; }
+.sr-good:hover   { background:var(--blue-mid);   color:#fff; }
+.sr-easy:hover   { background:var(--green-mid);  color:#fff; }
+.sr-next-label { font-size:0.65rem; color:var(--text3); display:block; margin-top:2px; }
+
+/* ── AI HINT ──────────────────────────────────── */
+.ai-hint-section { padding:0 0 12px; }
+.ai-hint-toggle {
+  background:linear-gradient(135deg, var(--purple-bg), var(--blue-bg));
+  border:1px solid var(--purple-mid);
+  color:var(--purple);
+  padding:8px 18px;
+  border-radius:7px;
+  cursor:pointer;
+  font-family:'Sora',sans-serif;
+  font-size:0.78rem;
+  font-weight:600;
+  transition:all 0.15s;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.ai-hint-toggle:hover { box-shadow:0 2px 8px rgba(109,79,194,0.2); }
+.ai-hint-toggle .ai-badge {
+  background:var(--purple);
+  color:#fff;
+  font-size:0.6rem;
+  padding:2px 6px;
+  border-radius:3px;
+  font-weight:700;
+  letter-spacing:0.5px;
+}
+.ai-hint-body {
+  display:none;
+  margin-top:10px;
+  background:linear-gradient(135deg, var(--purple-bg), var(--blue-bg));
+  border:1px solid var(--purple-mid);
+  border-radius:8px;
+  padding:14px 16px;
+  font-size:0.85rem;
+  color:var(--text);
+  line-height:1.7;
+  font-weight:300;
+  position:relative;
+}
+.ai-hint-body.show { display:block; animation:fadeIn 0.25s ease; }
+.ai-hint-body.loading::after {
+  content:'Thinking...';
+  color:var(--text3);
+  font-style:italic;
+  font-size:0.8rem;
+}
+.ai-hint-meta { font-size:0.65rem; color:var(--purple); font-weight:600; margin-bottom:6px; letter-spacing:0.5px; text-transform:uppercase; display:flex; align-items:center; gap:6px; }
+.ai-spark { font-size:0.9rem; }
+
+/* AI error state */
+.ai-error { color:var(--amber); font-size:0.82rem; }
+
+/* ── PROGRESS / ANALYTICS PAGE ────────────────── */
+.progress-page { padding:40px 40px; max-width:1000px; margin:0 auto; }
+.prog-title { font-family:'Playfair Display',serif; font-size:2rem; font-weight:700; margin-bottom:6px; color:var(--text); }
+.prog-sub { font-size:0.88rem; color:var(--text2); margin-bottom:32px; font-weight:300; }
+
+.prog-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:14px; margin-bottom:32px; }
+.prog-stat-card {
+  background:var(--surface); border:1px solid var(--border); border-radius:10px;
+  padding:20px 18px; box-shadow:var(--shadow-sm); text-align:center;
+}
+.psc-icon { font-size:1.6rem; margin-bottom:8px; display:block; }
+.psc-val { font-family:'JetBrains Mono',monospace; font-size:1.8rem; font-weight:700; color:var(--blue); display:block; margin-bottom:4px; }
+.psc-label { font-size:0.7rem; color:var(--text3); font-weight:700; text-transform:uppercase; letter-spacing:1px; }
+
+.prog-section-title { font-size:0.7rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--text3); margin-bottom:14px; display:flex; align-items:center; gap:12px; }
+.prog-section-title::after { content:''; flex:1; height:1px; background:var(--border); }
+
+/* Topic progress bars */
+.topic-prog-list { display:flex; flex-direction:column; gap:10px; margin-bottom:32px; }
+.tp-row { background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:14px 18px; box-shadow:var(--shadow-sm); }
+.tp-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+.tp-name { font-weight:600; font-size:0.88rem; color:var(--text); display:flex; align-items:center; gap:8px; }
+.tp-count { font-family:'JetBrains Mono',monospace; font-size:0.72rem; color:var(--text3); }
+.tp-bar-bg { height:7px; background:var(--bg2); border-radius:99px; overflow:hidden; }
+.tp-bar-fill { height:100%; border-radius:99px; transition:width 0.8s cubic-bezier(.34,1.56,.64,1); }
+
+/* Heatmap calendar */
+.heatmap-wrap { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:20px; box-shadow:var(--shadow-sm); margin-bottom:32px; overflow-x:auto; }
+.heatmap-grid { display:flex; gap:3px; }
+.heatmap-col { display:flex; flex-direction:column; gap:3px; }
+.heatmap-cell { width:13px; height:13px; border-radius:2px; background:var(--bg2); transition:all 0.15s; cursor:default; }
+.heatmap-cell.l1 { background:#c8e6d5; }
+.heatmap-cell.l2 { background:#76c49a; }
+.heatmap-cell.l3 { background:#2e7d52; }
+.heatmap-cell.l4 { background:#1a4d31; }
+.heatmap-days { display:flex; flex-direction:column; gap:3px; margin-right:6px; }
+.heatmap-day { height:13px; font-size:0.58rem; color:var(--text3); display:flex; align-items:center; }
+
+/* Recent activity */
+.activity-list { display:flex; flex-direction:column; gap:6px; margin-bottom:32px; }
+.act-row {
+  background:var(--surface); border:1px solid var(--border); border-radius:7px;
+  padding:10px 16px; display:flex; align-items:center; gap:12px; box-shadow:var(--shadow-sm);
+}
+.act-icon { font-size:1rem; }
+.act-info { flex:1; }
+.act-name { font-size:0.82rem; font-weight:500; color:var(--text); }
+.act-meta { font-size:0.7rem; color:var(--text3); font-family:'JetBrains Mono',monospace; }
+.act-xp { font-family:'JetBrains Mono',monospace; font-size:0.8rem; font-weight:700; color:var(--blue); }
+
+/* Review due badge on nav */
+.review-badge {
+  background:var(--amber); color:#fff;
+  font-size:0.6rem; font-weight:700;
+  border-radius:99px; padding:1px 5px;
+  margin-left:4px; vertical-align:middle;
+}
+
+/* New topics on home */
+.tc-comprehensions .tc-name { color:#1a7a7a; }
+.tc-classes .tc-name       { color:#8b4513; }
+.tc-errors .tc-name        { color:#7b2c8a; }
+.tc-numpy .tc-name         { color:#1565c0; }
+.tc-pandas .tc-name        { color:#1a6b2e; }
+.tc-visualization .tc-name { color:#c25c0a; }
+
+/* Streak calendar in stats */
+.streak-bar { display:flex; gap:3px; align-items:center; }
+.streak-day { width:10px; height:10px; border-radius:2px; background:var(--bg2); }
+.streak-day.active { background:var(--green); }
+.streak-day.today  { background:var(--blue); }
+
+/* Level badge */
+.level-badge {
+  display:inline-flex; align-items:center; gap:6px;
+  background:linear-gradient(135deg,var(--blue-bg),var(--purple-bg));
+  border:1px solid var(--blue-mid); border-radius:20px;
+  padding:4px 12px; font-size:0.75rem; font-weight:700; color:var(--blue);
+}
+
+/* localStorage indicator */
+.save-dot {
+  width:6px; height:6px; border-radius:50%;
+  background:var(--green); display:inline-block; margin-right:4px;
+  box-shadow:0 0 4px var(--green);
+}
+
+.tc-actions{display:flex;border-top:1px solid var(--border);}
+.tc-btn{flex:1;padding:8px 4px;font-size:.67rem;font-weight:600;font-family:'Sora',sans-serif;border:none;background:var(--bg);color:var(--text2);cursor:pointer;transition:all .15s;}
+.tc-btn-learn{border-right:1px solid var(--border);}
+.tc-btn-learn:hover{background:var(--blue-bg);color:var(--blue);}
+.tc-btn-practice:hover{background:var(--green-bg);color:var(--green);}
+.tc-header{padding:16px 16px 10px;}
+
+.tc-actions{display:flex;border-top:1px solid var(--border);margin-top:auto;}
+.tc-btn{flex:1;padding:8px 4px;font-size:.67rem;font-weight:600;font-family:'Sora',sans-serif;border:none;background:var(--bg);color:var(--text2);cursor:pointer;transition:all .15s;}
+.tc-btn-learn{border-right:1px solid var(--border);}
+.tc-btn-learn:hover{background:var(--blue-bg);color:var(--blue);}
+.tc-btn-practice:hover{background:var(--green-bg);color:var(--green);}
+.tc-header{padding:22px 20px 14px;}
+.topic-card{padding:0 !important;display:flex;flex-direction:column;}
+
+.back-link {
+  display:inline-flex;align-items:center;gap:6px;
+  padding:8px 16px;margin:12px 24px;
+  font-family:'Sora',sans-serif;font-size:0.8rem;font-weight:600;
+  color:var(--text2);text-decoration:none;
+  border:1px solid var(--border);border-radius:6px;
+  background:var(--surface);transition:all 0.15s;
+}
+.back-link:hover { background:var(--blue-bg);color:var(--blue);border-color:var(--blue-mid); }
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- TOP NAV -->
+<nav class="topnav">
+  <div class="logo"><span class="save-dot" id="saveDot" title="Progress saved"></span>🔁 Loops Challenges <span style="font-size:.65em;font-family:'Sora',sans-serif;font-weight:600;background:var(--green-bg);color:var(--green);padding:2px 8px;border-radius:10px;">Prathama</span></div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showPage('practice')" id="tab-practice">Practice</button>
+    <button class="nav-tab"        onclick="showPage('timed')"    id="tab-timed">⏱ Timed</button>
+    <button class="nav-tab"        onclick="showPage('progress')" id="tab-progress">Progress</button>
+  </div>
+  <div class="nav-stats">
+    <div class="nav-stat">⚡ <span id="ns-score">0</span></div>
+    <div class="nav-stat">🔥 <span id="ns-streak">0</span></div>
+    <div class="nav-stat level-badge">Lv.<span id="ns-level">1</span></div>
+  </div>
+</nav>
+
+<a href="abhyasa_prathama.html" class="back-link">← Back to Prathama</a>
+
+<!-- ════════════════════════════════ PRACTICE PAGE ════════════════════════════════ -->
+
+<div class="page active" id="page-practice">
+  <div class="stats-strip">
+    <div class="ss-stat"><span class="ss-icon">⚡</span><div><div class="ss-label">SCORE</div><div class="ss-val" id="ps-score">0</div></div></div>
+    <div class="ss-stat"><span class="ss-icon">🔥</span><div><div class="ss-label">STREAK</div><div class="ss-val" id="ps-streak">0</div></div></div>
+    <div class="ss-stat"><span class="ss-icon">✅</span><div><div class="ss-label">SOLVED</div><div class="ss-val" id="ps-solved">0/50</div></div></div>
+    <div class="ss-stat"><span class="ss-icon">🏆</span><div><div class="ss-label">LEVEL</div><div class="ss-val" id="ps-level">1</div></div></div>
+    <div class="xp-strip"><div class="xp-row"><span>XP</span><span id="ps-xptext">0 / 200</span></div><div class="xp-bg"><div class="xp-fill" id="ps-xpbar" style="width:0%"></div></div></div>
+  </div>
+  <div class="review-queue-card" id="reviewQueueCard" style="display:none">
+    <span class="rq-icon">🔄</span>
+    <div class="rq-info">
+      <div class="rq-title">Spaced Repetition — Review Due</div>
+      <div class="rq-sub">These challenges are due for review.</div>
+      <div class="rq-items" id="reviewQueueItems"></div>
+    </div>
+  </div>
+  <div class="practice-layout">
+    <aside class="challenges-sidebar">
+      <div class="cs-topic-tabs" id="csTabs"></div>
+      <div class="cs-list" id="csList"></div>
+    </aside>
+    <div class="editor-area">
+      <div class="ch-header">
+        <div class="ch-title" id="chTitle">Select a Challenge</div>
+        <div class="ch-desc"  id="chDesc">Choose a challenge from the sidebar to begin.</div>
+        <div class="ch-tags"  id="chTags"></div>
+      </div>
+      <div class="editor-wrap">
+        <div class="editor-titlebar">
+          <div class="editor-dots"><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></div>
+          <span class="editor-filename">solution.py</span>
+          <span style="flex:1"></span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:rgba(255,255,255,0.2)">Ctrl+Enter to run</span>
+        </div>
+        <textarea class="code-ta" id="codeTA" placeholder="# Select a challenge to begin..." spellcheck="false"></textarea>
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
+        <div class="hint-wrap" style="margin:0;flex:1;min-width:160px;">
+          <button class="hint-toggle" onclick="toggleHint()">💡 Show Hint <span style="font-size:0.65rem;color:var(--text3);font-weight:400">(−10 XP)</span></button>
+          <div class="hint-body" id="hintBody"></div>
+        </div>
+        <div class="ai-hint-section" style="flex:1;min-width:160px;">
+          <button class="ai-hint-toggle" onclick="toggleAIHint()" id="aiHintBtn">
+            <span class="ai-badge">AI</span> Smart Hint
+          </button>
+          <div class="ai-hint-body" id="aiHintBody">
+            <div class="ai-hint-meta"><span class="ai-spark">✨</span> Claude's Analysis</div>
+            <div id="aiHintContent"></div>
+          </div>
+        </div>
+      </div>
+      <div class="action-row">
+        <button class="btn btn-run"   onclick="runCode()">▶ Run Code</button>
+        <button class="btn btn-reset" onclick="resetCode()">↺ Reset</button>
+        <button class="btn btn-sol"   onclick="showSol()">👁 Solution</button>
+      </div>
+      <div id="srRatingWrap" style="display:none;margin-bottom:12px;">
+        <div style="font-size:0.7rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:8px;">How well did you know this?</div>
+        <div class="sr-rating">
+          <button class="sr-btn sr-again" onclick="rateSR(0)">Again<span class="sr-next-label" id="srNext0"></span></button>
+          <button class="sr-btn sr-hard"  onclick="rateSR(1)">Hard<span  class="sr-next-label" id="srNext1"></span></button>
+          <button class="sr-btn sr-good"  onclick="rateSR(2)">Good<span  class="sr-next-label" id="srNext2"></span></button>
+          <button class="sr-btn sr-easy"  onclick="rateSR(3)">Easy<span  class="sr-next-label" id="srNext3"></span></button>
+        </div>
+      </div>
+      <div class="output-wrap">
+        <div class="output-bar"><span>OUTPUT</span><span class="out-status" id="outStatus"></span></div>
+        <div class="output-text" id="outText">// Run your code to see output...</div>
+      </div>
+      <div class="tests-grid" id="testsGrid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════ TIMED PAGE ═══════════════════════════════ -->
+
+<div class="page" id="page-timed">
+  <div class="timed-banner hidden" id="timedBanner">
+    <div class="timer-ring-wrap">
+      <svg class="timer-svg" width="64" height="64" viewBox="0 0 64 64">
+        <circle class="timer-bg" cx="32" cy="32" r="28"/>
+        <circle class="timer-arc" id="timerArc" cx="32" cy="32" r="28" stroke-dasharray="175.93" stroke-dashoffset="0"/>
+      </svg>
+      <div class="timer-label" id="timerLabel">—</div>
+    </div>
+    <div class="tb-title" id="timedChalName">—</div>
+    <div class="tb-stat">✅ <span id="timedCorrect">0</span> correct</div>
+    <div class="tb-stat">❌ <span id="timedWrong">0</span> wrong</div>
+    <div class="tb-stat">📝 <span id="timedRemain">0</span> left</div>
+    <div class="tb-spacer"></div>
+    <button class="btn-sm btn-sm-red" onclick="endTimedMode()">End Session</button>
+  </div>
+  <div class="stats-strip" id="timedPracticeStats" style="display:none">
+    <div class="ss-stat"><span class="ss-icon">⏱</span><div><div class="ss-label">TIME LEFT</div><div class="ss-val" id="tp-time">—</div></div></div>
+    <div class="ss-stat"><span class="ss-icon">✅</span><div><div class="ss-label">CORRECT</div><div class="ss-val" id="tp-correct">0</div></div></div>
+    <div class="ss-stat"><span class="ss-icon">❌</span><div><div class="ss-label">WRONG</div><div class="ss-val" id="tp-wrong">0</div></div></div>
+    <div class="ss-stat"><span class="ss-icon">📝</span><div><div class="ss-label">LEFT</div><div class="ss-val" id="tp-remain">—</div></div></div>
+    <div style="margin-left:auto"><button class="btn-sm btn-sm-red" onclick="endTimedMode()">End Session</button></div>
+  </div>
+  <div id="timedEditorArea" style="display:none">
+    <div class="editor-area">
+      <div class="ch-header">
+        <div class="ch-title" id="tChTitle">—</div>
+        <div class="ch-desc"  id="tChDesc">—</div>
+        <div class="ch-tags"  id="tChTags"></div>
+      </div>
+      <div class="editor-wrap">
+        <div class="editor-titlebar">
+          <div class="editor-dots"><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></div>
+          <span class="editor-filename">solution.py</span>
+          <span style="flex:1"></span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:rgba(255,255,255,0.2)">Ctrl+Enter to run</span>
+        </div>
+        <textarea class="code-ta" id="tCodeTA" spellcheck="false"></textarea>
+      </div>
+      <div class="action-row">
+        <button class="btn btn-run"   onclick="runTimedCode()">▶ Run Code</button>
+        <button class="btn btn-reset" onclick="resetTimedCode()">↺ Reset</button>
+        <button class="btn btn-sol"   onclick="skipTimedChallenge()" style="color:var(--amber)">⏭ Skip</button>
+      </div>
+      <div class="output-wrap">
+        <div class="output-bar"><span>OUTPUT</span><span class="out-status" id="tOutStatus"></span></div>
+        <div class="output-text" id="tOutText">// Run your code to see output...</div>
+      </div>
+      <div class="tests-grid" id="tTestsGrid"></div>
+    </div>
+  </div>
+  <div id="timedStartScreen" style="display:flex;align-items:center;justify-content:center;min-height:calc(100vh - 120px);padding:20px;">
+    <div class="timed-start-card">
+      <div style="font-size:2.5rem;margin-bottom:12px">⏱</div>
+      <div class="tsc-title">Timed Loops Challenge</div>
+      <div class="tsc-sub">Race against the clock. Solve as many loops challenges as you can!</div>
+      <div style="font-size:0.7rem;font-weight:700;letter-spacing:2px;color:var(--text3);text-transform:uppercase;margin-bottom:12px;">Time Limit</div>
+      <div class="tsc-options">
+        <div class="tsc-opt selected" onclick="selectTimedDuration(120)"  data-dur="120"><span class="tsc-opt-time">2m</span><span class="tsc-opt-label">Sprint</span></div>
+        <div class="tsc-opt"          onclick="selectTimedDuration(300)"  data-dur="300"><span class="tsc-opt-time">5m</span><span class="tsc-opt-label">Standard</span></div>
+        <div class="tsc-opt"          onclick="selectTimedDuration(600)"  data-dur="600"><span class="tsc-opt-time">10m</span><span class="tsc-opt-label">Marathon</span></div>
+      </div>
+      <div style="font-size:0.7rem;font-weight:700;letter-spacing:2px;color:var(--text3);text-transform:uppercase;margin-bottom:12px;">Difficulty Level</div>
+      <div class="tsc-difficulty" style="flex-wrap:wrap;gap:8px;">
+        <button class="tsc-diff-btn active-mixed" onclick="selectTimedDiff('mixed',this)" data-d="mixed">Mixed (All)</button>
+        <button class="tsc-diff-btn" onclick="selectTimedDiff('easy',this)" data-d="easy">Easy Only</button>
+        <button class="tsc-diff-btn" onclick="selectTimedDiff('medium',this)" data-d="medium">Medium Only</button>
+        <button class="tsc-diff-btn" onclick="selectTimedDiff('hard',this)" data-d="hard">Hard Only</button>
+      </div>
+      <button class="btn btn-run" style="width:100%;justify-content:center;margin-top:20px;" onclick="startTimedMode()">Start Session →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════ PROGRESS PAGE ════════════════════════════ -->
+
+<div class="page" id="page-progress">
+  <div class="progress-page">
+    <div class="prog-title">🔁 Loops Progress</div>
+    <div class="prog-sub">Track your loops learning journey.</div>
+    <div class="prog-grid" id="progStatCards"></div>
+    <div class="prog-section-title">Topic Progress</div>
+    <div class="topic-prog-list" id="topicProgList"></div>
+    <div class="prog-section-title">Activity This Month</div>
+    <div class="heatmap-wrap">
+      <div style="display:flex;gap:16px;align-items:flex-start;">
+        <div class="heatmap-days" id="heatmapDays"></div>
+        <div class="heatmap-grid" id="heatmapGrid"></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;margin-top:10px;font-size:0.68rem;color:var(--text3);">
+        <span>Less</span>
+        <div class="heatmap-cell"></div><div class="heatmap-cell l1"></div><div class="heatmap-cell l2"></div><div class="heatmap-cell l3"></div><div class="heatmap-cell l4"></div>
+        <span>More</span>
+      </div>
+    </div>
+    <div class="prog-section-title">Recent Activity</div>
+    <div class="activity-list" id="activityList"></div>
+    <div class="prog-section-title">Spaced Repetition Queue</div>
+    <div id="srQueueSection"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ MODALS ═══════════════════════════════════ -->
+
+<div class="modal-bg" id="winModal">
+  <div class="modal-card">
+    <div class="modal-emoji" id="winEmoji">🎯</div>
+    <div class="modal-title"  id="winTitle">Solved!</div>
+    <div class="modal-xp"     id="winXP">+100 XP</div>
+    <div class="modal-msg"    id="winMsg">All test cases passed!</div>
+    <button class="btn btn-cont" onclick="closeWin()">Next Challenge →</button>
+  </div>
+</div>
+<div class="modal-bg" id="timedWinModal">
+  <div class="timed-results-card">
+    <div class="tr-title">⏱ Session Complete!</div>
+    <div class="tr-grid" id="trGrid"></div>
+    <div class="prog-section-title">Breakdown</div>
+    <div class="tr-breakdown" id="trBreakdown"></div>
+    <div style="display:flex;gap:10px;margin-top:16px;">
+      <button class="btn btn-run" style="flex:1" onclick="closeTimedResults();showPage('timed')">Play Again</button>
+      <button class="btn btn-reset" onclick="closeTimedResults();showPage('practice')">Practice</button>
+    </div>
+  </div>
+</div>
+<div class="modal-bg" id="solModal">
+  <div class="sol-card">
+    <div class="sol-title">Reference Solution</div>
+    <pre class="sol-code" id="solCode"></pre>
+    <div class="sol-exp"  id="solExp"></div>
+    <button class="btn-close" onclick="closeSol()">Close</button>
+  </div>
+</div>
+<div class="toast" id="toast">
+  <div class="toast-t" id="toastT">Info</div>
+  <div class="toast-m" id="toastM"></div>
+</div>
+
+</div>
+
+<script>
+const LESSONS = {};
+
+const CHALLENGES = {
+  loops:[
+    {id:"lp1",title:"Count to N",desc:"Write count_to(n) that returns a list [1, 2, ..., n] using a for loop.",difficulty:"easy",tags:["for loop","range","list"],hint:"Use range(1, n+1). Append each number to a result list.",starter:"def count_to(n):\n    result = []\n    # your code here\n    return result",solution:"def count_to(n):\n    result = []\n    for i in range(1, n + 1):\n        result.append(i)\n    return result",explanation:"range(1, n+1) gives 1 through n inclusive. Append each i to result.",tests:[{input:[5],expected:[1,2,3,4,5]},{input:[3],expected:[1,2,3]},{input:[0],expected:[]},{input:[1],expected:[1]}],fn:(n)=>{const r=[];for(let i=1;i<=n;i++)r.push(i);return r;},xp:50},
+    {id:"lp2",title:"Sum of List",desc:"Write sum_list(nums) returning the sum using a while loop (no built-in sum()).",difficulty:"easy",tags:["while loop","accumulator"],hint:"Use index i=0. Loop while i<len(nums), add nums[i], increment i.",starter:"def sum_list(nums):\n    total = 0\n    i = 0\n    # while loop here\n    return total",solution:"def sum_list(nums):\n    total = 0\n    i = 0\n    while i < len(nums):\n        total += nums[i]\n        i += 1\n    return total",explanation:"Initialize total=0, i=0. Loop while i<length. Add nums[i] to total, then i += 1.",tests:[{input:[[1,2,3,4,5]],expected:15},{input:[[10,20]],expected:30},{input:[[]],expected:0},{input:[[-1,1]],expected:0}],fn:(nums)=>nums.reduce((a,b)=>a+b,0),xp:60},
+    {id:"lp3",title:"FizzBuzz",desc:"Write fizzbuzz(n) returning list 1..n. Multiples of 3→'Fizz', 5→'Buzz', both→'FizzBuzz', else number.",difficulty:"medium",tags:["modulo","conditionals"],hint:"Check % 15 FIRST (FizzBuzz), then % 3 (Fizz), then % 5 (Buzz).",starter:"def fizzbuzz(n):\n    result = []\n    for i in range(1, n + 1):\n        # check conditions\n        pass\n    return result",solution:"def fizzbuzz(n):\n    result = []\n    for i in range(1, n + 1):\n        if i % 15 == 0:\n            result.append(\"FizzBuzz\")\n        elif i % 3 == 0:\n            result.append(\"Fizz\")\n        elif i % 5 == 0:\n            result.append(\"Buzz\")\n        else:\n            result.append(i)\n    return result",explanation:"Order matters: check 15 first (divisible by both 3 and 5), then 3, then 5.",tests:[{input:[5],expected:[1,2,"Fizz",4,"Buzz"]},{input:[15],expected:[1,2,"Fizz",4,"Buzz","Fizz",7,8,"Fizz","Buzz",11,"Fizz",13,14,"FizzBuzz"]},{input:[3],expected:[1,2,"Fizz"]}],fn:(n)=>{const r=[];for(let i=1;i<=n;i++){if(i%15===0)r.push("FizzBuzz");else if(i%3===0)r.push("Fizz");else if(i%5===0)r.push("Buzz");else r.push(i);}return r;},xp:80},
+    {id:"lp4",title:"Find Max",desc:"Write find_max(nums) returning the largest number without using max().",difficulty:"medium",tags:["comparison","variables"],hint:"Assume first element is max. Loop from index 1 onwards, update max_val if bigger.",starter:"def find_max(nums):\n    if not nums:\n        return None\n    max_val = nums[0]\n    # loop through rest\n    return max_val",solution:"def find_max(nums):\n    if not nums:\n        return None\n    max_val = nums[0]\n    for num in nums[1:]:\n        if num > max_val:\n            max_val = num\n    return max_val",explanation:"Start with first element as max. For each remaining element, update if it's larger.",tests:[{input:[[3,1,4,1,5,9,2,6]],expected:9},{input:[[100]],expected:100},{input:[[-5,-1,-10]],expected:-1}],fn:(nums)=>nums.length?Math.max(...nums):null,xp:80},
+    {id:"lp5",title:"Star Triangle",desc:"Write star_triangle(n) returning a list where row i has i stars: ['*','**','***'].",difficulty:"hard",tags:["nested loops","patterns"],hint:"Outer loop for each row (1 to n). Inner loop builds the star string.",starter:"def star_triangle(n):\n    rows = []\n    for i in range(1, n + 1):\n        row = ''\n        for j in range(i):\n            row += '*'\n        rows.append(row)\n    return rows",solution:"def star_triangle(n):\n    rows = []\n    for i in range(1, n + 1):\n        row = \"\"\n        for j in range(i):\n            row += \"*\"\n        rows.append(row)\n    return rows",explanation:"Inner loop runs i times per row, building a string of i stars.",tests:[{input:[3],expected:["*","**","***"]},{input:[1],expected:["*"]},{input:[4],expected:["*","**","***","****"]}],fn:(n)=>{const r=[];for(let i=1;i<=n;i++)r.push('*'.repeat(i));return r;},xp:120}
+    ,{id:"lp6",title:"Countdown",desc:"Write countdown(n) returning a list counting down from n to 1.",difficulty:"easy",tags:["range","step"],hint:"Use range(n, 0, -1).",starter:"def countdown(n):\n    # your code here\n    pass",solution:"def countdown(n):\n    return list(range(n, 0, -1))",explanation:"range(n, 0, -1) steps from n down to 1.",tests:[{input:[5],expected:[5,4,3,2,1]},{input:[3],expected:[3,2,1]},{input:[1],expected:[1]}],fn:(n)=>{const r=[];for(let i=n;i>=1;i--)r.push(i);return r;},xp:50}
+    ,{id:"lp7",title:"Running Total",desc:"Write running_total(nums) where each element is the cumulative sum up to that index.",difficulty:"easy",tags:["accumulator","for loop"],hint:"Keep a running total and append after each addition.",starter:"def running_total(nums):\n    # your code here\n    pass",solution:"def running_total(nums):\n    result = []\n    total = 0\n    for n in nums:\n        total += n\n        result.append(total)\n    return result",explanation:"Accumulate and record at each step.",tests:[{input:[[1,2,3,4]],expected:[1,3,6,10]},{input:[[5,5,5]],expected:[5,10,15]},{input:[[10,-3,7]],expected:[10,7,14]}],fn:(nums)=>{let t=0;return nums.map(n=>(t+=n,t));},xp:60}
+    ,{id:"lp8",title:"Skip Multiples",desc:"Write skip_multiples(n, k) returning numbers 1..n that are NOT multiples of k.",difficulty:"easy",tags:["continue","modulo"],hint:"Use continue when i % k == 0.",starter:"def skip_multiples(n, k):\n    # your code here\n    pass",solution:"def skip_multiples(n, k):\n    result = []\n    for i in range(1, n + 1):\n        if i % k == 0:\n            continue\n        result.append(i)\n    return result",explanation:"continue skips the append and moves to the next iteration.",tests:[{input:[10,3],expected:[1,2,4,5,7,8,10]},{input:[6,2],expected:[1,3,5]}],fn:(n,k)=>{const r=[];for(let i=1;i<=n;i++)if(i%k!==0)r.push(i);return r;},xp:60}
+    ,{id:"lp9",title:"Digit Sum",desc:"Write digit_sum(n) returning the sum of all digits of positive integer n.",difficulty:"easy",tags:["while loop","digits","math"],hint:"n % 10 extracts last digit. n //= 10 removes it.",starter:"def digit_sum(n):\n    # your code here\n    pass",solution:"def digit_sum(n):\n    total = 0\n    while n > 0:\n        total += n % 10\n        n //= 10\n    return total",explanation:"Modulo 10 peels off the last digit each iteration.",tests:[{input:[123],expected:6},{input:[9999],expected:36},{input:[7],expected:7}],fn:(n)=>{let t=0;while(n>0){t+=n%10;n=Math.floor(n/10);}return t;},xp:70}
+    ,{id:"lp10",title:"Collect Evens",desc:"Write collect_evens(nums) returning only the even numbers from the list.",difficulty:"easy",tags:["filter","modulo"],hint:"Append only when n % 2 == 0.",starter:"def collect_evens(nums):\n    # your code here\n    pass",solution:"def collect_evens(nums):\n    return [n for n in nums if n % 2 == 0]",explanation:"Filter with modulo check.",tests:[{input:[[1,2,3,4,5,6]],expected:[2,4,6]},{input:[[1,3,5]],expected:[]},{input:[[2,4,6]],expected:[2,4,6]}],fn:(nums)=>nums.filter(n=>n%2===0),xp:50}
+    ,{id:"lp11",title:"Fibonacci Sequence",desc:"Write fibonacci(n) returning the first n Fibonacci numbers.",difficulty:"medium",tags:["while loop","sequence"],hint:"Start [0,1]. Each new term = sum of last two.",starter:"def fibonacci(n):\n    # your code here\n    pass",solution:"def fibonacci(n):\n    if n <= 0: return []\n    if n == 1: return [0]\n    fibs = [0, 1]\n    while len(fibs) < n:\n        fibs.append(fibs[-1] + fibs[-2])\n    return fibs",explanation:"Each Fibonacci is the sum of the two preceding it.",tests:[{input:[7],expected:[0,1,1,2,3,5,8]},{input:[1],expected:[0]},{input:[2],expected:[0,1]}],fn:(n)=>{if(n<=0)return[];if(n===1)return[0];const f=[0,1];while(f.length<n)f.push(f[f.length-1]+f[f.length-2]);return f;},xp:90}
+    ,{id:"lp12",title:"Multiplication Table",desc:"Write mult_table(n) returning an n×n 2D list of products.",difficulty:"medium",tags:["nested loops","2D list"],hint:"Outer loop rows 1..n, inner loop cols 1..n.",starter:"def mult_table(n):\n    # your code here\n    pass",solution:"def mult_table(n):\n    return [[i*j for j in range(1,n+1)] for i in range(1,n+1)]",explanation:"Nested comprehension: outer builds rows, inner builds each row.",tests:[{input:[3],expected:[[1,2,3],[2,4,6],[3,6,9]]},{input:[2],expected:[[1,2],[2,4]]}],fn:(n)=>{const r=[];for(let i=1;i<=n;i++){const row=[];for(let j=1;j<=n;j++)row.push(i*j);r.push(row);}return r;},xp:80}
+    ,{id:"lp13",title:"Collatz Sequence",desc:"Write collatz(n) returning the full Collatz sequence from n down to 1.",difficulty:"medium",tags:["while loop","math"],hint:"Even → n//2. Odd → 3*n+1. Stop when n==1.",starter:"def collatz(n):\n    # your code here\n    pass",solution:"def collatz(n):\n    seq = [n]\n    while n != 1:\n        n = n // 2 if n % 2 == 0 else 3 * n + 1\n        seq.append(n)\n    return seq",explanation:"Apply Collatz rule until reaching 1.",tests:[{input:[6],expected:[6,3,10,5,16,8,4,2,1]},{input:[1],expected:[1]},{input:[2],expected:[2,1]}],fn:(n)=>{const s=[n];while(n!==1){n=n%2===0?n/2:3*n+1;s.push(n);}return s;},xp:90}
+    ,{id:"lp14",title:"Primes Up To N",desc:"Write primes_up_to(n) returning all prime numbers from 2 to n.",difficulty:"hard",tags:["nested loops","math","break"],hint:"For each num, check divisors 2..sqrt(num). Break on first divisor found.",starter:"def primes_up_to(n):\n    # your code here\n    pass",solution:"def primes_up_to(n):\n    primes = []\n    for num in range(2, n + 1):\n        is_prime = True\n        for d in range(2, int(num**0.5) + 1):\n            if num % d == 0:\n                is_prime = False\n                break\n        if is_prime:\n            primes.append(num)\n    return primes",explanation:"Trial division up to sqrt. break early when divisor found.",tests:[{input:[10],expected:[2,3,5,7]},{input:[20],expected:[2,3,5,7,11,13,17,19]},{input:[2],expected:[2]}],fn:(n)=>{const r=[];for(let num=2;num<=n;num++){let p=true;for(let d=2;d*d<=num;d++)if(num%d===0){p=false;break;}if(p)r.push(num);}return r;},xp:120}
+    ,{id:"lp15",title:"Moving Average",desc:"Write moving_avg(nums, k) returning the average of each sliding window of size k.",difficulty:"hard",tags:["sliding window","for loop"],hint:"Loop i from 0 to len(nums)-k. Average nums[i:i+k].",starter:"def moving_avg(nums, k):\n    # your code here\n    pass",solution:"def moving_avg(nums, k):\n    return [sum(nums[i:i+k])/k for i in range(len(nums)-k+1)]",explanation:"Slide a window of size k, computing the mean each time.",tests:[{input:[[1,2,3,4,5],3],expected:[2.0,3.0,4.0]},{input:[[1,2,3],2],expected:[1.5,2.5]}],fn:(nums,k)=>{const r=[];for(let i=0;i<=nums.length-k;i++)r.push(nums.slice(i,i+k).reduce((a,b)=>a+b,0)/k);return r;},xp:120}
+    ,{id:"lp16",title:"Enumerate Pairs",desc:"Write indexed_pairs(lst) returning [[index, item], ...] using enumerate().",difficulty:"easy",tags:["enumerate","for loop"],hint:"for i, item in enumerate(lst)",starter:"def indexed_pairs(lst):\n    # your code here\n    pass",solution:"def indexed_pairs(lst):\n    return [[i, item] for i, item in enumerate(lst)]",explanation:"enumerate yields (index, value) pairs.",tests:[{input:[["a","b","c"]],expected:[[0,"a"],[1,"b"],[2,"c"]]},{input:[[10,20]],expected:[[0,10],[1,20]]}],fn:(lst)=>lst.map((v,i)=>[i,v]),xp:60}
+    ,{id:"lp17",title:"Zip Two Lists",desc:"Write zip_lists(a, b) returning [[a[i], b[i]], ...] paired elements.",difficulty:"easy",tags:["zip","for loop"],hint:"for x, y in zip(a, b)",starter:"def zip_lists(a, b):\n    # your code here\n    pass",solution:"def zip_lists(a, b):\n    return [[x, y] for x, y in zip(a, b)]",explanation:"zip pairs elements, stopping at the shorter list.",tests:[{input:[[1,2,3],["a","b","c"]],expected:[[1,"a"],[2,"b"],[3,"c"]]},{input:[[1,2],[10]],expected:[[1,10]]}],fn:(a,b)=>{const n=Math.min(a.length,b.length);return Array.from({length:n},(_,i)=>[a[i],b[i]]);},xp:60}
+    ,{id:"lp18",title:"Nested Sum",desc:"Write nested_sum(matrix) summing all elements across a 2D list.",difficulty:"medium",tags:["nested loops","accumulator"],hint:"Two loops: outer over rows, inner over values.",starter:"def nested_sum(matrix):\n    # your code here\n    pass",solution:"def nested_sum(matrix):\n    return sum(val for row in matrix for val in row)",explanation:"Generator flattens the 2D structure into a single sum.",tests:[{input:[[[1,2],[3,4]]],expected:10},{input:[[[5]]],expected:5},{input:[[[1,2,3],[4,5,6]]],expected:21}],fn:(m)=>m.flat().reduce((a,b)=>a+b,0),xp:70}
+    ,{id:"lp19",title:"Binary to Decimal",desc:"Write bin_to_dec(bits) converting a list of bits [1,0,1,1] (MSB first) to an integer.",difficulty:"medium",tags:["for loop","binary","math"],hint:"result = result * 2 + bit for each bit.",starter:"def bin_to_dec(bits):\n    # your code here\n    pass",solution:"def bin_to_dec(bits):\n    result = 0\n    for bit in bits:\n        result = result * 2 + bit\n    return result",explanation:"Shift left (×2) and add each bit — Horner's method.",tests:[{input:[[1,0,1,1]],expected:11},{input:[[1,0,0,0]],expected:8},{input:[[1,1,1,1]],expected:15}],fn:(bits)=>bits.reduce((acc,b)=>acc*2+b,0),xp:90}
+    ,{id:"lp20",title:"Rotate Left",desc:"Write rotate_left(lst, k) returning the list rotated left by k positions.",difficulty:"medium",tags:["slicing","modulo"],hint:"k = k % len(lst). Return lst[k:] + lst[:k].",starter:"def rotate_left(lst, k):\n    # your code here\n    pass",solution:"def rotate_left(lst, k):\n    if not lst: return []\n    k = k % len(lst)\n    return lst[k:] + lst[:k]",explanation:"Modulo handles k > len. Concatenate tail with head.",tests:[{input:[[1,2,3,4,5],2],expected:[3,4,5,1,2]},{input:[[1,2,3],3],expected:[1,2,3]}],fn:(lst,k)=>{if(!lst.length)return[];k=k%lst.length;return[...lst.slice(k),...lst.slice(0,k)];},xp:90}
+    ,{id:"lp21",title:"GCD",desc:"Write gcd(a, b) using the Euclidean algorithm.",difficulty:"medium",tags:["while loop","math","algorithm"],hint:"while b != 0: a, b = b, a % b. Return a.",starter:"def gcd(a, b):\n    # your code here\n    pass",solution:"def gcd(a, b):\n    while b != 0:\n        a, b = b, a % b\n    return a",explanation:"Euclidean: replace (a,b) with (b, a%b) until b is 0.",tests:[{input:[48,18],expected:6},{input:[100,75],expected:25},{input:[7,5],expected:1}],fn:(a,b)=>{while(b!==0){[a,b]=[b,a%b];}return a;},xp:100}
+    ,{id:"lp22",title:"All Pairs",desc:"Write all_pairs(lst) returning all unique [x, y] pairs where x comes before y.",difficulty:"medium",tags:["nested loops","combinations"],hint:"Inner loop starts at i+1 to avoid repeats.",starter:"def all_pairs(lst):\n    # your code here\n    pass",solution:"def all_pairs(lst):\n    return [[lst[i],lst[j]] for i in range(len(lst)) for j in range(i+1,len(lst))]",explanation:"j starts at i+1 so each pair appears exactly once.",tests:[{input:[[1,2,3]],expected:[[1,2],[1,3],[2,3]]},{input:[[1,2]],expected:[[1,2]]}],fn:(lst)=>{const r=[];for(let i=0;i<lst.length;i++)for(let j=i+1;j<lst.length;j++)r.push([lst[i],lst[j]]);return r;},xp:90}
+    ,{id:"lp23",title:"Missing Number",desc:"Write missing_number(nums) — list has 0..n with exactly one missing. Find it.",difficulty:"hard",tags:["math","formula"],hint:"Expected sum = n*(n+1)//2. Answer = expected - actual.",starter:"def missing_number(nums):\n    # your code here\n    pass",solution:"def missing_number(nums):\n    n = len(nums)\n    return n*(n+1)//2 - sum(nums)",explanation:"Gauss sum formula gives expected total; difference is the missing number.",tests:[{input:[[3,0,1]],expected:2},{input:[[0,1]],expected:2},{input:[[9,6,4,2,3,5,7,0,1]],expected:8}],fn:(nums)=>{const n=nums.length;return n*(n+1)/2-nums.reduce((a,b)=>a+b,0);},xp:120}
+    ,{id:"lp24",title:"Longest Run",desc:"Write longest_run(lst) returning the length of the longest consecutive run of the same value.",difficulty:"hard",tags:["tracking","for loop"],hint:"Track current run and max. Reset on change.",starter:"def longest_run(lst):\n    # your code here\n    pass",solution:"def longest_run(lst):\n    if not lst: return 0\n    max_run = current = 1\n    for i in range(1, len(lst)):\n        if lst[i] == lst[i-1]: current += 1\n        else: current = 1\n        max_run = max(max_run, current)\n    return max_run",explanation:"Compare each element to the previous. Extend or reset the run counter.",tests:[{input:[[1,1,2,3,3,3,1]],expected:3},{input:[[1,2,3]],expected:1},{input:[[5,5,5,5]],expected:4}],fn:(lst)=>{if(!lst.length)return 0;let mx=1,cur=1;for(let i=1;i<lst.length;i++){if(lst[i]===lst[i-1])cur++;else cur=1;mx=Math.max(mx,cur);}return mx;},xp:130}
+    ,{id:"lp25",title:"Two Sum Sorted",desc:"Write two_sum_sorted(nums, target) on a sorted list. Return [i, j] or [].",difficulty:"hard",tags:["two pointer","while loop"],hint:"left=0, right=len-1. Move pointers based on sum vs target.",starter:"def two_sum_sorted(nums, target):\n    # your code here\n    pass",solution:"def two_sum_sorted(nums, target):\n    left, right = 0, len(nums)-1\n    while left < right:\n        s = nums[left] + nums[right]\n        if s == target: return [left, right]\n        elif s < target: left += 1\n        else: right -= 1\n    return []",explanation:"Two-pointer on sorted array: O(n). Converge based on sum comparison.",tests:[{input:[[1,2,3,4,6],6],expected:[1,3]},{input:[[2,7,11,15],9],expected:[0,1]},{input:[[1,2,3],10],expected:[]}],fn:(nums,t)=>{let l=0,r=nums.length-1;while(l<r){const s=nums[l]+nums[r];if(s===t)return[l,r];else if(s<t)l++;else r--;}return[];},xp:130}
+    ,{id:"lp26",title:"Bubble Sort",desc:"Write bubble_sort(lst) sorting in ascending order using bubble sort.",difficulty:"hard",tags:["nested loops","sorting","algorithm"],hint:"n-1 outer passes. Inner compares adjacent and swaps if out of order.",starter:"def bubble_sort(lst):\n    # your code here\n    pass",solution:"def bubble_sort(lst):\n    lst = lst[:]\n    n = len(lst)\n    for i in range(n-1):\n        for j in range(n-1-i):\n            if lst[j] > lst[j+1]:\n                lst[j], lst[j+1] = lst[j+1], lst[j]\n    return lst",explanation:"Each outer pass bubbles the largest unsorted element to its final position.",tests:[{input:[[3,1,4,1,5]],expected:[1,1,3,4,5]},{input:[[5,4,3,2,1]],expected:[1,2,3,4,5]}],fn:(lst)=>[...lst].sort((a,b)=>a-b),xp:130}
+    ,{id:"lp27",title:"Repeat Chars",desc:"Write repeat_chars(s, n) where each character is repeated n times: 'ab',2 → 'aabb'.",difficulty:"easy",tags:["for loop","string"],hint:"Append ch * n for each ch in s.",starter:"def repeat_chars(s, n):\n    # your code here\n    pass",solution:"def repeat_chars(s, n):\n    return ''.join(ch * n for ch in s)",explanation:"String multiplication repeats each character; join assembles the result.",tests:[{input:["abc",2],expected:"aabbcc"},{input:["hi",3],expected:"hhhiii"},{input:["x",1],expected:"x"}],fn:(s,n)=>s.split("").map(c=>c.repeat(n)).join(""),xp:70}
+    ,{id:"lp28",title:"Count Occurrences",desc:"Write count_occurrences(lst, target) counting how many times target appears.",difficulty:"easy",tags:["for loop","counting"],hint:"Increment counter each time element equals target.",starter:"def count_occurrences(lst, target):\n    # your code here\n    pass",solution:"def count_occurrences(lst, target):\n    return sum(1 for x in lst if x == target)",explanation:"Generator counts matches; sum totals them.",tests:[{input:[[1,2,2,3,2],2],expected:3},{input:[["a","b","a"],"a"],expected:2},{input:[[1,2,3],9],expected:0}],fn:(lst,t)=>lst.filter(x=>x===t).length,xp:50}
+    ,{id:"lp29",title:"Running Product",desc:"Write product_list(nums) returning the running product at each step.",difficulty:"medium",tags:["accumulator","for loop"],hint:"Multiply a running product and append after each step.",starter:"def product_list(nums):\n    # your code here\n    pass",solution:"def product_list(nums):\n    result = []\n    product = 1\n    for n in nums:\n        product *= n\n        result.append(product)\n    return result",explanation:"Cumulative product: multiply and record at each step.",tests:[{input:[[1,2,3,4]],expected:[1,2,6,24]},{input:[[2,3,5]],expected:[2,6,30]}],fn:(nums)=>{let p=1;return nums.map(n=>(p*=n,p));},xp:80}
+    ,{id:"lp30",title:"Pascal Row",desc:"Write pascal_row(n) returning the nth row (0-indexed) of Pascal's triangle.",difficulty:"hard",tags:["math","combinations","for loop"],hint:"C(n,k) = C(n,k-1) * (n-k+1) / k — build each term from the previous.",starter:"def pascal_row(n):\n    # your code here\n    pass",solution:"def pascal_row(n):\n    row = [1]\n    for i in range(1, n+1):\n        row.append(row[-1]*(n-i+1)//i)\n    return row",explanation:"Recurrence: each term = previous * (n-k+1) / k.",tests:[{input:[0],expected:[1]},{input:[3],expected:[1,3,3,1]},{input:[4],expected:[1,4,6,4,1]}],fn:(n)=>{const r=[1];for(let i=1;i<=n;i++)r.push(r[r.length-1]*(n-i+1)/i);return r;},xp:140}
+    ,{id:"lp31",title:"Find First Negative",desc:"Write find_first_negative(nums) returning the first negative number, or None.",difficulty:"easy",tags:["for loop","early return"],hint:"Return immediately when n < 0.",starter:"def find_first_negative(nums):\n    # your code here\n    pass",solution:"def find_first_negative(nums):\n    for n in nums:\n        if n < 0:\n            return n\n    return None",explanation:"Early return stops the loop the moment a match is found.",tests:[{input:[[1,2,-3,4]],expected:-3},{input:[[1,2,3]],expected:null},{input:[[-1,2,3]],expected:-1}],fn:(nums)=>{for(const n of nums)if(n<0)return n;return null;},xp:60}
+    ,{id:"lp32",title:"Consecutive Differences",desc:"Write consecutive_diffs(lst) returning differences between each adjacent pair.",difficulty:"easy",tags:["for loop","indexing"],hint:"result[i] = lst[i+1] - lst[i]",starter:"def consecutive_diffs(lst):\n    # your code here\n    pass",solution:"def consecutive_diffs(lst):\n    return [lst[i+1]-lst[i] for i in range(len(lst)-1)]",explanation:"Subtract each element from its successor.",tests:[{input:[[1,4,2,9,3]],expected:[3,-2,7,-6]},{input:[[1,2,3,4]],expected:[1,1,1]}],fn:(lst)=>lst.slice(1).map((v,i)=>v-lst[i]),xp:60}
+    ,{id:"lp33",title:"Row Maxes",desc:"Write row_maxes(matrix) returning the maximum value from each row.",difficulty:"easy",tags:["nested loops","max"],hint:"Apply max() to each row.",starter:"def row_maxes(matrix):\n    # your code here\n    pass",solution:"def row_maxes(matrix):\n    return [max(row) for row in matrix]",explanation:"max() applied per row in a single comprehension.",tests:[{input:[[[3,1,4],[1,5,9],[2,6,5]]],expected:[4,9,6]},{input:[[[1,2,3]]],expected:[3]}],fn:(m)=>m.map(r=>Math.max(...r)),xp:70}
+    ,{id:"lp34",title:"Matrix Diagonal",desc:"Write main_diagonal(matrix) returning the diagonal elements of a square matrix.",difficulty:"medium",tags:["loops","indexing","matrix"],hint:"Element at position [i][i] is on the main diagonal.",starter:"def main_diagonal(matrix):\n    # your code here\n    pass",solution:"def main_diagonal(matrix):\n    return [matrix[i][i] for i in range(len(matrix))]",explanation:"Same index i for both row and column traces the diagonal.",tests:[{input:[[[1,2,3],[4,5,6],[7,8,9]]],expected:[1,5,9]},{input:[[[1,0],[0,1]]],expected:[1,1]}],fn:(m)=>m.map((r,i)=>r[i]),xp:80}
+    ,{id:"lp35",title:"Sum of Divisors",desc:"Write sum_of_divisors(n) returning the sum of all proper divisors of n (less than n).",difficulty:"medium",tags:["for loop","math","divisors"],hint:"Loop from 1 to n//2. Add i if n % i == 0.",starter:"def sum_of_divisors(n):\n    # your code here\n    pass",solution:"def sum_of_divisors(n):\n    return sum(i for i in range(1, n//2+1) if n % i == 0)",explanation:"Proper divisors go up to n//2. Sum those that divide evenly.",tests:[{input:[12],expected:16},{input:[6],expected:6},{input:[1],expected:0}],fn:(n)=>{let t=0;for(let i=1;i<=Math.floor(n/2);i++)if(n%i===0)t+=i;return t;},xp:90}
+    ,{id:"lp36",title:"Alternate Signs",desc:"Write alternate_signs(n) returning [1, -2, 3, -4, ...] up to n.",difficulty:"easy",tags:["for loop","math"],hint:"Odd positions positive, even positions negative.",starter:"def alternate_signs(n):\n    # your code here\n    pass",solution:"def alternate_signs(n):\n    return [i if i%2!=0 else -i for i in range(1, n+1)]",explanation:"Ternary checks parity to assign sign.",tests:[{input:[6],expected:[1,-2,3,-4,5,-6]},{input:[1],expected:[1]},{input:[4],expected:[1,-2,3,-4]}],fn:(n)=>Array.from({length:n},(_,i)=>(i+1)%2!==0?(i+1):-(i+1)),xp:70}
+    ,{id:"lp37",title:"Every Nth",desc:"Write every_nth(lst, n) returning every nth element starting from index n-1.",difficulty:"easy",tags:["range","step"],hint:"range(n-1, len(lst), n) gives the correct indices.",starter:"def every_nth(lst, n):\n    # your code here\n    pass",solution:"def every_nth(lst, n):\n    return [lst[i] for i in range(n-1, len(lst), n)]",explanation:"Start at n-1, step by n to hit every nth index.",tests:[{input:[[1,2,3,4,5,6,7,8,9],3],expected:[3,6,9]},{input:[[10,20,30,40,50],2],expected:[20,40]}],fn:(lst,n)=>lst.filter((_,i)=>(i+1)%n===0),xp:70}
+    ,{id:"lp38",title:"Is Palindrome Number",desc:"Write is_palindrome_num(n) returning True if the integer reads the same forwards and backwards.",difficulty:"medium",tags:["while loop","digits"],hint:"Reverse the digits using modulo. Compare with original.",starter:"def is_palindrome_num(n):\n    # your code here\n    pass",solution:"def is_palindrome_num(n):\n    original, rev = n, 0\n    while n > 0:\n        rev = rev * 10 + n % 10\n        n //= 10\n    return original == rev",explanation:"Rebuild number with reversed digits, then compare.",tests:[{input:[121],expected:true},{input:[12321],expected:true},{input:[123],expected:false}],fn:(n)=>n.toString()===n.toString().split("").reverse().join(""),xp:100}
+    ,{id:"lp39",title:"Flatten Nested",desc:"Write flatten(nested) taking a list of lists and returning a single flat list.",difficulty:"medium",tags:["nested loops","flatten"],hint:"Outer loop over sublists, inner loop over items.",starter:"def flatten(nested):\n    # your code here\n    pass",solution:"def flatten(nested):\n    result = []\n    for sublist in nested:\n        for item in sublist:\n            result.append(item)\n    return result",explanation:"Two nested loops: outer gets sublists, inner gets elements.",tests:[{input:[[[1,2],[3,4],[5]]],expected:[1,2,3,4,5]},{input:[[[],[1],[2,3]]],expected:[1,2,3]}],fn:(nested)=>nested.flat(),xp:70}
+    ,{id:"lp40",title:"Find Index",desc:"Write find_index(lst, target) returning the first index of target, or -1.",difficulty:"easy",tags:["enumerate","search"],hint:"Return i as soon as val == target.",starter:"def find_index(lst, target):\n    # your code here\n    pass",solution:"def find_index(lst, target):\n    for i, val in enumerate(lst):\n        if val == target:\n            return i\n    return -1",explanation:"enumerate gives index and value. Return immediately on match.",tests:[{input:[[1,2,3,4],3],expected:2},{input:[["a","b","c"],"b"],expected:1},{input:[[1,2,3],9],expected:-1}],fn:(lst,t)=>lst.indexOf(t),xp:60}
+    ,{id:"lp41",title:"For-Else Prime Check",desc:"Write is_prime(n) using a for-else — the else runs only if no break occurred.",difficulty:"medium",tags:["for-else","break","math"],hint:"Break when divisor found. else clause fires only if loop completed.",starter:"def is_prime(n):\n    # your code here\n    pass",solution:"def is_prime(n):\n    if n < 2: return False\n    for d in range(2, int(n**0.5)+1):\n        if n % d == 0: break\n    else:\n        return True\n    return False",explanation:"Python's for-else: the else only runs when no break occurred.",tests:[{input:[2],expected:true},{input:[7],expected:true},{input:[9],expected:false},{input:[1],expected:false}],fn:(n)=>{if(n<2)return false;for(let d=2;d*d<=n;d++)if(n%d===0)return false;return true;},xp:90}
+    ,{id:"lp42",title:"Number Triangle",desc:"Write triangle(n) returning ['1','12','123',...] — each row adds one more digit.",difficulty:"medium",tags:["nested loops","string building"],hint:"Inner loop builds the digit string for each row.",starter:"def triangle(n):\n    # your code here\n    pass",solution:"def triangle(n):\n    return [''.join(str(j) for j in range(1,i+1)) for i in range(1,n+1)]",explanation:"Row i contains digits 1 through i concatenated as a string.",tests:[{input:[4],expected:["1","12","123","1234"]},{input:[1],expected:["1"]},{input:[3],expected:["1","12","123"]}],fn:(n)=>Array.from({length:n},(_,i)=>Array.from({length:i+1},(_,j)=>String(j+1)).join("")),xp:90}
+    ,{id:"lp43",title:"Count Vowels in Loop",desc:"Write count_vowels(s) counting vowels (aeiou, case-insensitive) using a loop.",difficulty:"easy",tags:["for loop","string","counting"],hint:"Check c.lower() in 'aeiou' for each character.",starter:"def count_vowels(s):\n    # your code here\n    pass",solution:"def count_vowels(s):\n    return sum(1 for c in s if c.lower() in 'aeiou')",explanation:"Generator expression counts truthy membership tests.",tests:[{input:["hello"],expected:2},{input:["Python"],expected:1},{input:["AEIOU"],expected:5}],fn:(s)=>s.split("").filter(c=>"aeiou".includes(c.toLowerCase())).length,xp:60}
+    ,{id:"lp44",title:"Step Range",desc:"Write step_range(start, stop, step) returning numbers from start up to stop in increments of step.",difficulty:"easy",tags:["range"],hint:"list(range(start, stop, step))",starter:"def step_range(start, stop, step):\n    # your code here\n    pass",solution:"def step_range(start, stop, step):\n    return list(range(start, stop, step))",explanation:"range() with three arguments handles start, stop, step directly.",tests:[{input:[0,10,2],expected:[0,2,4,6,8]},{input:[1,10,3],expected:[1,4,7]}],fn:(a,b,s)=>{const r=[];for(let i=a;i<b;i+=s)r.push(i);return r;},xp:50}
+    ,{id:"lp45",title:"Anagram Groups",desc:"Write group_anagrams(words) grouping words that are anagrams. Return list of groups.",difficulty:"hard",tags:["dict","loops","algorithm"],hint:"Sorted characters form a canonical key — anagrams share the same key.",starter:"def group_anagrams(words):\n    # your code here\n    pass",solution:"def group_anagrams(words):\n    groups = {}\n    for word in words:\n        key = tuple(sorted(word))\n        if key not in groups:\n            groups[key] = []\n        groups[key].append(word)\n    return list(groups.values())",explanation:"Sorted characters give a canonical form. Anagrams share the same sorted key.",tests:[{input:[["eat","tea","tan","ate","nat","bat"]],expected:[["eat","tea","ate"],["tan","nat"],["bat"]]},{input:[["a"]],expected:[["a"]]}],fn:(words)=>{const g={};for(const w of words){const k=w.split("").sort().join("");if(!g[k])g[k]=[];g[k].push(w);}return Object.values(g);},xp:150}
+    ,{id:"lp46",title:"Newton Square Root",desc:"Write approx_sqrt(n) using Newton's method: iterate guess=(guess+n/guess)/2 until error < 0.0001.",difficulty:"hard",tags:["while loop","Newton","math"],hint:"Start with guess=n/2.0. Loop until abs(guess*guess-n)<0.0001.",starter:"def approx_sqrt(n):\n    # your code here\n    pass",solution:"def approx_sqrt(n):\n    if n == 0: return 0.0\n    guess = n / 2.0\n    while abs(guess*guess - n) > 0.0001:\n        guess = (guess + n/guess) / 2\n    return round(guess, 4)",explanation:"Newton's method halves the error each iteration.",tests:[{input:[4],expected:2.0},{input:[9],expected:3.0},{input:[2],expected:1.4142}],fn:(n)=>{if(n===0)return 0;let g=n/2;while(Math.abs(g*g-n)>0.0001)g=(g+n/g)/2;return Math.round(g*10000)/10000;},xp:150}
+    ,{id:"lp47",title:"Reverse String Loop",desc:"Write reverse_string(s) reversing using a loop (no slicing or built-ins).",difficulty:"easy",tags:["for loop","string"],hint:"Loop from len-1 down to 0 and append each character.",starter:"def reverse_string(s):\n    # your code here\n    pass",solution:"def reverse_string(s):\n    result = ''\n    for i in range(len(s)-1, -1, -1):\n        result += s[i]\n    return result",explanation:"Negative step range walks backwards through the string.",tests:[{input:["hello"],expected:"olleh"},{input:["Python"],expected:"nohtyP"},{input:[""],expected:""}],fn:(s)=>s.split("").reverse().join(""),xp:60}
+    ,{id:"lp48",title:"Window Pairs",desc:"Write window_pairs(lst) returning all consecutive [lst[i], lst[i+1]] pairs.",difficulty:"easy",tags:["for loop","windowing"],hint:"Loop i from 0 to len-2. Pair lst[i] with lst[i+1].",starter:"def window_pairs(lst):\n    # your code here\n    pass",solution:"def window_pairs(lst):\n    return [[lst[i], lst[i+1]] for i in range(len(lst)-1)]",explanation:"Each pair is the current element and its immediate successor.",tests:[{input:[[1,2,3,4]],expected:[[1,2],[2,3],[3,4]]},{input:[[1,2]],expected:[[1,2]]},{input:[[1]],expected:[]}],fn:(lst)=>lst.slice(0,-1).map((v,i)=>[v,lst[i+1]]),xp:60}
+    ,{id:"lp49",title:"Max Subarray Sum",desc:"Write max_subarray_sum(lst) returning the maximum sum of any contiguous subarray (Kadane's algorithm).",difficulty:"hard",tags:["Kadane","dynamic programming"],hint:"current = max(num, current + num). Track max seen.",starter:"def max_subarray_sum(lst):\n    # your code here\n    pass",solution:"def max_subarray_sum(lst):\n    if not lst: return 0\n    max_sum = current_sum = lst[0]\n    for num in lst[1:]:\n        current_sum = max(num, current_sum + num)\n        max_sum = max(max_sum, current_sum)\n    return max_sum",explanation:"Kadane's: at each step, extend or start fresh. Track the best.",tests:[{input:[[-2,1,-3,4,-1,2,1,-5,4]],expected:6},{input:[[1,2,3]],expected:6},{input:[[-1,-2,-3]],expected:-1}],fn:(lst)=>{if(!lst.length)return 0;let mx=lst[0],cur=lst[0];for(let i=1;i<lst.length;i++){cur=Math.max(lst[i],cur+lst[i]);mx=Math.max(mx,cur);}return mx;},xp:160}
+    ,{id:"lp50",title:"Sieve of Eratosthenes",desc:"Write sieve(n) returning all primes up to n using the Sieve of Eratosthenes.",difficulty:"hard",tags:["sieve","boolean array","algorithm"],hint:"Start with all True. Mark multiples of each prime as False.",starter:"def sieve(n):\n    # your code here\n    pass",solution:"def sieve(n):\n    if n < 2: return []\n    is_prime = [True] * (n + 1)\n    is_prime[0] = is_prime[1] = False\n    for i in range(2, int(n**0.5) + 1):\n        if is_prime[i]:\n            for j in range(i*i, n+1, i):\n                is_prime[j] = False\n    return [i for i, p in enumerate(is_prime) if p]",explanation:"Mark composites starting at i². Remaining True positions are prime.",tests:[{input:[10],expected:[2,3,5,7]},{input:[30],expected:[2,3,5,7,11,13,17,19,23,29]},{input:[1],expected:[]}],fn:(n)=>{if(n<2)return[];const p=Array(n+1).fill(true);p[0]=p[1]=false;for(let i=2;i*i<=n;i++)if(p[i])for(let j=i*i;j<=n;j+=i)p[j]=false;return p.map((v,i)=>v?i:-1).filter(i=>i>0);},xp:160}
+  ]
+};
+
+const defaultState = {
+  score:0, streak:0, xp:0, level:1,
+  solved:{loops:{}},
+  practiceTab:'loops', currentCh:null,
+  hintUsed:false, hintVisible:false, aiHintVisible:false,
+  timedDuration:120, timedDifficulty:'mixed',
+  activity:[],  // [{date, topicId, chId, xp, title}]
+  sr:{}         // {chId: {interval, dueDate, easeFactor, reps}}
+};
+
+let S = loadState();
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  PERSISTENCE
+// ═══════════════════════════════════════════════════════════════════════════
+function loadState() {
+  try {
+    const saved = localStorage.getItem('abhyasa_prathama_loops_v1');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      // Merge with defaults to handle new topics added later
+      const st = {...defaultState, ...parsed};
+      for (const k of Object.keys(defaultState.solved)) {
+        if (!st.solved[k]) st.solved[k] = {};
+      }
+      return st;
+    }
+  } catch(e) {}
+  return {...defaultState,
+    solved:{loops:{}},
+    activity:[], sr:{}};
+}
+
+function saveState() {
+  try {
+    localStorage.setItem('abhyasa_prathama_loops_v1', JSON.stringify(S));
+    const dot = document.getElementById('saveDot');
+    if(dot){ dot.style.background='var(--green)'; setTimeout(()=>dot.style.background='var(--border)',1200); }
+  } catch(e) {}
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  SPACED REPETITION (SM-2 simplified)
+// ═══════════════════════════════════════════════════════════════════════════
+function srInit(chId) {
+  if (!S.sr[chId]) {
+    S.sr[chId] = { interval:1, dueDate:Date.now(), easeFactor:2.5, reps:0 };
+  }
+}
+
+function srRate(chId, quality) {
+  // quality: 0=Again, 1=Hard, 2=Good, 3=Easy
+  srInit(chId);
+  const card = S.sr[chId];
+  const qMap = [0, 3, 4, 5]; // SM-2 quality mapping
+  const q = qMap[quality];
+  if (q < 3) {
+    card.reps = 0; card.interval = 1;
+  } else {
+    if (card.reps === 0) card.interval = 1;
+    else if (card.reps === 1) card.interval = 6;
+    else card.interval = Math.round(card.interval * card.easeFactor);
+    card.reps++;
+    card.easeFactor = Math.max(1.3, card.easeFactor + 0.1 - (5-q)*(0.08+(5-q)*0.02));
+  }
+  card.dueDate = Date.now() + card.interval * 86400000;
+  saveState();
+}
+
+function srNextLabel(chId, quality) {
+  srInit(chId);
+  const card = S.sr[chId];
+  const qMap = [0, 3, 4, 5];
+  const q = qMap[quality];
+  let interval;
+  if (q < 3) { interval = 1; }
+  else {
+    const reps = card.reps;
+    if (reps === 0) interval = 1;
+    else if (reps === 1) interval = 6;
+    else interval = Math.round(card.interval * card.easeFactor);
+  }
+  if (interval <= 1) return 'Tomorrow';
+  if (interval < 7) return `${interval}d`;
+  if (interval < 30) return `${Math.round(interval/7)}w`;
+  return `${Math.round(interval/30)}mo`;
+}
+
+function getDueReviews() {
+  const now = Date.now();
+  const due = [];
+  for (const [chId, card] of Object.entries(S.sr)) {
+    if (card.dueDate <= now && card.reps > 0) {
+      // Find challenge
+      for (const [topic, chs] of Object.entries(CHALLENGES)) {
+        const ch = chs.find(c=>c.id===chId);
+        if (ch) due.push({...ch, topicId:topic});
+      }
+    }
+  }
+  return due;
+}
+
+function updateReviewQueue() {
+  const due = getDueReviews();
+  const card = document.getElementById('reviewQueueCard');
+  const items = document.getElementById('reviewQueueItems');
+  if(!card||!items) return;
+  if (due.length === 0) { card.style.display='none'; return; }
+  card.style.display='flex';
+  items.innerHTML = due.map(ch=>`
+    <span class="rq-item rq-due" onclick="startReview('${ch.topicId}','${ch.id}')" title="${ch.title}">
+      ${ch.title.length>18?ch.title.slice(0,16)+'…':ch.title}
+    </span>`).join('');
+}
+
+function startReview(topicId, chId) {
+  S.practiceTab = topicId;
+  renderPractice();
+  const ch = CHALLENGES[topicId].find(c=>c.id===chId);
+  if(ch) selectChallenge(ch);
+  showPage('practice');
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  TIMED MODE
+// ═══════════════════════════════════════════════════════════════════════════
+let timedState = {
+  active:false, timeLeft:0, timer:null, queue:[],
+  correct:0, wrong:0, results:[], currentIdx:0
+};
+
+function selectTimedDuration(secs) {
+  S.timedDuration = secs;
+  document.querySelectorAll('.tsc-opt').forEach(el=>{
+    el.classList.toggle('selected', parseInt(el.dataset.dur)===secs);
+  });
+  const hint = document.getElementById('timedModeHint');
+  if(hint) {
+    if(secs===1800) hint.innerHTML = '<strong style="color:var(--purple)">Full Marathon (30m)</strong> randomizes across <em>all topics</em> including NumPy, Pandas &amp; Visualization — a complete workout!';
+    else if(secs===600) hint.innerHTML = '<strong style="color:var(--text2)">Marathon (10m)</strong> — enough time for 6–10 challenges depending on difficulty.';
+    else if(secs===300) hint.innerHTML = '<strong style="color:var(--text2)">Standard (5m)</strong> — a focused session with 4–7 challenges.';
+    else hint.innerHTML = '<strong style="color:var(--text2)">Sprint (2m)</strong> — fast warmup. Great for starting your day!';
+  }
+}
+
+function selectTimedDiff(diff, btn) {
+  S.timedDifficulty = diff;
+  document.querySelectorAll('.tsc-diff-btn').forEach(el=>{
+    // Remove all active- classes
+    el.className = el.className.replace(/active-\w+/g,'').trim() || 'tsc-diff-btn';
+    el.classList.add('tsc-diff-btn');
+  });
+  if(btn) btn.classList.add('active-'+diff);
+}
+
+function buildTimedQueue() {
+  let all = [];
+  const is30min = S.timedDuration === 1800;
+  for(const [topic, chs] of Object.entries(CHALLENGES)) {
+    chs.forEach(ch => all.push({...ch, topicId:topic}));
+  }
+  const diff = S.timedDifficulty;
+  if(diff === 'easy')   all = all.filter(c=>c.difficulty==='easy');
+  else if(diff === 'medium') all = all.filter(c=>c.difficulty==='medium');
+  else if(diff === 'hard')   all = all.filter(c=>c.difficulty==='hard');
+  else if(diff === 'level1') all = all.filter(c=>c.difficulty==='easy'||c.difficulty==='medium');
+  else if(diff === 'level2') all = all.filter(c=>c.difficulty==='medium'||c.difficulty==='hard');
+  // For 30min marathon: always randomize all topics; for shorter: shuffle but keep going
+  // Shuffle with Fisher-Yates
+  for(let i=all.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [all[i],all[j]]=[all[j],all[i]];
+  }
+  // For full marathon, cycle the queue so there's always a challenge available
+  if(is30min) {
+    // Duplicate queue so it never runs out in 30min
+    all = [...all, ...all, ...all];
+  }
+  return all;
+}
+
+function startTimedMode() {
+  timedState.queue = buildTimedQueue();
+  if(!timedState.queue.length){ showToast('No challenges','No challenges match that difficulty.',true); return; }
+  timedState.active = true;
+  timedState.timeLeft = S.timedDuration;
+  timedState.correct = 0; timedState.wrong = 0; timedState.results = [];
+  timedState.currentIdx = 0;
+
+  document.getElementById('timedStartScreen').style.display = 'none';
+  document.getElementById('timedEditorArea').style.display = 'block';
+  document.getElementById('timedPracticeStats').style.display = 'flex';
+  loadTimedChallenge();
+  startTimedTimer();
+}
+
+function loadTimedChallenge() {
+  const ch = timedState.queue[timedState.currentIdx];
+  if(!ch) { endTimedMode(); return; }
+  document.getElementById('tChTitle').textContent = ch.title;
+  document.getElementById('tChDesc').textContent  = ch.desc;
+  document.getElementById('tChTags').innerHTML    = ch.tags.map(t=>`<span class="ch-tag">${t}</span>`).join('');
+  document.getElementById('tCodeTA').value = ch.starter;
+  document.getElementById('tOutText').textContent = '// Run your code to see output...';
+  document.getElementById('tOutStatus').textContent = '';
+  document.getElementById('tTestsGrid').innerHTML = '';
+  updateTimedStats();
+}
+
+function updateTimedStats() {
+  document.getElementById('tp-time').textContent    = formatTime(timedState.timeLeft);
+  document.getElementById('tp-correct').textContent = timedState.correct;
+  document.getElementById('tp-wrong').textContent   = timedState.wrong;
+  document.getElementById('tp-remain').textContent  = timedState.queue.length - timedState.currentIdx;
+  updateTimerRing();
+}
+
+function updateTimerRing() {
+  const arc = document.getElementById('timerArc');
+  const lbl = document.getElementById('timerLabel');
+  if(!arc) return;
+  const total = S.timedDuration;
+  const pct = timedState.timeLeft / total;
+  const circ = 175.93;
+  arc.style.strokeDashoffset = circ * (1-pct);
+  arc.className = 'timer-arc' + (pct < 0.2 ? ' crit' : pct < 0.4 ? ' warn' : '');
+  if(lbl) lbl.textContent = formatTime(timedState.timeLeft);
+}
+
+function formatTime(secs) {
+  return `${Math.floor(secs/60)}:${String(secs%60).padStart(2,'0')}`;
+}
+
+function startTimedTimer() {
+  timedState.timer = setInterval(()=>{
+    timedState.timeLeft--;
+    updateTimedStats();
+    if(timedState.timeLeft <= 0) endTimedMode();
+  }, 1000);
+}
+
+function runTimedCode() {
+  const ch = timedState.queue[timedState.currentIdx];
+  if(!ch) return;
+  const code = document.getElementById('tCodeTA').value;
+  document.getElementById('tOutStatus').textContent='RUNNING'; document.getElementById('tOutStatus').className='out-status out-run';
+  document.getElementById('tOutText').innerHTML='<span class="running">Running</span>';
+  setTimeout(()=>{
+    let allPass=true; let output=''; let results=[];
+    try {
+      const jsCode = pythonToJS(code);
+      const evalFn = new Function('return ('+jsCode+')')();
+      ch.tests.forEach((test,i)=>{
+        try {
+          const got = evalFn(...test.input);
+          const pass = deepEqual(got,test.expected);
+          if(!pass) allPass=false;
+          results.push({pass,input:test.input,expected:test.expected,got,i});
+          output += pass?`✅ Test ${i+1}: PASS\n`:`❌ Test ${i+1}: FAIL — got ${JSON.stringify(got)}, expected ${JSON.stringify(test.expected)}\n`;
+        } catch(e){allPass=false;results.push({pass:false,input:test.input,expected:test.expected,got:'Error',i});output+=`❌ Test ${i+1}: ERROR — ${e.message}\n`;}
+      });
+    } catch(e){ allPass=false; output=`❌ Error: ${e.message}`; }
+    document.getElementById('tOutText').textContent=output;
+    document.getElementById('tOutStatus').textContent=allPass?'ALL PASS':'FAILED';
+    document.getElementById('tOutStatus').className=`out-status ${allPass?'out-pass':'out-fail'}`;
+    document.getElementById('tTestsGrid').innerHTML=results.map(r=>`<div class="test-card ${r.pass?'pass':'fail'}"><div class="tc-label">TEST ${r.i+1}</div><div class="tc-io">In: ${JSON.stringify(r.input.length===1?r.input[0]:r.input)}</div><div class="tc-res ${r.pass?'pass':'fail'}">${r.pass?'✅ Pass':'❌ Got: '+JSON.stringify(r.got)}</div></div>`).join('');
+    if(allPass) {
+      timedState.correct++;
+      const timeBonus = Math.min(30, Math.floor(timedState.timeLeft/10));
+      const xpGain = ch.xp + timeBonus;
+      S.score+=xpGain; S.xp+=xpGain; S.streak++;
+      S.level=Math.floor(S.xp/200)+1;
+      timedState.results.push({title:ch.title, pass:true, xp:xpGain});
+      if(!S.solved[ch.topicId||'loops']) S.solved[ch.topicId||'loops']={};
+      S.solved[ch.topicId||'loops'][ch.id]=true;
+      logActivity(ch.topicId||'loops', ch.id, xpGain, ch.title);
+      updateStats(); saveState();
+      timedState.currentIdx++;
+      setTimeout(()=>loadTimedChallenge(), 800);
+    } else {
+      timedState.results.push({title:ch.title, pass:false, xp:0});
+    }
+  },300);
+}
+
+function resetTimedCode() {
+  const ch = timedState.queue[timedState.currentIdx];
+  if(ch) document.getElementById('tCodeTA').value=ch.starter;
+}
+
+function skipTimedChallenge() {
+  const ch = timedState.queue[timedState.currentIdx];
+  if(ch) { timedState.wrong++; timedState.results.push({title:ch.title,pass:false,xp:0}); timedState.currentIdx++; loadTimedChallenge(); }
+}
+
+function endTimedMode() {
+  if(timedState.timer) { clearInterval(timedState.timer); timedState.timer=null; }
+  timedState.active=false;
+  document.getElementById('timedEditorArea').style.display='none';
+  document.getElementById('timedPracticeStats').style.display='none';
+  showTimedResults();
+}
+
+function showTimedResults() {
+  const r = timedState.results;
+  const correct = r.filter(x=>x.pass).length;
+  const totalXP = r.reduce((a,x)=>a+x.xp,0);
+  const accuracy = r.length ? Math.round(correct/r.length*100) : 0;
+  document.getElementById('trGrid').innerHTML=`
+    <div class="tr-stat"><span class="tr-stat-val">${correct}</span><div class="tr-stat-label">Correct</div></div>
+    <div class="tr-stat"><span class="tr-stat-val">${r.length-correct}</span><div class="tr-stat-label">Skipped</div></div>
+    <div class="tr-stat"><span class="tr-stat-val">${accuracy}%</span><div class="tr-stat-label">Accuracy</div></div>
+    <div class="tr-stat"><span class="tr-stat-val">+${totalXP}</span><div class="tr-stat-label">XP Earned</div></div>`;
+  document.getElementById('trBreakdown').innerHTML = r.slice(0,10).map(x=>`
+    <div class="tr-row"><span>${x.pass?'✅':'❌'} ${x.title}</span><span style="color:var(--blue);font-family:'JetBrains Mono',monospace;font-size:0.78rem;font-weight:700">${x.pass?'+'+x.xp+' XP':'—'}</span></div>`).join('');
+  document.getElementById('timedWinModal').classList.add('show');
+}
+
+function closeTimedResults() {
+  document.getElementById('timedWinModal').classList.remove('show');
+  document.getElementById('timedStartScreen').style.display='flex';
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  AI HINTS
+// ═══════════════════════════════════════════════════════════════════════════
+let aiHintLoading = false;
+
+async function toggleAIHint() {
+  if(!S.currentCh) return;
+  const body = document.getElementById('aiHintBody');
+  const content = document.getElementById('aiHintContent');
+  S.aiHintVisible = !S.aiHintVisible;
+  if(!S.aiHintVisible) { body.classList.remove('show'); return; }
+  body.classList.add('show');
+  if(aiHintLoading) return;
+  aiHintLoading = true;
+  content.textContent = '';
+  body.classList.add('loading');
+  const code = document.getElementById('codeTA').value;
+  const ch = S.currentCh;
+  const userCode = code === ch.starter ? '(not started yet)' : code;
+  const prompt = `You are a Python tutor. A student is working on this challenge:
+
+Title: ${ch.title}
+Description: ${ch.desc}
+Tags: ${ch.tags.join(', ')}
+Difficulty: ${ch.difficulty}
+
+Their current code:
+\`\`\`python
+${userCode}
+\`\`\`
+
+Give a SHORT, helpful hint (2-4 sentences max). Do NOT give the full solution. Point them in the right direction conceptually. Be encouraging and specific to what they've written so far.`;
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:200,
+        messages:[{role:'user',content:prompt}]
+      })
+    });
+    const data = await response.json();
+    const text = data.content?.[0]?.text || 'Could not generate hint. Try the manual hint instead.';
+    body.classList.remove('loading');
+    content.textContent = text;
+  } catch(e) {
+    body.classList.remove('loading');
+    content.innerHTML = `<span class="ai-error">⚠ Network error. Check your connection and try again.</span>`;
+  }
+  aiHintLoading = false;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  PROGRESS PAGE
+// ═══════════════════════════════════════════════════════════════════════════
+function logActivity(topicId, chId, xpGained, title) {
+  S.activity.unshift({
+    date: new Date().toISOString(),
+    topicId, chId, xp: xpGained, title
+  });
+  if(S.activity.length > 100) S.activity = S.activity.slice(0,100);
+}
+
+function renderProgressPage() {
+  const allChs = Object.values(CHALLENGES).flat();
+  const solvedAll = Object.values(S.solved).flatMap(t=>Object.keys(t));
+  const totalSolved = solvedAll.length;
+  const totalChs = allChs.length;
+  const sessionsToday = S.activity.filter(a=>{
+    const d = new Date(a.date); const t = new Date();
+    return d.toDateString()===t.toDateString();
+  }).length;
+  const dueCount = getDueReviews().length;
+
+  // Stat cards
+  document.getElementById('progStatCards').innerHTML=`
+    <div class="prog-stat-card"><span class="psc-icon">✅</span><span class="psc-val">${totalSolved}</span><div class="psc-label">Challenges Solved</div></div>
+    <div class="prog-stat-card"><span class="psc-icon">⚡</span><span class="psc-val">${S.score}</span><div class="psc-label">Total Score</div></div>
+    <div class="prog-stat-card"><span class="psc-icon">🔥</span><span class="psc-val">${S.streak}</span><div class="psc-label">Best Streak</div></div>
+    <div class="prog-stat-card"><span class="psc-icon">🏆</span><span class="psc-val">${S.level}</span><div class="psc-label">Current Level</div></div>
+    <div class="prog-stat-card"><span class="psc-icon">📅</span><span class="psc-val">${sessionsToday}</span><div class="psc-label">Solved Today</div></div>
+    <div class="prog-stat-card"><span class="psc-icon">🔄</span><span class="psc-val">${dueCount}</span><div class="psc-label">Reviews Due</div></div>`;
+
+  // Topic progress
+  const topicColors = {loops:'var(--loop-color)',lists:'var(--list-color)',functions:'var(--fn-color)',strings:'var(--str-color)',dicts:'var(--dict-color)',comprehensions:'var(--teal)',classes:'var(--amber)',errors:'var(--purple)',numpy:'#1565c0',pandas:'#1a6b2e',visualization:'#c25c0a'};
+  const topicIcons = {loops:'🔁',lists:'📋',functions:'⚡',strings:'🔤',dicts:'📦',comprehensions:'🧬',classes:'🏗️',errors:'🛡️',numpy:'🔢',pandas:'🐼',visualization:'📊'};
+  document.getElementById('topicProgList').innerHTML=Object.entries(CHALLENGES).map(([t,chs])=>{
+    const solved = Object.keys(S.solved[t]||{}).length;
+    const pct = Math.round(solved/chs.length*100);
+    return `<div class="tp-row">
+      <div class="tp-header">
+        <div class="tp-name">${topicIcons[t]||''} ${t.charAt(0).toUpperCase()+t.slice(1)}</div>
+        <div class="tp-count" style="color:${topicColors[t]}">${solved}/${chs.length} · ${pct}%</div>
+      </div>
+      <div class="tp-bar-bg"><div class="tp-bar-fill" style="width:${pct}%;background:${topicColors[t]}"></div></div>
+    </div>`;
+  }).join('');
+
+  // Heatmap — last 28 days
+  renderHeatmap();
+
+  // Activity
+  const actList = document.getElementById('activityList');
+  if(S.activity.length===0){
+    actList.innerHTML='<div style="color:var(--text3);font-size:0.85rem;padding:12px 0">No activity yet — start solving challenges!</div>';
+  } else {
+    actList.innerHTML=S.activity.slice(0,15).map(a=>{
+      const d = new Date(a.date);
+      const rel = getRelativeTime(d);
+      return `<div class="act-row"><span class="act-icon">✅</span><div class="act-info"><div class="act-name">${a.title}</div><div class="act-meta">${a.topicId} · ${rel}</div></div><span class="act-xp">+${a.xp} XP</span></div>`;
+    }).join('');
+  }
+
+  // SR queue section
+  const due = getDueReviews();
+  document.getElementById('srQueueSection').innerHTML = due.length===0
+    ? '<div style="color:var(--text3);font-size:0.85rem;padding:12px 0">🎉 No reviews due — great work staying on top of things!</div>'
+    : `<div style="display:flex;gap:8px;flex-wrap:wrap">${due.map(ch=>`<span class="rq-item rq-due" onclick="startReview('${ch.topicId}','${ch.id}')">${ch.title}</span>`).join('')}</div>`;
+}
+
+function renderHeatmap() {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const days=28;
+  const counts={};
+  S.activity.forEach(a=>{
+    const d=new Date(a.date); d.setHours(0,0,0,0);
+    const key=d.getTime();
+    counts[key]=(counts[key]||0)+1;
+  });
+  // Build 4 weeks × 7 days grid
+  const grid=document.getElementById('heatmapGrid');
+  const daysEl=document.getElementById('heatmapDays');
+  if(!grid)return;
+  grid.innerHTML=''; daysEl.innerHTML='';
+  const dayLabels=['','M','','W','','F',''];
+  dayLabels.forEach(l=>{
+    const d=document.createElement('div');
+    d.className='heatmap-day'; d.textContent=l;
+    daysEl.appendChild(d);
+  });
+  const startDate=new Date(today); startDate.setDate(startDate.getDate()-days+1);
+  let col=null;
+  for(let i=0;i<days;i++){
+    const d=new Date(startDate); d.setDate(d.getDate()+i);
+    const dow=d.getDay(); // 0=sun
+    if(dow===0||i===0){
+      col=document.createElement('div'); col.className='heatmap-col'; grid.appendChild(col);
+    }
+    const count=counts[d.getTime()]||0;
+    const cell=document.createElement('div');
+    cell.className='heatmap-cell'+(count===0?'':count===1?' l1':count===2?' l2':count<5?' l3':' l4');
+    cell.title=`${d.toLocaleDateString()}: ${count} solved`;
+    col.appendChild(cell);
+  }
+}
+
+function getRelativeTime(date) {
+  const diff = Date.now()-date.getTime();
+  const mins=Math.floor(diff/60000);
+  if(mins<1) return 'just now';
+  if(mins<60) return `${mins}m ago`;
+  const hrs=Math.floor(mins/60);
+  if(hrs<24) return `${hrs}h ago`;
+  const days=Math.floor(hrs/24);
+  return days===1?'yesterday':`${days}d ago`;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  NAVIGATION
+// ═══════════════════════════════════════════════════════════════════════════
+function showPage(p) {
+  document.querySelectorAll('.page').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(el=>el.classList.remove('active'));
+  document.getElementById('page-'+p).classList.add('active');
+  document.getElementById('tab-'+p).classList.add('active');
+  if(p==='learn') showLesson(S.currentTopic||'loops');
+  if(p==='practice') { renderPractice(); updateReviewQueue(); }
+  if(p==='progress') renderProgressPage();
+  if(p==='timed' && !timedState.active) {
+    document.getElementById('timedStartScreen').style.display='flex';
+    document.getElementById('timedEditorArea').style.display='none';
+    document.getElementById('timedPracticeStats').style.display='none';
+  }
+}
+
+function openTopic(topic) {
+  S.currentTopic=topic;
+  showPage('practice');
+  setPracticeTab(topic);
+  selectChallenge(CHALLENGES[topic][0]);
+}
+function openLesson(topic) {
+  S.currentTopic=topic;
+  showPage('learn');
+  showLesson(topic);
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  LEARN
+// ═══════════════════════════════════════════════════════════════════════════
+function showLesson(topic) {
+  S.currentTopic=topic;
+  const el=document.getElementById('learn-content');
+  if(el && LESSONS[topic]) el.innerHTML=LESSONS[topic];
+  document.querySelectorAll('.sidebar-topic').forEach(el=>el.classList.remove('active'));
+  const sl=document.getElementById('sl-'+topic);
+  if(sl) sl.classList.add('active');
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  PRACTICE
+// ═══════════════════════════════════════════════════════════════════════════
+function renderPractice() {
+  const tabs=document.getElementById('csTabs');
+  const topics=[['loops','🔁']];
+  tabs.innerHTML=topics.map(([t,ic])=>
+    `<button class="cs-tab${S.practiceTab===t?' active':''}" onclick="setPracticeTab('${t}')" title="${t}">${ic}</button>`
+  ).join('');
+  // Update home card challenge counts dynamically
+  topics.forEach(([t])=>{
+    const el=document.querySelector(`.tc-${t === 'functions' ? 'functions' : t === 'loops' ? 'loops' : t === 'lists' ? 'lists' : 'strings'} .tc-meta`);
+    if(el && CHALLENGES[t]) el.textContent=CHALLENGES[t].length+' CHALLENGES';
+  });
+  renderChallengeList();
+}
+
+function setPracticeTab(topic) {
+  S.practiceTab=topic;
+  document.querySelectorAll('.cs-tab').forEach((b,i)=>{
+    const ts=['loops'];
+    b.classList.toggle('active',ts[i]===topic);
+  });
+  renderChallengeList();
+}
+
+function renderChallengeList() {
+  const list=document.getElementById('csList');
+  if(!list) return;
+  const chs=CHALLENGES[S.practiceTab]||[];
+  const now=Date.now();
+  list.innerHTML=chs.map(ch=>{
+    const solved=S.solved[S.practiceTab]&&S.solved[S.practiceTab][ch.id];
+    const active=S.currentCh&&S.currentCh.id===ch.id;
+    const srCard=S.sr[ch.id];
+    const isDue=srCard&&srCard.dueDate<=now&&srCard.reps>0;
+    return `<div class="cs-item${active?' active':''}${solved?' solved':''}" onclick='selectChallenge(${JSON.stringify(ch).replace(/'/g,"&#39;")})'>
+      <span class="cs-status">${solved?(isDue?'🔄':'✅'):'○'}</span>
+      <div class="cs-info"><div class="cs-name">${ch.title}</div><div class="cs-xp">${ch.xp} XP${isDue?' · <span style="color:var(--amber)">review due</span>':''}</div></div>
+      <span class="diff-badge diff-${ch.difficulty}">${ch.difficulty[0].toUpperCase()}</span>
+    </div>`;
+  }).join('');
+}
+
+function selectChallenge(ch) {
+  S.currentCh={...ch};
+  S.hintUsed=false; S.hintVisible=false; S.aiHintVisible=false;
+  document.getElementById('chTitle').textContent=ch.title;
+  document.getElementById('chDesc').textContent=ch.desc;
+  document.getElementById('chTags').innerHTML=ch.tags.map(t=>`<span class="ch-tag">${t}</span>`).join('');
+  document.getElementById('codeTA').value=ch.starter;
+  document.getElementById('hintBody').textContent=''; document.getElementById('hintBody').classList.remove('show');
+  document.getElementById('aiHintBody').classList.remove('show');
+  document.getElementById('aiHintContent').textContent='';
+  aiHintLoading=false;
+  document.getElementById('outText').textContent='// Run your code to see output...';
+  document.getElementById('outStatus').textContent=''; document.getElementById('outStatus').className='out-status';
+  document.getElementById('testsGrid').innerHTML='';
+  document.getElementById('srRatingWrap').style.display='none';
+  srInit(ch.id);
+  updateSRLabels(ch.id);
+  renderChallengeList();
+}
+
+function updateSRLabels(chId) {
+  [0,1,2,3].forEach(q=>{
+    const el=document.getElementById('srNext'+q);
+    if(el) el.textContent=srNextLabel(chId,q);
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  CODE EXECUTION
+// ═══════════════════════════════════════════════════════════════════════════
+function runCode() {
+  if(!S.currentCh) return;
+  const ch=S.currentCh;
+  const code=document.getElementById('codeTA').value;
+  const outS=document.getElementById('outStatus'); const outT=document.getElementById('outText');
+  outS.textContent='RUNNING'; outS.className='out-status out-run';
+  outT.innerHTML='<span class="running">Running</span>';
+  setTimeout(()=>{
+    let results=[]; let allPass=true; let output='';
+    try {
+      const jsCode=pythonToJS(code);
+      const evalFn=new Function('return ('+jsCode+')')();
+      ch.tests.forEach((test,i)=>{
+        try {
+          const got=evalFn(...test.input);
+          const pass=deepEqual(got,test.expected);
+          if(!pass) allPass=false;
+          results.push({pass,input:test.input,expected:test.expected,got,i});
+          output+=pass?`✅ Test ${i+1}: PASS\n`:`❌ Test ${i+1}: FAIL — got ${JSON.stringify(got)}, expected ${JSON.stringify(test.expected)}\n`;
+        } catch(e){allPass=false;results.push({pass:false,input:test.input,expected:test.expected,got:'Error',i});output+=`❌ Test ${i+1}: ERROR — ${e.message}\n`;}
+      });
+    } catch(e){allPass=false;output=`❌ Error: ${e.message}\n\nCheck your syntax.`;}
+    outT.textContent=output;
+    outS.textContent=allPass?'ALL PASS':'FAILED';
+    outS.className=`out-status ${allPass?'out-pass':'out-fail'}`;
+    document.getElementById('testsGrid').innerHTML=results.map(r=>`<div class="test-card ${r.pass?'pass':'fail'}"><div class="tc-label">TEST ${r.i+1}</div><div class="tc-io">In: ${JSON.stringify(r.input.length===1?r.input[0]:r.input)}</div><div class="tc-res ${r.pass?'pass':'fail'}">${r.pass?'✅ Pass':'❌ Got: '+JSON.stringify(r.got)}</div></div>`).join('');
+    if(allPass) handleWin();
+  },350);
+}
+
+function handleWin() {
+  const ch=S.currentCh;
+  const alreadySolved=S.solved[S.practiceTab]&&S.solved[S.practiceTab][ch.id];
+  if(!alreadySolved) {
+    if(!S.solved[S.practiceTab]) S.solved[S.practiceTab]={};
+    S.solved[S.practiceTab][ch.id]=true;
+    let xpGain=ch.xp; if(S.hintUsed) xpGain=Math.max(10,xpGain-10);
+    S.score+=xpGain; S.streak++; S.xp+=xpGain;
+    const newLevel=Math.floor(S.xp/200)+1; const leveled=newLevel>S.level; S.level=newLevel;
+    logActivity(S.practiceTab,ch.id,xpGain,ch.title);
+    updateStats(); renderChallengeList(); updateReviewQueue();
+    saveState();
+    document.getElementById('winEmoji').textContent=S.streak>=3?'🔥':'🎯';
+    document.getElementById('winTitle').textContent=leveled?'Level Up!':'Solved!';
+    document.getElementById('winXP').textContent=`+${xpGain} XP`;
+    document.getElementById('winMsg').textContent=leveled?`All tests passed! You reached Level ${S.level}! 🚀`:`All tests passed! Streak: ${S.streak} 🔥`;
+    document.getElementById('winModal').classList.add('show');
+  } else {
+    // Show SR rating for re-solve
+    document.getElementById('srRatingWrap').style.display='block';
+    updateSRLabels(ch.id);
+    showToast('Already solved','Rate how well you knew it for spaced repetition.');
+  }
+}
+
+function rateSR(quality) {
+  if(!S.currentCh) return;
+  srRate(S.currentCh.id, quality);
+  document.getElementById('srRatingWrap').style.display='none';
+  showToast('Review recorded', `Next review: ${srNextLabel(S.currentCh.id, quality)}`);
+  renderChallengeList();
+}
+
+function updateStats() {
+  ['ns-score','ps-score'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=S.score;});
+  ['ns-streak','ps-streak'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=S.streak;});
+  ['ns-level','ps-level'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=S.level;});
+  const total=Object.values(S.solved).reduce((a,t)=>a+Object.keys(t).length,0);
+  const totalChs=Object.values(CHALLENGES).flat().length;
+  const el=document.getElementById('ps-solved');if(el)el.textContent=`${total}/${totalChs}`;
+  const xpInLevel=S.xp%200;
+  const xpBar=document.getElementById('ps-xpbar');if(xpBar)xpBar.style.width=(xpInLevel/200*100)+'%';
+  const xpTxt=document.getElementById('ps-xptext');if(xpTxt)xpTxt.textContent=`${xpInLevel} / 200`;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  PYTHON → JS TRANSPILER
+// ═══════════════════════════════════════════════════════════════════════════
+function pythonToJS(code) {
+  let lines=code.split('\n'); let jsLines=[]; let indentStack=[0];
+  for(let i=0;i<lines.length;i++){
+    let line=lines[i]; let stripped=line.trimStart();
+    if(!stripped||stripped.startsWith('#')) continue;
+    let indent=line.length-stripped.length;
+    while(indentStack.length>1&&indent<indentStack[indentStack.length-1]){indentStack.pop();jsLines.push('}');}
+    let pad='  '.repeat(indentStack.length-1); let js=stripped;
+    if(js.match(/^def\s+\w+\s*\(/)){
+      js=js.replace(/^def\s+(\w+)\s*\(([^)]*)\)\s*:/,(_,name,params)=>{
+        const jp=params.split(',').map(p=>{p=p.trim();return p.includes('=')?p.split('=')[0].trim():p;}).filter(Boolean).join(', ');
+        return `function ${name}(${jp}) {`;
+      }); indentStack.push(indent+2);
+    } else if(js.match(/^class\s+\w+/)){
+      js=js.replace(/^class\s+(\w+)(?:\([^)]*\))?\s*:/,(_,name)=>`// class ${name} (simplified)\nfunction ${name}(...args){ const self={}; self.__class__='${name}';`);
+      indentStack.push(indent+2);
+    } else if(js.match(/^for\s+\w+\s+in\s+range\s*\(/)){
+      js=js.replace(/^for\s+(\w+)\s+in\s+range\s*\(([^)]+)\)\s*:/,(_,v,args)=>{
+        const p=args.split(',').map(s=>s.trim());
+        let start='0',end,step='1';
+        if(p.length===1){end=p[0];}else if(p.length===2){start=p[0];end=p[1];}else{start=p[0];end=p[1];step=p[2];}
+        const op=step.startsWith('-')?'>':'<';
+        return `for(let ${v}=${start};${v}${op}${end};${v}+=${step}){`;
+      }); indentStack.push(indent+2);
+    } else if(js.match(/^for\s+\w+\s+in\s+/)){
+      js=js.replace(/^for\s+(\w+)\s+in\s+(.+)\s*:/,(_,v,it)=>{
+        it=it.replace(/\[(\d+):\]/,'.slice($1)').replace(/\[:[-]?(\d+)\]/,'.slice(0,-$1)');
+        return `for(const ${v} of ${it}){`;
+      }); indentStack.push(indent+2);
+    } else if(js.match(/^while\s+/)){
+      js=js.replace(/^while\s+(.+)\s*:/,(_,c)=>`while(${pyC(c)}){`); indentStack.push(indent+2);
+    } else if(js.match(/^if\s+/)){
+      js=js.replace(/^if\s+(.+)\s*:/,(_,c)=>`if(${pyC(c)}){`); indentStack.push(indent+2);
+    } else if(js.match(/^elif\s+/)){
+      jsLines.push(pad+'}'); indentStack.pop();
+      js=js.replace(/^elif\s+(.+)\s*:/,(_,c)=>`else if(${pyC(c)}){`); indentStack.push(indent+2);
+    } else if(js.match(/^else\s*:/)){
+      jsLines.push(pad+'}'); indentStack.pop(); js='else{'; indentStack.push(indent+2);
+    } else if(js.match(/^try\s*:/)){
+      js='try{'; indentStack.push(indent+2);
+    } else if(js.match(/^except\s*/)){
+      jsLines.push(pad+'}'); indentStack.pop();
+      js=js.replace(/^except\s+(\w+)\s*:/,(_,exc)=>`catch(_err_${exc}){`).replace(/^except\s*:/,'catch(_err){');
+      indentStack.push(indent+2);
+    } else if(js.match(/^finally\s*:/)){
+      jsLines.push(pad+'}'); indentStack.pop(); js='finally{'; indentStack.push(indent+2);
+    } else if(js==='pass'||js.startsWith('"""')||js.startsWith("'''")){continue;}
+    else { js=pyE(js); if(!js.endsWith(';')&&!js.endsWith('{')) js+=';'; }
+    jsLines.push(pad+js);
+  }
+  while(indentStack.length>1){indentStack.pop();jsLines.push('}');}
+  return jsLines.join('\n');
+}
+
+function pyC(c){
+  return c.replace(/\bnot\s+in\b/g,'##NI##').replace(/\bin\b/g,'##IN##')
+    .replace(/(\w+)\s*##NI##\s*(\w+)/g,'!$2.includes($1)').replace(/(\w+)\s*##IN##\s*(\w+)/g,'$2.includes($1)')
+    .replace(/\band\b/g,'&&').replace(/\bor\b/g,'||').replace(/\bnot\b/g,'!')
+    .replace(/\bNone\b/g,'null').replace(/\bTrue\b/g,'true').replace(/\bFalse\b/g,'false');
+}
+
+function pyE(expr){
+  return expr
+    .replace(/\bTrue\b/g,'true').replace(/\bFalse\b/g,'false').replace(/\bNone\b/g,'null')
+    .replace(/\band\b/g,'&&').replace(/\bor\b/g,'||')
+    .replace(/\.append\((.+)\)/g,'.push($1)').replace(/\.lower\(\)/g,'.toLowerCase()').replace(/\.upper\(\)/g,'.toUpperCase()')
+    .replace(/\.split\(\)/g,".split(' ')").replace(/\.split\(([^)]+)\)/g,'.split($1)')
+    .replace(/len\(([^)]+)\)/g,'$1.length').replace(/str\(([^)]+)\)/g,'String($1)')
+    .replace(/int\(([^)]+)\)/g,'parseInt($1)').replace(/float\(([^)]+)\)/g,'parseFloat($1)')
+    .replace(/ord\(([^)]+)\)/g,'$1.charCodeAt(0)').replace(/chr\(([^)]+)\)/g,'String.fromCharCode($1)')
+    .replace(/\.isalpha\(\)/g,'.match(/^[a-zA-Z]+$/)').replace(/\.isdigit\(\)/g,'.match(/^[0-9]+$/)')
+    .replace(/(\w+)\.copy\(\)/g,'({...$1})').replace(/set\(([^)]+)\)/g,'new Set($1)')
+    .replace(/(\w+)\.get\(([^,]+),\s*([^)]+)\)/g,'($1[$2]!==undefined?$1[$2]:$3)')
+    .replace(/f"([^"]+)"/g,(_,s)=>'`'+s.replace(/\{([^}]+)\}/g,'${$1}')+'`')
+    .replace(/f'([^']+)'/g,(_,s)=>'`'+s.replace(/\{([^}]+)\}/g,'${$1}')+'`')
+    .replace(/(\w+)\[-(\w+):\]/g,'$1.slice(-$2)').replace(/(\w+)\[:-(\w+)\]/g,'$1.slice(0,-$2)').replace(/(\w+)\[(\w+):\]/g,'$1.slice($2)')
+    .replace(/(\w+)\s+not\s+in\s+(\w+)/g,'!$2.includes($1)')
+    .replace(/(\w+)\s+in\s+(\w+)/g,'(Array.isArray($2)?$2.includes($1):(typeof $2==="string"?$2.includes($1):$1 in $2))')
+    .replace(/raise\s+(\w+)\s*\(([^)]*)\)/g,'(()=>{throw new Error($2)})()')
+    .replace(/raise\s+(\w+)/g,'(()=>{throw new Error("$1")})()')
+    .replace(/(\w+)\*\*(\w+)/g,'Math.pow($1,$2)').replace(/\*\*(\w+)/g,'**$1')
+    .replace(/sorted\(([^,)]+)(?:,\s*key=([^,)]+))?(?:,\s*reverse=True)?\)/g,(m,arr,key)=>{
+      if(m.includes('reverse=True'))return `[...${arr}].sort((a,b)=>${key?`${key}(b)-${key}(a)`:'b-a'})`;
+      return `[...${arr}].sort()`;
+    });
+}
+
+function deepEqual(a,b){
+  if(a===b)return true;
+  if(a===null||b===null)return a===b;
+  if(typeof a!==typeof b)return String(a)===String(b);
+  if(Array.isArray(a)&&Array.isArray(b)){if(a.length!==b.length)return false;return a.every((v,i)=>deepEqual(v,b[i]));}
+  if(typeof a==='object'&&typeof b==='object'){
+    const ka=Object.keys(a).sort(),kb=Object.keys(b).sort();
+    if(ka.length!==kb.length)return false;
+    if(!deepEqual(ka,kb))return false;
+    return ka.every(k=>deepEqual(a[k],b[k]));
+  }
+  return false;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  UI CONTROLS
+// ═══════════════════════════════════════════════════════════════════════════
+function toggleHint(){
+  if(!S.currentCh)return;
+  S.hintVisible=!S.hintVisible;
+  const hb=document.getElementById('hintBody');
+  if(S.hintVisible){
+    hb.textContent=S.currentCh.hint; hb.classList.add('show');
+    if(!S.hintUsed){S.hintUsed=true; showToast('Hint revealed','−10 XP on this challenge',true);}
+  } else hb.classList.remove('show');
+}
+
+function resetCode(){
+  if(!S.currentCh)return;
+  document.getElementById('codeTA').value=S.currentCh.starter;
+  document.getElementById('outText').textContent='// Run your code to see output...';
+  document.getElementById('outStatus').textContent=''; document.getElementById('outStatus').className='out-status';
+  document.getElementById('testsGrid').innerHTML=''; document.getElementById('hintBody').classList.remove('show');
+  document.getElementById('srRatingWrap').style.display='none';
+  S.hintVisible=false;
+}
+
+function showSol(){
+  if(!S.currentCh)return;
+  document.getElementById('solCode').textContent=S.currentCh.solution;
+  document.getElementById('solExp').textContent=S.currentCh.explanation;
+  document.getElementById('solModal').classList.add('show');
+}
+function closeSol(){ document.getElementById('solModal').classList.remove('show'); }
+
+function closeWin(){
+  document.getElementById('winModal').classList.remove('show');
+  // Show SR rating for newly solved
+  document.getElementById('srRatingWrap').style.display='block';
+  if(S.currentCh) updateSRLabels(S.currentCh.id);
+  // Advance to next challenge
+  const chs=CHALLENGES[S.practiceTab]||[];
+  const idx=chs.findIndex(c=>c.id===S.currentCh?.id);
+  if(idx<chs.length-1) selectChallenge(chs[idx+1]);
+}
+
+function showToast(title,msg,isErr=false){
+  const t=document.getElementById('toast');
+  document.getElementById('toastT').textContent=title;
+  document.getElementById('toastM').textContent=msg;
+  t.className=`toast${isErr?' err':''} show`;
+  setTimeout(()=>t.classList.remove('show'),3200);
+}
+
+// Keyboard shortcuts
+document.addEventListener('keydown',e=>{
+  const practice=document.getElementById('page-practice').classList.contains('active');
+  const timed=document.getElementById('page-timed').classList.contains('active');
+  if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){
+    e.preventDefault();
+    if(practice) runCode();
+    if(timed&&timedState.active) runTimedCode();
+  }
+});
+
+['codeTA','tCodeTA'].forEach(id=>{
+  const el=document.getElementById(id);
+  if(el) el.addEventListener('keydown',e=>{
+    if(e.key==='Tab'){
+      e.preventDefault();
+      const s=e.target.selectionStart,en=e.target.selectionEnd;
+      e.target.value=e.target.value.substring(0,s)+'    '+e.target.value.substring(en);
+      e.target.selectionStart=e.target.selectionEnd=s+4;
+    }
+  });
+});
+
+document.getElementById('solModal').addEventListener('click',e=>{if(e.target===document.getElementById('solModal'))closeSol();});
+document.getElementById('timedWinModal').addEventListener('click',e=>{if(e.target===document.getElementById('timedWinModal'))closeTimedResults();});
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════════════════════════════════
+showLesson('loops');
+updateStats();
+renderPractice();
+// Update home card counts from actual challenge data
+Object.entries(CHALLENGES).forEach(([topic, chs])=>{
+  const card = document.querySelector(`.tc-${topic} .tc-meta`);
+  if(card) card.textContent = chs.length + ' CHALLENGES';
+});
+// Init SR for all solved challenges
+for(const [topic, solvedMap] of Object.entries(S.solved)){
+  for(const chId of Object.keys(solvedMap)){
+    srInit(chId);
+  }
+}
+
+</script>
+</body>
+</html>

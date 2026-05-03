@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python Classes - Bhujanga Abhyāsa</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Sora:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f5f4f0;
+      --bg2: #eeecea;
+      --surface: #ffffff;
+      --surface2: #fafaf8;
+      --border: #e2dfd9;
+      --border2: #cdc9c2;
+      --text: #1e1c18;
+      --text2: #6b6760;
+      --text3: #9e9b96;
+      --text-inv: #ffffff;
+      --blue: #3b6fd4;
+      --blue-bg: #eef2fb;
+      --green: #2e7d52;
+      --green-bg: #edf5f0;
+      --amber: #b45309;
+      --amber-bg: #fef6ec;
+      --red: #c0392b;
+      --red-bg: #fdf0ee;
+      --purple: #6d4fc2;
+      --purple-bg: #f2eefb;
+      --teal: #1a7a7a;
+      --class-color: #6d4fc2;
+      --code-bg: #1e1c18;
+      --code-text: #e8e4db;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Sora', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Top Navigation */
+    .top-nav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--class-color);
+    }
+
+    .back-link {
+      color: var(--text2);
+      text-decoration: none;
+      font-size: 0.95rem;
+      padding: 0.5rem 1rem;
+      border-radius: 0.375rem;
+      transition: all 0.2s;
+    }
+
+    .back-link:hover {
+      background: var(--bg2);
+      color: var(--class-color);
+    }
+
+    .container {
+      display: flex;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      position: sticky;
+      top: 64px;
+      width: 280px;
+      height: calc(100vh - 64px);
+      background: var(--surface2);
+      border-right: 1px solid var(--border);
+      overflow-y: auto;
+      padding: 1.5rem 0;
+    }
+
+    .sidebar-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--class-color);
+      padding: 0 1.5rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .sidebar-nav {
+      list-style: none;
+    }
+
+    .sidebar-nav li {
+      border-left: 3px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .sidebar-nav a {
+      display: block;
+      padding: 0.75rem 1.5rem;
+      color: var(--text2);
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: all 0.2s;
+    }
+
+    .sidebar-nav li:hover {
+      border-left-color: var(--class-color);
+      background: var(--bg);
+    }
+
+    .sidebar-nav a:hover {
+      color: var(--class-color);
+      padding-left: 2rem;
+    }
+
+    .sidebar-nav li.active {
+      border-left-color: var(--class-color);
+      background: var(--purple-bg);
+    }
+
+    .sidebar-nav li.active a {
+      color: var(--class-color);
+      font-weight: 600;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      padding: 3rem 4rem;
+      max-width: 900px;
+    }
+
+    /* Section Styling */
+    .section {
+      margin-bottom: 4rem;
+      scroll-margin-top: 80px;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--class-color);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .section-icon {
+      font-size: 2.25rem;
+    }
+
+    .section-intro {
+      color: var(--text2);
+      font-size: 1.05rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.8;
+    }
+
+    /* Code Block Styling */
+    .code-block {
+      background: var(--code-bg);
+      border-radius: 0.5rem;
+      margin: 1.5rem 0;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .code-block-header {
+      background: #16140f;
+      padding: 0.75rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #2a2722;
+      font-size: 0.85rem;
+      color: var(--text3);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .code-dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+    }
+
+    .code-dot.d1 { background: #ff605c; }
+    .code-dot.d2 { background: #ffbd44; }
+    .code-dot.d3 { background: #00ca4e; }
+
+    .code-content {
+      padding: 1.5rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      color: var(--code-text);
+      overflow-x: auto;
+      line-height: 1.7;
+    }
+
+    /* Syntax Highlighting */
+    .kw { color: #ff6b6b; font-weight: 500; } /* keywords */
+    .fn-name { color: #51cf66; } /* functions */
+    .str { color: #ffa94d; } /* strings */
+    .num { color: #b197fc; } /* numbers */
+    .comment { color: #909090; font-style: italic; }
+    .var { color: var(--code-text); }
+    .op { color: #74c0fc; } /* operators */
+
+    /* Diagram Styling */
+    .diagram-box {
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: 0.5rem;
+      padding: 2rem;
+      margin: 1.5rem 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .diagram-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text2);
+      margin-bottom: 1rem;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Callouts */
+    .callout {
+      border-left: 4px solid var(--blue);
+      background: var(--blue-bg);
+      padding: 1rem 1.5rem;
+      border-radius: 0.375rem;
+      margin: 1.5rem 0;
+      color: var(--text);
+    }
+
+    .callout.info {
+      border-left-color: var(--blue);
+      background: var(--blue-bg);
+    }
+
+    .callout.warning {
+      border-left-color: var(--amber);
+      background: var(--amber-bg);
+    }
+
+    .callout.tip {
+      border-left-color: var(--class-color);
+      background: var(--purple-bg);
+    }
+
+    .callout-title {
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      font-size: 0.95rem;
+    }
+
+    /* Comparison Table */
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+      overflow: hidden;
+    }
+
+    .compare-table th {
+      background: var(--bg2);
+      padding: 1rem;
+      text-align: left;
+      font-weight: 700;
+      border-bottom: 2px solid var(--border);
+      color: var(--text);
+    }
+
+    .compare-table td {
+      padding: 1rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--text2);
+    }
+
+    .compare-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Practice CTA */
+    .practice-cta {
+      background: linear-gradient(135deg, var(--purple-bg) 0%, var(--blue-bg) 100%);
+      border: 2px solid var(--class-color);
+      border-radius: 0.75rem;
+      padding: 2rem;
+      margin-top: 4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .cta-text {
+      flex: 1;
+    }
+
+    .cta-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--class-color);
+      margin-bottom: 0.5rem;
+    }
+
+    .cta-sub {
+      color: var(--text2);
+      font-size: 1rem;
+    }
+
+    .cta-btn {
+      background: var(--class-color);
+      color: var(--text-inv);
+      padding: 0.875rem 1.75rem;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      transition: all 0.2s;
+      white-space: nowrap;
+      display: inline-block;
+      text-decoration: none;
+    }
+
+    .cta-btn:hover {
+      background: #5838a8;
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg2);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border2);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--text2);
+    }
+
+    @media (max-width: 1024px) {
+      .sidebar {
+        width: 220px;
+      }
+      .main-content {
+        padding: 2rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+      .sidebar {
+        position: relative;
+        top: 0;
+        width: 100%;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        max-height: 200px;
+        overflow-x: auto;
+        padding: 1rem;
+      }
+      .sidebar-nav {
+        display: flex;
+        gap: 1rem;
+      }
+      .sidebar-nav li {
+        border-left: none;
+        border-bottom: 3px solid transparent;
+      }
+      .main-content {
+        padding: 1.5rem;
+      }
+      .practice-cta {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Top Navigation -->
+  <nav class="top-nav">
+    <div class="nav-left">
+      <a href="abhyasa_dwitiya.html" class="back-link">← Back to Dwitiya</a>
+      <span class="logo">🏗️ Classes</span>
+    </div>
+  </nav>
+
+  <div class="container">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-title">📚 Sections</div>
+      <ul class="sidebar-nav">
+        <li class="active"><a href="#section-1">Classes & Objects</a></li>
+        <li><a href="#section-2">Instance Methods</a></li>
+        <li><a href="#section-3">Class vs Instance Variables</a></li>
+        <li><a href="#section-4">Inheritance</a></li>
+        <li><a href="#section-5">Multiple Inheritance</a></li>
+        <li><a href="#section-6">Properties & Decorators</a></li>
+        <li><a href="#section-7">Class & Static Methods</a></li>
+        <li><a href="#section-8">Dunder Methods</a></li>
+        <li><a href="#section-9">Encapsulation</a></li>
+        <li><a href="#section-10">Abstract Classes</a></li>
+        <li><a href="#section-11">Dataclasses</a></li>
+        <li><a href="#section-12">Design Patterns</a></li>
+      </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Section 1: Classes & Objects -->
+      <section class="section" id="section-1">
+        <h2 class="section-title"><span class="section-icon">🏗️</span> Classes & Objects</h2>
+        <p class="section-intro">A class is a blueprint for creating objects. It defines the structure (attributes) and behavior (methods) that objects will have. Objects are instances of classes—individual examples created from the blueprint.</p>
+
+        <h3 style="font-size: 1.3rem; color: var(--class-color); margin-top: 1.5rem; margin-bottom: 1rem;">Creating a Simple Class</h3>
+        <div class="code-block">
+          <div class="code-block-header">
+            <span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span>
+            <span>dog.py</span>
+          </div>
+          <pre class="code-content"><span class="kw">class</span> <span class="fn-name">Dog</span>:
+    <span class="str">"""A class representing a dog."""</span>
+
+    <span class="kw">def</span> <span class="fn-name">__init__</span>(<span class="var">self</span>, <span class="var">name</span>, <span class="var">age</span>):
+        <span class="var">self</span>.<span class="var">name</span> <span class="op">=</span> <span class="var">name</span>
+        <span class="var">self</span>.<span class="var">age</span> <span class="op">=</span> <span class="var">age</span>
+
+    <span class="kw">def</span> <span class="fn-name">bark</span>(<span class="var">self</span>):
+        <span class="kw">return</span> <span class="str">f"{self.name} says: Woof!"</span>
+
+<span class="comment"># Create instances (objects)</span>
+<span class="var">dog1</span> <span class="op">=</span> <span class="fn-name">Dog</span>(<span class="str">"Buddy"</span>, <span class="num">3</span>)
+<span class="var">dog2</span> <span class="op">=</span> <span class="fn-name">Dog</span>(<span class="str">"Max"</span>, <span class="num">5</span>)
+
+<span class="fn-name">print</span>(<span class="var">dog1</span>.<span class="var">name</span>)  <span class="comment"># Output: Buddy</span>
+<span class="fn-name">print</span>(<span class="var">dog1</span>.<span class="fn-name">bark</span>())  <span class="comment"># Output: Buddy says: Woof!</span></pre>
+        </div>
+
+        <div class="callout tip">
+          <div class="callout-title">Key Concepts</div>
+          <strong>__init__</strong>: The constructor method, called automatically when creating an object. It initializes instance attributes.
+          <br><strong>self</strong>: Refers to the current instance. Always the first parameter in methods.
+          <br><strong>Instance attributes</strong>: Variables like self.name that store data specific to each object.
+        </div>
+
+        <h3 style="font-size: 1.3rem; color: var(--class-color); margin-top: 1.5rem; margin-bottom: 1rem;">Understanding Object Creation</h3>
+        <div class="code-block">
+          <div class="code-block-header">
+            <span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span>
+            <span>person.py</span>
+          </div>
+          <pre class="code-content"><span class="kw">class</span> <span class="fn-name">Person</span>:
+    <span class="kw">def</span> <span class="fn-name">__init__</span>(<span class="var">self</span>, <span class="var">name</span>, <span class="var">email</span>):
+        <span class="var">self</span>.<span class="var">name</span> <span class="op">=</span> <span class="var">name</span>
+        <span class="var">self</span>.<span class="var">email</span> <span class="op">=</span> <span class="var">email</span>
+        <span class="var">self</span>.<span class="var">created_at</span> <span class="op">=</span> <span class="fn-name">time</span>.<span class="fn-name">time</span>()
+
+<span class="comment"># Each instance has its own data</span>
+<span class="var">alice</span> <span class="op">=</span> <span class="fn-name">Person</span>(<span class="str">"Alice"</span>, <span class="str">"alice@example.com"</span>)
+<span class="var">bob</span> <span class="op">=</span> <span class="fn-name">Person</span>(<span class="str">"Bob"</span>, <span class="str">"bob@example.com"</span>)
+
+<span class="comment"># Different objects, different attributes</span>
+<span class="fn-name">print</span>(<span class="var">alice</span>.<span class="var">name</span>)  <span class="comment"># Alice</span>
+<span class="fn-name">print</span>(<span class="var">bob</span>.<span class="var">name</span>)    <span class="comment"># Bob</span>
+<span class="fn-name">print</span>(<span class="var">alice</span> <span class="op">==</span> <span class="var">bob</span>)  <span class="comment"># False (different objects)</span></pre>
+        </div>
+      </section>
+
+      <!-- Section 2: Instance Methods -->
+      <section class="section" id="section-2">
+        <h2 class="section-title"><span class="section-icon">⚙️</span> Instance Methods</h2>
+        <p class="section-intro">Instance methods are functions defined within a class that operate on instance data. They have access to self and can read/modify instance attributes.</p>
+
+        <h3 style="font-size: 1.3rem; color: var(--class-color); margin-top: 1.5rem; margin-bottom: 1rem;">Defining and Calling Methods</h3>
+        <div class="code-block">
+          <div class="code-block-header">
+            <span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span>
+            <span>bank_account.py</span>
+          </div>
+          <pre class="code-content"><span class="kw">class</span> <span class="fn-name">BankAccount</span>:
+    <span class="kw">def</span> <span class="fn-name">__init__</span>(<span class="var">self</span>, <span class="var">owner</span>, <span class="var">balance</span><span class="op">=</span><span class="num">0</span>):
+        <span class="var">self</span>.<span class="var">owner</span> <span class="op">=</span> <span class="var">owner</span>
+        <span class="var">self</span>.<span class="var">balance</span> <span class="op">=</span> <span class="var">balance</span>
+
+    <span class="kw">def</span> <span class="fn-name">deposit</span>(<span class="var">self</span>, <span class="var">amount</span>):
+        <span class="var">self</span>.<span class="var">balance</span> <span class="op">+=</span> <span class="var">amount</span>
+        <span class="kw">return</span> <span class="str">f"Deposited ${amount}. New balance: ${self.balance}"</span>
+
+    <span class="kw">def</span> <span class="fn-name">withdraw</span>(<span class="var">self</span>, <span class="var">amount</span>):
+        <span class="kw">if</span> <span class="var">amount</span> <span class="op">></span> <span class="var">self</span>.<span class="var">balance</span>:
+            <span class="kw">return</span> <span class="str">"Insufficient funds"</span>
+        <span class="var">self</span>.<span class="var">balance</span> <span class="op">-=</span> <span class="var">amount</span>
+        <span class="kw">return</span> <span class="str">f"Withdrew ${amount}. New balance: ${self.balance}"</span>
+
+<span class="var">account</span> <span class="op">=</span> <span class="fn-name">BankAccount</span>(<span class="str">"John"</span>, <span class="num">1000</span>)
+<span class="fn-name">print</span>(<span class="var">account</span>.<span class="fn-name">deposit</span>(<span class="num">500</span>))   <span class="comment"># Deposited $500. New balance: $1500</span>
+<span class="fn-name">print</span>(<span class="var">account</span>.<span class="fn-name">withdraw</span>(<span class="num">200</span>))  <span class="comment"># Withdrew $200. New balance: $1300</span></pre>
+        </div>
+
+        <h3 style="font-size: 1.3rem; color: var(--class-color); margin-top: 1.5rem; margin-bottom: 1rem;">Method Chaining</h3>
+        <div class="code-block">
+          <div class="code-block-header">
+            <span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span>
+            <span>string_builder.py</span>
+          </div>
+          <pre class="code-content"><span class="kw">class</span> <span class="fn-name">StringBuilder</span>:
+    <span class="kw">def</span> <span class="fn-name">__init__</span>(<span class="var">self</span>):
+        <span class="var">self</span>.<span class="var">text</span> <span class="op">=</span> <span class="str">""</span>
+
+    <span class="kw">def</span> <span class="fn-name">append</span>(<span class="var">self</span>, <span class="var">text</span>):
+        <span class="var">self</span>.<span class="var">text</span> <span class="op">+=</span> <span class="var">text</span>
+        <span class="kw">return</span> <span class="var">self</span>  <span class="comment"># Return self for chaining</span>
+
+    <span class="kw">def</span> <span class="fn-name">uppercase</span>(<span class="var">self</span>):
+        <span class="var">self</span>.<span class="var">text</span> <span class="op">=</span> <span class="var">self</span>.<span class="var">text</span>.<span class="fn-name">upper</span>()
+        <span class="kw">return</span> <span class="var">self</span>
+
+    <span class="kw">def</span> <span class="fn-name">get</span>(<span class="var">self</span>):
+        <span class="kw">return</span> <span class="var">self</span>.<span class="var">text</span>
+
+<span class="comment"># Chain methods together</span>
+<span class="var">builder</span> <span class="op">=</span> <span class="fn-name">StringBuilder</span>()
+<span class="var">result</span> <span class="op">=</span> <span class="var">builder</span>.<span class="fn-name">append</span>(<span class="str">"Hello"</span>).<span class="fn-name">append</span>(<span class="str">" "</span>).<span class="fn-name">append</span>(<span class="str">"World"</span>).<span class="fn-name">uppercase</span>().<span class="fn-name">get</span>()
+<span class="fn-name">print</span>(<span class="var">result</span>)  <span class="comment"># HELLO WORLD</span></pre>
+        </div>
+      </section>
+
+      <!-- Section 3: Class vs Instance Variables -->
+      <section class="section" id="section-3">
+        <h2 class="section-title"><span class="section-icon">🔄</span> Class vs Instance Variables</h2>
+        <p class="section-intro">Instance variables are unique to each object. Class variables are shared across all instances. Understanding the difference is crucial for managing state correctly.</p>
+
+        <h3 style="font-size: 1.3rem; color: var(--class-color); margin-top: 1.5rem; margin-bottom: 1rem;">Comparing Variable Types</h3>
+        <div class="code-block">
+          <div class="code-block-header">
+            <span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span>
+            <span>counter.py</span>
+          </div>
+          <pre class="code-content"><span class="kw">class</span> <span class="fn-name">Counter</span>:
+    <span class="var">total_created</span> <span class="op">=</span> <span class="num">0</span>  <span class="comment"># Class variable</span>
+
+    <span class="kw">def</span> <span class="fn-name">__init__</span>(<span class="var">self</span>, <span class="var">name</span>):
+        <span class="var">self</span>.<span class="var">name</span> <span class="op">=</span> <span class="var">name</span>  <span class="comment"># Instance variable</span>
+        <span class="var">self</span>.<span class="var">count</span> <span class="op">=</span> <span class="num">0</span>   <span class="comment"># Instance variable</span>
+        <span class="fn-name">Counter</span>.<span class="var">total_created</span> <span class="op">+=</span> <span class="num">1</span>
+
+<span class="var">c1</span> <span class="op">=</span> <span class="fn-name">Counter</span>(<span class="str">"First"</span>)
+<span class="var">c2</span> <span class="op">=</span> <span class="fn-name">Counter</span>(<span class="str">"Second"</span>)
+<span class="var">c3</span> <span class="op">=</span> <span class="fn-name">Counter</span>(<span class="str">"Third"</span>)
+
+<span class="comment"># Each instance has different instance variables</span>
+<span class="fn-name">print</span>(<span class="var">c1</span>.<span class="var">name</span>)  <span class="comment"># First</span>
+<span class="fn-name">print</span>(<span class="var">c2</span>.<span class="var">name</span>)  <span class="comment"># Second</span>
+
+<span class="comment"># But all share the same class variable</span>
+<span class="fn-name">print</span>(<span class="fn-name">Counter</span>.<span class="var">total_created</span>)  <span class="comment"># 3</span>
+<span class="fn-name">print</span>(<span class="var">c1</span>.<span class="var">total_created</span>)       <span class="comment"># 3 (accessed via instance)</span></pre>
+        </div>
+
+        <h3 style="font-size: 1.3rem; color: var(--class-color); margin-top: 1.5rem; margin-bottom: 1rem;">Mutable Class Variables (Caution!)</h3>
+        <div class="code-block">
+          <div class="code-block-header">
+            <span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span>
+            <span>team.py</span>
+          </div>
+          <pre class="code-content"><span class="kw">class</span> <span class="fn-name">Team</span>:
+    <span class="var">members</span> <span class="op">=</span> []  <span class="comment"># DANGEROUS: mutable class variable</span>
+
+    <span class="kw">def</span> <span class="fn-name">__init__</span>(<span class="var">self</span>, <span class="var">name</span>):
+        <span class="var">self</span>.<span class="var">name</span> <span class="op">=</span> <span class="var">name</span>
+
+    <span class="kw">def</span> <span class="fn-name">add_member</span>(<span class="var">self</span>, <span class="var">member</span>):
+        <span class="fn-name">Team</span>.<span class="var">members</span>.<span class="fn-name">append</span>(<span class="var">member</span>)
+
+<span class="var">team1</span> <span class="op">=</span> <span class="fn-name">Team</span>(<span class="str">"A"</span>)
+<span class="var">team2</span> <span class="op">=</span> <span class="fn-name">Team</span>(<span class="str">"B"</span>)
+
+<span class="var">team1</span>.<span class="fn-name">add_member</span>(<span class="str">"Alice"</span>)
+<span class="var">team2</span>.<span class="fn-name">add_member</span>(<span class="str">"Bob"</span>)
+
+<span class="comment"># Oops! Both teams share the same list</span>
+<span class="fn-name">print</span>(<span class="fn-name">Team</span>.<span class="var">members</span>)  <span class="comment"># ['Alice', 'Bob']</span>
+
+<span class="comment"># Solution: Use instance variables</span>
+<span class="kw">class</span> <span class="fn-name">Team</span>:
+    <span class="kw">def</span> <span class="fn-name">__init__</span>(<span class="var">self</span>, <span class="var">name</span>):
+        <span class="var">self</span>.<span class="var">name</span> <span class="op">=</span> <span class="var">name</span>
+        <span class="var">self</span>.<span class="var">members</span> <span class="op">=</span> []  <span class="comment"># Each instance has its own list</span></pre>
+        </div>
+      </section>
+
+      <!-- Section 4: Inheritance -->
+      <section class="section" id="section-4">
+        <h2 class="section-title"><span class="section-icon">🔗</span> Inheritance</h2>
+        <p class="section-intro">Inheritance allows a class to inherit attributes and methods from another class. The parent (base) class provides common functionality, and child (derived) classes specialize it.</p>
+
+        <h3 style="font-size: 1.3rem; color: var(--class-color); margin-top: 1.5rem; margin-bottom: 1rem;">Basic Inheritance</h3>
+        <div class="code-block">
+          <div class="code-block-header">
+            <span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span>
+            <span>animals.py</span>
+          </div>
+          <pre class="code-content"><span class="kw">class</span> <span class="fn-name">Animal</span>:
+    <span class="kw">def</span> <span class="fn-name">__init__</span>(<span class="var">self</span>, <span class="var">name</span>):
+        <span class="var">self</span>.<span class="var">name</span> <span class="op">=</span> <span class="var">name</span>
+
+    <span class="kw">def</span> <span class="fn-name">speak</span>(<span class="var">self</span>):
+        <span class="kw">return</span> <span class="str">f"{self.name} makes a sound"</span>
+
+<span class="kw">class</span> <span class="fn-name">Dog</span>(<span class="fn-name">Animal</span>):  <span class="comment"># Dog inherits from Animal</span>
+    <span class="kw">def</span> <span class="fn-name">speak</span>(<span class="var">self</span>):  <span class="comment"># Override parent method</span>
+        <span class="kw">return</span> <span class="str">f"{self.name} barks"</span>
+
+<span class="kw">class</span> <span class="fn-name">Cat</span>(<span class="fn-name">Animal</span>):
+    <span class="kw">def</span> <span class="fn-name">speak</span>(<span class="var">self</span>):
+        <span class="kw">return</span> <span class="str">f"{self.name} meows"</span>
+
+<span class="var">dog</span> <span class="op">=</span> <span class="fn-name">Dog</span>(<span class="str">"Buddy"</span>)
+<span class="var">cat</span> <span class="op">=</span> <span class="fn-name">Cat</span>(<span class="str">"Whiskers"</span>)
+
+<span class="fn-name">print</span>(<span class="var">dog</span>.<span class="fn-name">speak</span>())  <span class="comment"># Buddy barks</span>
+<span class="fn-name">print</span>(<span class="var">cat</span>.<span class="fn-name">speak</span>())  <span class="comment"># Whiskers meows</span></pre>
+        </div>
+
+        <h3 style="font-size: 1.3rem; color: var(--class-color); margin-top: 1.5rem; margin-bottom: 1rem;">Using super()</h3>
+        <div class="code-block">
+          <div class="code-block-header">
+            <span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span>
+            <span>vehicle.py</span>
+          </div>
+          <pre class="code-content"><span class="kw">class</span> <span class="fn-name">Vehicle</span>:
+    <span class="kw">def</span> <span class="fn-name">__init__</span>(<span class="var">self</span>, <span class="var">brand</span>, <span class="var">color</span>):
+        <span class="var">self</span>.<span class="var">brand</span> <span class="op">=</span> <span class="var">brand</span>
+        <span class="var">self</span>.<span class="var">color</span> <span class="op">=</span> <span class="var">color</span>
+
+<span class="kw">class</span> <span class="fn-name">Car</span>(<span class="fn-name">Vehicle</span>):
+    <span class="kw">def</span> <span class="fn-name">__init__</span>(<span class="var">self</span>, <span class="var">brand</span>, <span class="var">color</span>, <span class="var">num_doors</span>):
+        <span class="kw">super</span>().<span class="fn-name">__init__</span>(<span class="var">brand</span>, <span class="var">color</span>)  <span class="comment"># Call parent __init__</span>
+        <span class="var">self</span>.<span class="var">num_doors</span> <span class="op">=</span> <span class="var">num_doors</span>
+
+    <span class="kw">def</span> <span class="fn-name">info</span>(<span class="var">self</span>):
+        <span class="kw">return</span> <span class="str">f"{self.brand} {self.color} car with {self.num_doors} doors"</span>
+
+<span class="var">car</span> <span class="op">=</span> <span class="fn-name">Car</span>(<span class="str">"Toyota"</span>, <span class="str">"Red"</span>, <span class="num">4</span>)
+<span class="fn-name">print</span>(<span class="var">car</span>.<span class="fn-name">info</span>())  <span class="comment"># Toyota Red car with 4 doors</span></pre>
+        </div>
+      </section>
+
+      <!-- Section 5: Multiple Inheritance -->
+      <section class="section" id="section-5">
+        <h2 class="section-title"><span class="section-icon">🔀</span> Multiple Inheritance</h2>
+        <p class="section-intro">A class can inherit from multiple parent classes. Python uses Method Resolution Order (MRO) to determine which method to call when multiple parents define the same method.</p>
+
+        <h3 style="font-size: 1.3rem; color: var(--class-color); margin-top: 1.5rem; margin-bottom: 1rem;">Multiple Inheritance & MRO</h3>
+        <div class="code-block">
+          <div class="code-block-header">
+            <span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span>
+            <span>mro_example.py</span>
+          </div>
+          <pre class="code-content"><span class="kw">class</span> <span class="fn-name">Flyer</span>:
+    <span class="kw">def</span> <span class="fn-name">move</span>(<span class="var">self</span>):
+        <span class="kw">return</span> <span class="str">"Flying"</span>
+
+<span class="kw">class</span> <span class="fn-name">Swimmer</span>:
+    <span class="kw">def</span> <span class="fn-name">move</span>(<span class="var">self</span>):
+        <span class="kw">return</span> <span class="str">"Swimming"</span>
+
+<span class="kw">class</span> <span class="fn-name">Duck</span>(<span class="fn-name">Flyer</span>, <span class="fn-name">Swimmer</span>):  <span class="comment"># Flyer first, then Swimmer</span>
+    <span class="kw">pass</span>
+
+<span class="var">duck</span> <span class="op">=</span> <span class="fn-name">Duck</span>()
+<span class="fn-name">print</span>(<span class="var">duck</span>.<span class="fn-name">move</span>())  <span class="comment"># Flying (Flyer is first in MRO)</span>
+
+<span class="comment"># Check MRO</span>
+<span class="fn-name">print</span>(<span class="fn-name">Duck</span>.<span class="fn-name">__mro__</span>)
+<span class="comment"># (<class 'Duck'>, <class 'Flyer'>, <class 'Swimmer'>, <class 'object'>)</span></pre>
+        </div>
+
+        <h3 style="font-size: 1.3rem; color: var(--class-color); margin-top: 1.5rem; margin-bottom: 1rem;">Mixins Pattern</h3>
+        <div class="code-block">
+          <div class="code-block-header">
+            <span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span>
+            <span>mixins.py</span>
+          </div>
+          <pre class="code-content"><span class="kw">class</span> <span class="fn-name">JSONMixin</span>:
+    <span class="kw">def</span> <span class="fn-name">to_json</span>(<span class="var">self</span>):
+        <span class="kw">import</span> <span class="var">json</span>
+        <span class="kw">return</span> <span class="var">json</span>.<span class="fn-name">dumps</span>(<span class="var">self</span>.<span class="fn-name">__dict__</span>)
+
+<span class="kw">class</span> <span class="fn-name">TimestampMixin</span>:
+    <span class="kw">def</span> <span class="fn-name">get_age</span>(<span class="var">self</span>):
+        <span class="kw">import</span> <span class="var">time</span>
+        <span class="kw">return</span> <span class="var">time</span>.<span class="fn-name">time</span>() <span class="op">-</span> <span class="var">self</span>.<span class="var">created_at</span>
+
+<span class="kw">class</span> <span class="fn-name">User</span>(<span class="fn-name">JSONMixin</span>, <span class="fn-name">TimestampMixin</span>):
+    <span class="kw">def</span> <span class="fn-name">__init__</span>(<span class="var">self</span>, <span class="var">name</span>):
+        <span class="var">self</span>.<span class="var">name</span> <span class="op">=</span> <span class="var">name</span>
+        <span class="var">self</span>.<span class="var">created_at</span> <span class="op">=</span> <span class="fn-name">__import__</span>(<span class="str">"time"</span>).<span class="fn-name">time</span>()
+
+<span class="var">user</span> <span class="op">=</span> <span class="fn-name">User</span>(<span class="str">"Alice"</span>)
+<span class="fn-name">print</span>(<span class="var">user</span>.<span class="fn-name">to_json</span>())  <span class="comment"># Uses JSONMixin</span>
+<span class="fn-name">print</span>(<span class="var">user</span>.<span class="fn-name">get_age</span>())    <span class="comment"># Uses TimestampMixin</span></pre>
+        </div>
+      </section>
+
+      <!-- Section 6: Properties & Decorators -->
+      <section class="section" id="section-6">
+        <h2 class="section-title"><span class="section-icon">✨</span> Properties & Decorators</h2>
+        <p class="section-intro">The @property decorator allows you to define methods that can be accessed like attributes. This enables validation and computed attributes while maintaining clean syntax.</p>
+
+        <h3 style="font-size: 1.3rem; color: var(--class-color); margin-top: 1.5rem; margin-bottom: 1rem;">@property Decorator</h3>
+        <div class="code-block">
+          <div class="code-block-header">
+            <span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span>
+            <span>temperature.py</span>
+          </div>
+          <pre class="code-content"><span class="kw">class</span> <span class="fn-name">Temperature</span>:
+    <span class="kw">def</span> <span class="fn-name">__init__</span>(<span class="var">self</span>, <span class="var">celsius</span>):
+        <span class="var">self</span>.<span class="var">_celsius</span> <span class="op">=</span> <span class="var">celsius</span>
+
+    <span class="op">@</span><span class="fn-name">property</span>
+    <span class="kw">def</span> <span class="fn-name">fahrenheit</span>(<span class="var">self</span>):
+        <span class="kw">return</span> <span class="var">self</span>.<span class="var">_celsius</span> <span class="op">*</span> <span class="num">9</span><span class="op">/</span><span class="num">5</span> <span class="op">+</span> <span class="num">32</span>
+
+    <span class="op">@</span><span class="fn-name">fahrenheit</span>.<span class="fn-name">setter</span>
+    <span class="kw">def</span> <span class="fn-name">fahrenheit</span>(<span class="var">self</span>, <span class="var">value</span>):
+        <span class="var">self</span>.<span class="var">_celsius</span> <span class="op">=</span> (<span class="var">value</span> <span class="op">-</span> <span class="num">32</span>) <span class="op">*</span> <span class="num">5</span><span class="op">/</span><span class="num">9</span>
+
+<span class="var">temp</span> <span class="op">=</span> <span class="fn-name">Temperature</span>(<span class="num">0</span>)
+<span class="fn-name">print</span>(<span class="var">temp</span>.<span class="var">fahrenheit</span>)      <span class="comment"># 32.0 (accessed like attribute)</span>
+<span class="var">temp</span>.<span class="var">fahrenheit</span> <span class="op">=</span> <span class="num">212</span>        <span class="comment"># Set via setter</span>
+<span class="fn-name">print</span>(<span class="var">temp</span>.<span class="var">_celsius</span>)         <span class="comment"># 100.0</span></pre>
+        </div>
+
+        <h3 style="font-size: 1.3rem; color: var(--class-color); margin-top: 1.5rem; margin-bottom: 1rem;">Validation with Properties</h3>
+        <div class="code-block">
+          <div class="code-block-header">
+            <span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span>
+            <span>age.py</span>
+          </div>
+          <pre class="code-content"><span class="kw">class</span> <span class="fn-name">Person</span>:
+    <span class="kw">def</span> <span class="fn-name">__init__</span>(<span class="var">self</span>, <span class="var">age</span>):
+        <span class="var">self</span>.<span class="var">age</span> <span class="op">=</span> <span class="var">age</span>  <span class="comment"># Uses setter</span>
+
+    <span class="op">@</span><span class="fn-name">property</span>
+    <span class="kw">def</span> <span class="fn-name">age</span>(<span class="var">self</span>):
+        <span class="kw">return</span> <span class="var">self</span>.<span class="var">_age</span>
+
+    <span class="op">@</span><span class="fn-name">age</span>.<span class="fn-name">setter</span>
+    <span class="kw">def</span> <span class="fn-name">age</span>(<span class="var">self</span>, <span class="var">value</span>):
+        <span class="kw">if</span> <span class="var">value</span> <span class="op"><</span> <span class="num">0</span> <span class="kw">or</span> <span class="var">value</span> <span class="op">></span> <span class="num">150</span>:
+            <span class="kw">raise</span> <span class="fn-name">ValueError</span>(<span class="str">"Invalid age"</span>)
+        <span class="var">self</span>.<span class="var">_age</span> <span class="op">=</span> <span class="var">value</span>
+
+<span class="var">person</span> <span class="op">=</span> <span class="fn-name">Person</span>(<span class="num">25</span>)
+<span class="var">person</span>.<span class="var">age</span> <span class="op">=</span> <span class="num">200</span>  <span class="comment"># Raises ValueError</span></pre>
+        </div>
+      </section>
+
+      <!-- Section 7: Class Methods & Static Methods -->
+      <section class="section" id="section-7">
+        <h2 class="section-title"><span class="section-icon">📌</span> Class & Static Methods</h2>
+        <p class="section-intro">@classmethod operates on the class itself (receives the class as the first argument), while @staticmethod doesn't receive the class or instance. Use them to organize utility functions and alternative constructors.</p>
+
+        <h3 style="font-size: 1.3rem; color: var(--class-color); margin-top: 1.5rem; margin-bottom: 1rem;">@classmethod Example</h3>
+        <div class="code-block">
+          <div class="code-block-header">
+            <span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span>
+            <span>date_factory.py</span>
+          </div>
+          <pre class="code-content"><span class="kw">class</span> <span class="fn-name">Date</span>:
+    <span class="var">instances_created</span> <span class="op">=</span> <span class="num">0</span>
+
+    <span class="kw">def</span> <span class="fn-name">__init__</span>(<span class="var">self</span>, <span class="var">day</span>, <span class="var">month</span>, <span class="var">year</span>):
+        <span class="var">self</span>.<span class="var">day</span> <span class="op">=</span> <span class="var">day</span>
+        <span class="var">self</span>.<span class="var">month</span> <span class="op">=</span> <span class="var">month</span>
+        <span class="var">self</span>.<span class="var">year</span> <span class="op">=</span> <span class="var">year</span>
+        <span class="fn-name">Date</span>.<span class="var">instances_created</span> <span class="op">+=</span> <span class="num">1</span>
+
+    <span class="op">@</span><span class="fn-name">classmethod</span>
+    <span class="kw">def</span> <span class="fn-name">from_string</span>(<span class="var">cls</span>, <span class="var">date_str</span>):
+        <span class="str">"""Factory method: create from '12-25-2023' format"""</span>
+        <span class="var">day</span>, <span class="var">month</span>, <span class="var">year</span> <span class="op">=</span> <span class="var">date_str</span>.<span class="fn-name">split</span>(<span class="str">"-"</span>)
+        <span class="kw">return</span> <span class="var">cls</span>(<span class="fn-name">int</span>(<span class="var">day</span>), <span class="fn-name">int</span>(<span class="var">month</span>), <span class="fn-name">int</span>(<span class="var">year</span>))
+
+<span class="var">d1</span> <span class="op">=</span> <span class="fn-name">Date</span>(<span class="num">25</span>, <span class="num">12</span>, <span class="num">2023</span>)
+<span class="var">d2</span> <span class="op">=</span> <span class="fn-name">Date</span>.<span class="fn-name">from_string</span>(<span class="str">"25-12-2023"</span>)
+<span class="fn-name">print</span>(<span class="fn-name">Date</span>.<span class="var">instances_created</span>)  <span class="comment"># 2</span></pre>
+        </div>
+
+        <h3 style="font-size: 1.3rem; color: var(--class-color); margin-top: 1.5rem; margin-bottom: 1rem;">@staticmethod Example</h3>
+        <div class="code-block">
+          <div class="code-block-header">
+            <span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span>
+            <span>math_utils.py</span>
+          </div>
+          <pre class="code-content"><span class="kw">class</span> <span class="fn-name">MathUtils</span>:
+    <span class="op">@</span><span class="fn-name">staticmethod</span>
+    <span class="kw">def</span> <span class="fn-name">is_prime</span>(<span class="var">n</span>):
+        <span class="str">"""Check if number is prime"""</span>
+        <span class="kw">if</span> <span class="var">n</span> <span class="op"><</span> <span class="num">2</span>:
+            <span class="kw">return</span> <span class="kw">False</span>
+        <span class="kw">for</span> <span class="var">i</span> <span class="kw">in</span> <span class="fn-name">range</span>(<span class="num">2</span>, <span class="fn-name">int</span>(<span class="var">n</span><span class="op">**</span><span class="num">0.5</span>) <span class="op">+</span> <span class="num">1</span>):
+            <span class="kw">if</span> <span class="var">n</span> <span class="op">%</span> <span class="var">i</span> <span class="op">==</span> <span class="num">0</span>:
+                <span class="kw">return</span> <span class="kw">False</span>
+        <span class="kw">return</span> <span class="kw">True</span>
+
+    <span class="op">@</span><span class="fn-name">staticmethod</span>
+    <span class="kw">def</span> <span class="fn-name">gcd</span>(<span class="var">a</span>, <span class="var">b</span>):
+        <span class="str">"""Greatest common divisor"""</span>
+        <span class="kw">while</span> <span class="var">b</span>:
+            <span class="var">a</span>, <span class="var">b</span> <span class="op">=</span> <span class="var">b</span>, <span class="var">a</span> <span class="op">%</span> <span class="var">b</span>
+        <span class="kw">return</span> <span class="var">a</span>
+
+<span class="comment"># Call without instance</span>
+<span class="fn-name">print</span>(<span class="fn-name">MathUtils</span>.<span class="fn-name">is_prime</span>(<span class="num">17</span>))   <span class="comment"># True</span>
+<span class="fn-name">print</span>(<span class="fn-name">MathUtils</span>.<span class="fn-name">gcd</span>(<span class="num">48</span>, <span class="num">18</span>))  <span class="comment"># 6</span></pre>
+        </div>
+      </section>
+
+      <!-- Section 8: Dunder Methods -->
+      <section class="section" id="section-8">
+        <h2 class="section-title"><span class="section-icon">🔮</span> Dunder Methods</h2>
+        <p class="section-intro">Dunder (double underscore) methods like __str__ and __add__ enable your objects to behave like built-in types. They allow custom string representation, comparison, arithmetic, and more.</p>
+
+        <h3 style="font-size: 1.3rem; color: var(--class-color); margin-top: 1.5rem; margin-bottom: 1rem;">String Representation</h3>
+        <div class="code-block">
+          <div class="code-block-header">
+            <span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span>
+            <span>vector.py</span>
+          </div>
+          <pre class="code-content"><span class="kw">class</span> <span class="fn-name">Vector</span>:
+    <span class="kw">def</span> <span class="fn-name">__init__</span>(<span class="var">self</span>, <span class="var">x</span>, <span class="var">y</span>):
+        <span class="var">self</span>.<span class="var">x</span> <span class="op">=</span> <span class="var">x</span>
+        <span class="var">self</span>.<span class="var">y</span> <span class="op">=</span> <span class="var">y</span>
+
+    <span class="kw">def</span> <span class="fn-name">__str__</span>(<span class="var">self</span>):
+        <span class="str">"""User-friendly representation"""</span>
+        <span class="kw">return</span> <span class="str">f"Vector({self.x}, {self.y})"</span>
+
+    <span class="kw">def</span> <span class="fn-name">__repr__</span>(<span class="var">self</span>):
+        <span class="str">"""Developer-friendly, evaluable representation"""</span>
+        <span class="kw">return</span> <span class="str">f"Vector({self.x!r}, {self.y!r})"</span>
+
+    <span class="kw">def</span> <span class="fn-name">__len__</span>(<span class="var">self</span>):
+        <span class="kw">return</span> <span class="fn-name">int</span>((<span class="var">self</span>.<span class="var">x</span><span class="op">**</span><span class="num">2</span> <span class="op">+</span> <span class="var">self</span>.<span class="var">y</span><span class="op">**</span><span class="num">2</span>)<span class="op">**</span><span class="num">0.5</span>)
+
+<span class="var">v</span> <span class="op">=</span> <span class="fn-name">Vector</span>(<span class="num">3</span>, <span class="num">4</span>)
+<span class="fn-name">print</span>(<span class="var">v</span>)         <span class="comment"># Vector(3, 4) (__str__)</span>
+<span class="fn-name">print</span>(<span class="fn-name">repr</span>(<span class="var">v</span>))  <span class="comment"># Vector(3, 4) (__repr__)</span>
+<span class="fn-name">print</span>(<span class="fn-name">len</span>(<span class="var">v</span>))   <span class="comment"># 5 (__len__)</span></pre>
+        </div>
+
+        <h3 style="font-size: 1.3rem; color: var(--class-color); margin-top: 1.5rem; margin-bottom: 1rem;">Comparison & Arithmetic</h3>
+        <div class="code-block">
+          <div class="code-block-header">
+            <span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span>
+            <span>fraction.py</span>
+          </div>
+          <pre class="code-content"><span class="kw">class</span> <span class="fn-name">Fraction</span>:
+    <span class="kw">def</span> <span class="fn-name">__init__</span>(<span class="var">self</span>, <span class="var">num</span>, <span class="var">den</span>):
+        <span class="var">self</span>.<span class="var">num</span> <span class="op">=</span> <span class="var">num</span>
+        <span class="var">self</span>.<span class="var">den</span> <span class="op">=</span> <span class="var">den</span>
+
+    <span class="kw">def</span> <span class="fn-name">__eq__</span>(<span class="var">self</span>, <span class="var">other</span>):
+        <span class="kw">return</span> <span class="var">self</span>.<span class="var">num</span> <span class="op">*</span> <span class="var">other</span>.<span class="var">den</span> <span class="op">==</span> <span class="var">self</span>.<span class="var">den</span> <span class="op">*</span> <span class="var">other</span>.<span class="var">num</span>
+
+    <span class="kw">def</span> <span class="fn-name">__lt__</span>(<span class="var">self</span>, <span class="var">other</span>):
+        <span class="kw">return</span> <span class="var">self</span>.<span class="var">num</span> <span class="op">*</span> <span class="var">other</span>.<span class="var">den</span> <span class="op"><</span> <span class="var">self</span>.<span class="var">den</span> <span class="op">*</span> <span class="var">other</span>.<span class="var">num</span>
+
+    <span class="kw">def</span> <span class="fn-name">__add__</span>(<span class="var">self</span>, <span class="var">other</span>):
+        <span class="var">num</span> <span class="op">=</span> <span class="var">self</span>.<span class="var">num</span> <span class="op">*</span> <span class="var">other</span>.<span class="var">den</span> <span class="op">+</span> <span class="var">self</span>.<span class="var">den</span> <span class="op">*</span> <span class="var">other</span>.<span class="var">num</span>
+        <span class="var">den</span> <span class="op">=</span> <span class="var">self</span>.<span class="var">den</span> <span class="op">*</span> <span class="var">other</span>.<span class="var">den</span>
+        <span class="kw">return</span> <span class="fn-name">Fraction</span>(<span class="var">num</span>, <span class="var">den</span>)
+
+<span class="var">f1</span> <span class="op">=</span> <span class="fn-name">Fraction</span>(<span class="num">1</span>, <span class="num">2</span>)
+<span class="var">f2</span> <span class="op">=</span> <span class="fn-name">Fraction</span>(<span class="num">1</span>, <span class="num">3</span>)
+<span class="fn-name">print</span>(<span class="var">f1</span> <span class="op">==</span> <span class="fn-name">Fraction</span>(<span class="num">2</span>, <span class="num">4</span>))  <span class="comment"># True</span>
+<span class="fn-name">print</span>(<span class="var">f1</span> <span class="op"><</span> <span class="var">f2</span>)              <span class="comment"># False</span></pre>
+        </div>
+      </section>
+
+      <!-- Section 9: Encapsulation -->
+      <section class="section" id="section-9">
+        <h2 class="section-title"><span class="section-icon">🔒</span> Encapsulation</h2>
+        <p class="section-intro">Encapsulation is bundling data and methods together, and controlling access to them. Python uses naming conventions (_private, __mangled) to indicate access levels, as there's no true private keyword.</p>
+
+        <h3 style="font-size: 1.3rem; color: var(--class-color); margin-top: 1.5rem; margin-bottom: 1rem;">Private and Protected Attributes</h3>
+        <div class="code-block">
+          <div class="code-block-header">
+            <span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span>
+            <span>bank.py</span>
+          </div>
+          <pre class="code-content"><span class="kw">class</span> <span class="fn-name">BankAccount</span>:
+    <span class="kw">def</span> <span class="fn-name">__init__</span>(<span class="var">self</span>, <span class="var">owner</span>, <span class="var">balance</span>):
+        <span class="var">self</span>.<span class="var">owner</span> <span class="op">=</span> <span class="var">owner</span>
+        <span class="var">self</span>.<span class="var">_balance</span> <span class="op">=</span> <span class="var">balance</span>  <span class="comment"># Protected (by convention)</span>
+        <span class="var">self</span>.<span class="var">__pin</span> <span class="op">=</span> <span class="str">"1234"</span>     <span class="comment"># Name-mangled (private)</span>
+
+    <span class="kw">def</span> <span class="fn-name">withdraw</span>(<span class="var">self</span>, <span class="var">amount</span>):
+        <span class="str">"""External method controls access to _balance"""</span>
+        <span class="kw">if</span> <span class="var">amount</span> <span class="op">></span> <span class="var">self</span>.<span class="var">_balance</span>:
+            <span class="kw">raise</span> <span class="fn-name">ValueError</span>(<span class="str">"Insufficient funds"</span>)
+        <span class="var">self</span>.<span class="var">_balance</span> <span class="op">-=</span> <span class="var">amount</span>
+
+    <span class="kw">def</span> <span class="fn-name">verify_pin</span>(<span class="var">self</span>, <span class="var">pin</span>):
+        <span class="str">"""Only way to access __pin"""</span>
+        <span class="kw">return</span> <span class="var">pin</span> <span class="op">==</span> <span class="var">self</span>.<span class="var">__pin</span>
+
+<span class="var">account</span> <span class="op">=</span> <span class="fn-name">BankAccount</span>(<span class="str">"John"</span>, <span class="num">1000</span>)
+<span class="comment"># account._balance = 2000  # Discouraged (protected)</span>
+<span class="comment"># account.__pin = "5678"  # Raises AttributeError (mangled)</span>
+<span class="fn-name">print</span>(<span class="var">account</span>.<span class="var">_BankAccount__pin</span>)  <span class="comment"># Name mangling: _ClassName__attr</span></pre>
+        </div>
+
+        <h3 style="font-size: 1.3rem; color: var(--class-color); margin-top: 1.5rem; margin-bottom: 1rem;">Getters and Setters</h3>
+        <div class="code-block">
+          <div class="code-block-header">
+            <span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span>
+            <span>student.py</span>
+          </div>
+          <pre class="code-content"><span class="kw">class</span> <span class="fn-name">Student</span>:
+    <span class="kw">def</span> <span class="fn-name">__init__</span>(<span class="var">self</span>, <span class="var">name</span>, <span class="var">gpa</span>):
+        <span class="var">self</span>.<span class="var">_name</span> <span class="op">=</span> <span class="var">name</span>
+        <span class="var">self</span>.<span class="var">_gpa</span> <span class="op">=</span> <span class="var">gpa</span>
+
+    <span class="kw">def</span> <span class="fn-name">get_gpa</span>(<span class="var">self</span>):
+        <span class="str">"""Getter with validation"""</span>
+        <span class="kw">return</span> <span class="var">self</span>.<span class="var">_gpa</span>
+
+    <span class="kw">def</span> <span class="fn-name">set_gpa</span>(<span class="var">self</span>, <span class="var">gpa</span>):
+        <span class="str">"""Setter with validation"""</span>
+        <span class="kw">if</span> <span class="kw">not</span> (<span class="num">0</span> <span class="op"><=</span> <span class="var">gpa</span> <span class="op"><=</span> <span class="num">4.0</span>):
+            <span class="kw">raise</span> <span class="fn-name">ValueError</span>(<span class="str">"GPA must be between 0 and 4.0"</span>)
+        <span class="var">self</span>.<span class="var">_gpa</span> <span class="op">=</span> <span class="var">gpa</span>
+
+<span class="var">student</span> <span class="op">=</span> <span class="fn-name">Student</span>(<span class="str">"Alice"</span>, <span class="num">3.8</span>)
+<span class="fn-name">print</span>(<span class="var">student</span>.<span class="fn-name">get_gpa</span>())  <span class="comment"># 3.8</span></pre>
+        </div>
+      </section>
+
+      <!-- Section 10: Abstract Classes -->
+      <section class="section" id="section-10">
+        <h2 class="section-title"><span class="section-icon">📐</span> Abstract Classes</h2>
+        <p class="section-intro">Abstract classes define an interface that subclasses must implement. Use abc.ABC and @abstractmethod to enforce a contract, ensuring derived classes implement required methods.</p>
+
+        <h3 style="font-size: 1.3rem; color: var(--class-color); margin-top: 1.5rem; margin-bottom: 1rem;">Defining Abstract Classes</h3>
+        <div class="code-block">
+          <div class="code-block-header">
+            <span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span>
+            <span>shapes.py</span>
+          </div>
+          <pre class="code-content"><span class="kw">from</span> <span class="var">abc</span> <span class="kw">import</span> <span class="fn-name">ABC</span>, <span class="fn-name">abstractmethod</span>
+
+<span class="kw">class</span> <span class="fn-name">Shape</span>(<span class="fn-name">ABC</span>):
+    <span class="op">@</span><span class="fn-name">abstractmethod</span>
+    <span class="kw">def</span> <span class="fn-name">area</span>(<span class="var">self</span>):
+        <span class="str">"""All shapes must implement area()"""</span>
+        <span class="kw">pass</span>
+
+    <span class="op">@</span><span class="fn-name">abstractmethod</span>
+    <span class="kw">def</span> <span class="fn-name">perimeter</span>(<span class="var">self</span>):
+        <span class="str">"""All shapes must implement perimeter()"""</span>
+        <span class="kw">pass</span>
+
+    <span class="kw">def</span> <span class="fn-name">describe</span>(<span class="var">self</span>):
+        <span class="str">"""Concrete method (optional in abstract class)"""</span>
+        <span class="kw">return</span> <span class="str">f"I am a {self.__class__.__name__}"</span>
+
+<span class="kw">class</span> <span class="fn-name">Circle</span>(<span class="fn-name">Shape</span>):
+    <span class="kw">def</span> <span class="fn-name">__init__</span>(<span class="var">self</span>, <span class="var">radius</span>):
+        <span class="var">self</span>.<span class="var">radius</span> <span class="op">=</span> <span class="var">radius</span>
+
+    <span class="kw">def</span> <span class="fn-name">area</span>(<span class="var">self</span>):
+        <span class="kw">return</span> <span class="num">3.14</span> <span class="op">*</span> <span class="var">self</span>.<span class="var">radius</span> <span class="op">**</span> <span class="num">2</span>
+
+    <span class="kw">def</span> <span class="fn-name">perimeter</span>(<span class="var">self</span>):
+        <span class="kw">return</span> <span class="num">2</span> <span class="op">*</span> <span class="num">3.14</span> <span class="op">*</span> <span class="var">self</span>.<span class="var">radius</span>
+
+<span class="comment"># shape = Shape()  # TypeError: Can't instantiate abstract class</span>
+<span class="var">circle</span> <span class="op">=</span> <span class="fn-name">Circle</span>(<span class="num">5</span>)
+<span class="fn-name">print</span>(<span class="var">circle</span>.<span class="fn-name">area</span>())        <span class="comment"># 78.5</span>
+<span class="fn-name">print</span>(<span class="var">circle</span>.<span class="fn-name">describe</span>())  <span class="comment"># I am a Circle</span></pre>
+        </div>
+
+        <h3 style="font-size: 1.3rem; color: var(--class-color); margin-top: 1.5rem; margin-bottom: 1rem;">Abstract Properties</h3>
+        <div class="code-block">
+          <div class="code-block-header">
+            <span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span>
+            <span>animal_abstract.py</span>
+          </div>
+          <pre class="code-content"><span class="kw">from</span> <span class="var">abc</span> <span class="kw">import</span> <span class="fn-name">ABC</span>, <span class="fn-name">abstractmethod</span>
+
+<span class="kw">class</span> <span class="fn-name">Animal</span>(<span class="fn-name">ABC</span>):
+    <span class="op">@</span><span class="fn-name">property</span>
+    <span class="op">@</span><span class="fn-name">abstractmethod</span>
+    <span class="kw">def</span> <span class="fn-name">species</span>(<span class="var">self</span>):
+        <span class="str">"""Species must be defined"""</span>
+        <span class="kw">pass</span>
+
+    <span class="op">@</span><span class="fn-name">abstractmethod</span>
+    <span class="kw">def</span> <span class="fn-name">make_sound</span>(<span class="var">self</span>):
+        <span class="kw">pass</span>
+
+<span class="kw">class</span> <span class="fn-name">Dog</span>(<span class="fn-name">Animal</span>):
+    <span class="op">@</span><span class="fn-name">property</span>
+    <span class="kw">def</span> <span class="fn-name">species</span>(<span class="var">self</span>):
+        <span class="kw">return</span> <span class="str">"Canis familiaris"</span>
+
+    <span class="kw">def</span> <span class="fn-name">make_sound</span>(<span class="var">self</span>):
+        <span class="kw">return</span> <span class="str">"Woof!"</span>
+
+<span class="var">dog</span> <span class="op">=</span> <span class="fn-name">Dog</span>()
+<span class="fn-name">print</span>(<span class="var">dog</span>.<span class="var">species</span>)  <span class="comment"># Canis familiaris</span></pre>
+        </div>
+      </section>
+
+      <!-- Section 11: Dataclasses -->
+      <section class="section" id="section-11">
+        <h2 class="section-title"><span class="section-icon">📦</span> Dataclasses</h2>
+        <p class="section-intro">The @dataclass decorator automatically generates __init__, __repr__, __eq__, and other methods. It's perfect for simple data containers and reduces boilerplate code.</p>
+
+        <h3 style="font-size: 1.3rem; color: var(--class-color); margin-top: 1.5rem; margin-bottom: 1rem;">Basic Dataclass</h3>
+        <div class="code-block">
+          <div class="code-block-header">
+            <span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span>
+            <span>point.py</span>
+          </div>
+          <pre class="code-content"><span class="kw">from</span> <span class="var">dataclasses</span> <span class="kw">import</span> <span class="fn-name">dataclass</span>
+
+<span class="op">@</span><span class="fn-name">dataclass</span>
+<span class="kw">class</span> <span class="fn-name">Point</span>:
+    <span class="var">x</span>: <span class="fn-name">float</span>
+    <span class="var">y</span>: <span class="fn-name">float</span>
+    <span class="var">label</span>: <span class="fn-name">str</span> <span class="op">=</span> <span class="str">""</span>  <span class="comment"># Default value</span>
+
+<span class="comment"># Automatically generates __init__, __repr__, __eq__</span>
+<span class="var">p1</span> <span class="op">=</span> <span class="fn-name">Point</span>(<span class="num">3</span>, <span class="num">4</span>)
+<span class="var">p2</span> <span class="op">=</span> <span class="fn-name">Point</span>(<span class="num">3</span>, <span class="num">4</span>)
+<span class="var">p3</span> <span class="op">=</span> <span class="fn-name">Point</span>(<span class="num">3</span>, <span class="num">4</span>, <span class="str">"origin"</span>)
+
+<span class="fn-name">print</span>(<span class="var">p1</span>)          <span class="comment"># Point(x=3, y=4, label='')</span>
+<span class="fn-name">print</span>(<span class="var">p1</span> <span class="op">==</span> <span class="var">p2</span>)    <span class="comment"># True (auto-generated __eq__)</span>
+<span class="fn-name">print</span>(<span class="var">p3</span>.<span class="var">label</span>)   <span class="comment"># origin</span></pre>
+        </div>
+
+        <h3 style="font-size: 1.3rem; color: var(--class-color); margin-top: 1.5rem; margin-bottom: 1rem;">Frozen and Post-Init</h3>
+        <div class="code-block">
+          <div class="code-block-header">
+            <span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span>
+            <span>config.py</span>
+          </div>
+          <pre class="code-content"><span class="kw">from</span> <span class="var">dataclasses</span> <span class="kw">import</span> <span class="fn-name">dataclass</span>, <span class="fn-name">field</span>
+
+<span class="op">@</span><span class="fn-name">dataclass</span>(<span class="var">frozen</span><span class="op">=</span><span class="kw">True</span>)  <span class="comment"># Immutable</span>
+<span class="kw">class</span> <span class="fn-name">Config</span>:
+    <span class="var">host</span>: <span class="fn-name">str</span>
+    <span class="var">port</span>: <span class="fn-name">int</span>
+    <span class="var">tags</span>: <span class="fn-name">list</span> <span class="op">=</span> <span class="fn-name">field</span>(<span class="var">default_factory</span><span class="op">=</span><span class="kw">list</span>)
+
+    <span class="kw">def</span> <span class="fn-name">__post_init__</span>(<span class="var">self</span>):
+        <span class="str">"""Called after __init__, for validation/setup"""</span>
+        <span class="kw">if</span> <span class="var">self</span>.<span class="var">port</span> <span class="op"><</span> <span class="num">0</span> <span class="kw">or</span> <span class="var">self</span>.<span class="var">port</span> <span class="op">></span> <span class="num">65535</span>:
+            <span class="kw">raise</span> <span class="fn-name">ValueError</span>(<span class="str">"Invalid port"</span>)
+
+<span class="var">cfg</span> <span class="op">=</span> <span class="fn-name">Config</span>(<span class="str">"localhost"</span>, <span class="num">8080</span>)
+<span class="comment"># cfg.port = 9000  # Raises FrozenInstanceError</span>
+<span class="fn-name">print</span>(<span class="var">cfg</span>)  <span class="comment"># Config(host='localhost', port=8080, tags=[])</span></pre>
+        </div>
+      </section>
+
+      <!-- Section 12: Design Patterns -->
+      <section class="section" id="section-12">
+        <h2 class="section-title"><span class="section-icon">🎯</span> Design Patterns</h2>
+        <p class="section-intro">Design patterns are reusable solutions to common OOP problems. Singleton ensures one instance, Observer enables event handling, Strategy allows swappable algorithms, and Composition avoids rigid inheritance.</p>
+
+        <h3 style="font-size: 1.3rem; color: var(--class-color); margin-top: 1.5rem; margin-bottom: 1rem;">Singleton Pattern</h3>
+        <div class="code-block">
+          <div class="code-block-header">
+            <span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span>
+            <span>singleton.py</span>
+          </div>
+          <pre class="code-content"><span class="kw">class</span> <span class="fn-name">Logger</span>:
+    <span class="var">_instance</span> <span class="op">=</span> <span class="kw">None</span>
+
+    <span class="kw">def</span> <span class="fn-name">__new__</span>(<span class="var">cls</span>):
+        <span class="kw">if</span> <span class="var">cls</span>.<span class="var">_instance</span> <span class="kw">is</span> <span class="kw">None</span>:
+            <span class="var">cls</span>.<span class="var">_instance</span> <span class="op">=</span> <span class="fn-name">super</span>().<span class="fn-name">__new__</span>(<span class="var">cls</span>)
+        <span class="kw">return</span> <span class="var">cls</span>.<span class="var">_instance</span>
+
+    <span class="kw">def</span> <span class="fn-name">log</span>(<span class="var">self</span>, <span class="var">msg</span>):
+        <span class="fn-name">print</span>(<span class="str">f"[LOG] {msg}"</span>)
+
+<span class="var">log1</span> <span class="op">=</span> <span class="fn-name">Logger</span>()
+<span class="var">log2</span> <span class="op">=</span> <span class="fn-name">Logger</span>()
+<span class="fn-name">print</span>(<span class="var">log1</span> <span class="kw">is</span> <span class="var">log2</span>)  <span class="comment"># True (same instance)</span></pre>
+        </div>
+
+        <h3 style="font-size: 1.3rem; color: var(--class-color); margin-top: 1.5rem; margin-bottom: 1rem;">Observer Pattern</h3>
+        <div class="code-block">
+          <div class="code-block-header">
+            <span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span>
+            <span>observer.py</span>
+          </div>
+          <pre class="code-content"><span class="kw">class</span> <span class="fn-name">Subject</span>:
+    <span class="kw">def</span> <span class="fn-name">__init__</span>(<span class="var">self</span>):
+        <span class="var">self</span>.<span class="var">_observers</span> <span class="op">=</span> []
+
+    <span class="kw">def</span> <span class="fn-name">attach</span>(<span class="var">self</span>, <span class="var">observer</span>):
+        <span class="var">self</span>.<span class="var">_observers</span>.<span class="fn-name">append</span>(<span class="var">observer</span>)
+
+    <span class="kw">def</span> <span class="fn-name">notify</span>(<span class="var">self</span>, <span class="var">event</span>):
+        <span class="kw">for</span> <span class="var">observer</span> <span class="kw">in</span> <span class="var">self</span>.<span class="var">_observers</span>:
+            <span class="var">observer</span>.<span class="fn-name">update</span>(<span class="var">event</span>)
+
+<span class="kw">class</span> <span class="fn-name">Observer</span>:
+    <span class="kw">def</span> <span class="fn-name">update</span>(<span class="var">self</span>, <span class="var">event</span>):
+        <span class="kw">raise</span> <span class="fn-name">NotImplementedError</span>
+
+<span class="kw">class</span> <span class="fn-name">EmailObserver</span>(<span class="fn-name">Observer</span>):
+    <span class="kw">def</span> <span class="fn-name">update</span>(<span class="var">self</span>, <span class="var">event</span>):
+        <span class="fn-name">print</span>(<span class="str">f"Email notification: {event}"</span>)
+
+<span class="var">subject</span> <span class="op">=</span> <span class="fn-name">Subject</span>()
+<span class="var">email_obs</span> <span class="op">=</span> <span class="fn-name">EmailObserver</span>()
+<span class="var">subject</span>.<span class="fn-name">attach</span>(<span class="var">email_obs</span>)
+<span class="var">subject</span>.<span class="fn-name">notify</span>(<span class="str">"User logged in"</span>)  <span class="comment"># Email notification: User logged in</span></pre>
+        </div>
+
+        <h3 style="font-size: 1.3rem; color: var(--class-color); margin-top: 1.5rem; margin-bottom: 1rem;">Composition Over Inheritance</h3>
+        <div class="code-block">
+          <div class="code-block-header">
+            <span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span>
+            <span>composition.py</span>
+          </div>
+          <pre class="code-content"><span class="kw">class</span> <span class="fn-name">Engine</span>:
+    <span class="kw">def</span> <span class="fn-name">start</span>(<span class="var">self</span>):
+        <span class="kw">return</span> <span class="str">"Engine started"</span>
+
+<span class="kw">class</span> <span class="fn-name">Transmission</span>:
+    <span class="kw">def</span> <span class="fn-name">shift</span>(<span class="var">self</span>, <span class="var">gear</span>):
+        <span class="kw">return</span> <span class="str">f"Shifted to {gear}"</span>
+
+<span class="comment"># Composition: Car HAS-A engine, not IS-A engine</span>
+<span class="kw">class</span> <span class="fn-name">Car</span>:
+    <span class="kw">def</span> <span class="fn-name">__init__</span>(<span class="var">self</span>):
+        <span class="var">self</span>.<span class="var">engine</span> <span class="op">=</span> <span class="fn-name">Engine</span>()
+        <span class="var">self</span>.<span class="var">transmission</span> <span class="op">=</span> <span class="fn-name">Transmission</span>()
+
+    <span class="kw">def</span> <span class="fn-name">start</span>(<span class="var">self</span>):
+        <span class="kw">return</span> <span class="var">self</span>.<span class="var">engine</span>.<span class="fn-name">start</span>()
+
+    <span class="kw">def</span> <span class="fn-name">drive</span>(<span class="var">self</span>, <span class="var">gear</span>):
+        <span class="kw">return</span> <span class="var">self</span>.<span class="var">transmission</span>.<span class="fn-name">shift</span>(<span class="var">gear</span>)
+
+<span class="var">car</span> <span class="op">=</span> <span class="fn-name">Car</span>()
+<span class="fn-name">print</span>(<span class="var">car</span>.<span class="fn-name">start</span>())       <span class="comment"># Engine started</span>
+<span class="fn-name">print</span>(<span class="var">car</span>.<span class="fn-name">drive</span>(<span class="str">"D"</span>))  <span class="comment"># Shifted to D</span></pre>
+        </div>
+      </section>
+
+      <!-- Practice CTA -->
+      <div class="practice-cta">
+        <div class="cta-text">
+          <div class="cta-title">Ready to Master Classes?</div>
+          <div class="cta-sub">50 class challenges from easy to hard await.</div>
+        </div>
+        <a href="challenges_classes.html" class="cta-btn">Start Challenges</a>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Scroll-spy: Highlight sidebar nav based on scroll position
+    const sections = document.querySelectorAll('.section');
+    const navItems = document.querySelectorAll('.sidebar-nav li');
+
+    function updateActiveSection() {
+      let current = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        if (window.pageYOffset >= sectionTop - 100) {
+          current = section.getAttribute('id');
+        }
+      });
+
+      navItems.forEach(item => {
+        item.classList.remove('active');
+        const link = item.querySelector('a');
+        if (link && link.getAttribute('href') === `#${current}`) {
+          item.classList.add('active');
+        }
+      });
+    }
+
+    window.addEventListener('scroll', updateActiveSection);
+    updateActiveSection(); // Initial call
+  </script>
+</body>
+</html>

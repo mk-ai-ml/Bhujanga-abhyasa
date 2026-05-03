@@ -1,0 +1,1524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python Functions - Bhujanga Abhyāsa</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Sora:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f5f4f0;
+      --bg2: #eeecea;
+      --surface: #ffffff;
+      --surface2: #fafaf8;
+      --border: #e2dfd9;
+      --border2: #cdc9c2;
+      --text: #1e1c18;
+      --text2: #6b6760;
+      --text3: #9e9b96;
+      --blue: #3b6fd4;
+      --blue-bg: #eef2fb;
+      --green: #2e7d52;
+      --green-bg: #edf5f0;
+      --amber: #b45309;
+      --amber-bg: #fef6ec;
+      --red: #c0392b;
+      --red-bg: #fdf0ee;
+      --purple: #6d4fc2;
+      --purple-bg: #f2eefb;
+      --teal: #1a7a7a;
+      --fn-color: #b45309;
+      --code-bg: #1e1c18;
+      --code-text: #e8e4db;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Sora', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* Top Navigation */
+    .top-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--fn-color);
+    }
+
+    .logo-icon {
+      font-size: 1.75rem;
+    }
+
+    .back-link {
+      color: var(--blue);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .back-link:hover {
+      color: var(--text);
+    }
+
+    /* Main Container */
+    .container {
+      display: flex;
+      gap: 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    /* Sidebar Navigation */
+    .sidebar {
+      width: 240px;
+      flex-shrink: 0;
+      position: sticky;
+      top: 80px;
+      height: calc(100vh - 100px);
+      overflow-y: auto;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem 1rem;
+    }
+
+    .sidebar-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 2px solid var(--fn-color);
+    }
+
+    .sidebar-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .sidebar-nav a {
+      color: var(--text2);
+      text-decoration: none;
+      padding: 0.5rem 0.75rem;
+      border-radius: 6px;
+      transition: all 0.2s;
+      font-size: 0.9rem;
+    }
+
+    .sidebar-nav a:hover {
+      background: var(--amber-bg);
+      color: var(--fn-color);
+    }
+
+    .sidebar-nav a.active {
+      background: var(--amber-bg);
+      color: var(--fn-color);
+      font-weight: 600;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    /* Section Styles */
+    section {
+      margin-bottom: 4rem;
+      scroll-margin-top: 100px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-icon {
+      font-size: 2rem;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--fn-color);
+      margin-bottom: 1rem;
+    }
+
+    h3 {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.75rem;
+      margin-top: 1.5rem;
+    }
+
+    .intro-text {
+      font-size: 1.1rem;
+      color: var(--text2);
+      margin-bottom: 2rem;
+      line-height: 1.8;
+    }
+
+    /* Code Block */
+    .code-block {
+      background: var(--code-bg);
+      border-radius: 12px;
+      margin: 1.5rem 0;
+      overflow: hidden;
+      border: 1px solid var(--border2);
+    }
+
+    .code-block-header {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 0.75rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border2);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      color: var(--text3);
+    }
+
+    .code-dot {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+    }
+
+    .code-dot.d1 { background: #ed6158; }
+    .code-dot.d2 { background: #fcc02e; }
+    .code-dot.d3 { background: #5fc038; }
+
+    .code-content {
+      padding: 1.5rem;
+      overflow-x: auto;
+      color: var(--code-text);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .code-content::-webkit-scrollbar {
+      height: 6px;
+    }
+
+    .code-content::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .code-content::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 3px;
+    }
+
+    /* Syntax Highlighting Classes */
+    .kw { color: #ff6b6b; }           /* keywords */
+    .fn-name { color: #51cf66; }      /* function names */
+    .str { color: #ffa94d; }          /* strings */
+    .num { color: #b197fc; }          /* numbers */
+    .comment { color: #888; font-style: italic; }
+    .var { color: var(--code-text); }
+    .op { color: #4ecdc4; }           /* operators */
+
+    /* Callout Boxes */
+    .callout {
+      border-left: 4px solid var(--border);
+      background: var(--surface2);
+      padding: 1rem 1.25rem;
+      border-radius: 6px;
+      margin: 1.5rem 0;
+    }
+
+    .callout.info {
+      border-left-color: var(--blue);
+      background: var(--blue-bg);
+    }
+
+    .callout.warning {
+      border-left-color: var(--amber);
+      background: var(--amber-bg);
+    }
+
+    .callout.tip {
+      border-left-color: var(--green);
+      background: var(--green-bg);
+    }
+
+    .callout-title {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .callout.info .callout-title { color: var(--blue); }
+    .callout.warning .callout-title { color: var(--amber); }
+    .callout.tip .callout-title { color: var(--green); }
+
+    /* Compare Table */
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .compare-table th {
+      background: var(--bg2);
+      padding: 1rem;
+      text-align: left;
+      font-weight: 600;
+      border-bottom: 2px solid var(--border);
+      color: var(--text);
+    }
+
+    .compare-table td {
+      padding: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .compare-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Diagram */
+    .diagram-box {
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 200px;
+    }
+
+    .diagram-title {
+      font-weight: 600;
+      color: var(--fn-color);
+      margin-bottom: 1.5rem;
+      font-size: 1.1rem;
+    }
+
+    .scope-diagram {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+
+    .scope-level {
+      width: 100%;
+      padding: 1rem;
+      background: var(--surface2);
+      border: 2px solid var(--border);
+      border-radius: 6px;
+      text-align: center;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .scope-level:not(:last-child) {
+      margin-bottom: 0.5rem;
+    }
+
+    .scope-level-1 { background: #fff3e0; border-color: var(--amber); }
+    .scope-level-2 { background: #f3e5f5; border-color: var(--purple); }
+    .scope-level-3 { background: #e8f5e9; border-color: var(--green); }
+    .scope-level-4 { background: #ede7f6; border-color: var(--blue); }
+
+    .call-stack {
+      display: flex;
+      flex-direction: column-reverse;
+      align-items: center;
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+
+    .stack-frame {
+      background: var(--amber-bg);
+      border: 2px solid var(--amber);
+      border-radius: 8px;
+      padding: 1.25rem;
+      width: 200px;
+      text-align: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .stack-frame.return {
+      background: var(--green-bg);
+      border-color: var(--green);
+    }
+
+    .stack-frame.complete {
+      background: var(--surface2);
+      border-color: var(--border);
+      opacity: 0.6;
+    }
+
+    .stack-arrow {
+      font-size: 1.5rem;
+      color: var(--text3);
+    }
+
+    .flow-diagram {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin: 2rem 0;
+      flex-wrap: wrap;
+    }
+
+    .flow-node {
+      flex: 1;
+      min-width: 140px;
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: center;
+      font-weight: 500;
+    }
+
+    .flow-node.fn-input {
+      background: var(--blue-bg);
+      border-color: var(--blue);
+      color: var(--blue);
+    }
+
+    .flow-node.fn-process {
+      background: var(--purple-bg);
+      border-color: var(--purple);
+      color: var(--purple);
+    }
+
+    .flow-node.fn-output {
+      background: var(--green-bg);
+      border-color: var(--green);
+      color: var(--green);
+    }
+
+    .flow-arrow {
+      color: var(--text3);
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+
+    /* Mono text for code references */
+    .mono {
+      font-family: 'JetBrains Mono', monospace;
+      background: var(--surface2);
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      color: var(--text);
+      font-size: 0.95em;
+    }
+
+    /* Practice CTA */
+    .practice-cta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(135deg, var(--fn-color) 0%, #d97706 100%);
+      color: white;
+      padding: 2rem 2.5rem;
+      border-radius: 12px;
+      margin: 4rem 0 2rem 0;
+    }
+
+    .cta-text {
+      flex: 1;
+    }
+
+    .cta-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .cta-sub {
+      font-size: 1rem;
+      opacity: 0.95;
+    }
+
+    .cta-btn {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.3s;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      display: inline-block;
+    }
+
+    .cta-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+
+    /* Footer */
+    footer {
+      background: var(--bg2);
+      padding: 2rem;
+      text-align: center;
+      color: var(--text2);
+      border-top: 1px solid var(--border);
+      margin-top: 4rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .container {
+        gap: 1.5rem;
+        padding: 1.5rem;
+      }
+
+      .sidebar {
+        width: 180px;
+        top: 70px;
+      }
+
+      h1 { font-size: 2rem; }
+      h2 { font-size: 1.75rem; }
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+        top: auto;
+        padding: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      .sidebar-nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+      }
+
+      .sidebar-nav a {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.85rem;
+      }
+
+      h1 { font-size: 1.75rem; }
+      h2 { font-size: 1.25rem; }
+
+      .practice-cta {
+        flex-direction: column;
+        gap: 1.5rem;
+        text-align: center;
+      }
+
+      .code-content {
+        font-size: 0.85rem;
+      }
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border2);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--border);
+    }
+  </style>
+</head>
+<body>
+
+<!-- Top Navigation -->
+<nav class="top-nav">
+  <div class="logo">
+    <span class="logo-icon">⚡</span>
+    <span>Bhujanga Abhyāsa</span>
+  </div>
+  <a href="abhyasa_prathama.html" class="back-link">← Back to Prathama</a>
+</nav>
+
+<div class="container">
+
+  <!-- Sidebar Navigation -->
+  <aside class="sidebar">
+    <div class="sidebar-title">⚡ Functions</div>
+    <nav class="sidebar-nav">
+      <a href="#defining" class="sidebar-link">Defining Functions</a>
+      <a href="#parameters" class="sidebar-link">Parameters & Args</a>
+      <a href="#varargs" class="sidebar-link">*args & **kwargs</a>
+      <a href="#returns" class="sidebar-link">Return Values</a>
+      <a href="#scope" class="sidebar-link">Scope & Variables</a>
+      <a href="#recursion" class="sidebar-link">Recursion</a>
+      <a href="#lambda" class="sidebar-link">Lambda Functions</a>
+      <a href="#higher-order" class="sidebar-link">Higher-Order Funcs</a>
+      <a href="#closures" class="sidebar-link">Closures</a>
+      <a href="#decorators" class="sidebar-link">Decorators</a>
+      <a href="#generators" class="sidebar-link">Generators</a>
+      <a href="#composition" class="sidebar-link">Composition</a>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+
+    <!-- Hero Section -->
+    <section id="intro">
+      <div class="section-header">
+        <span class="section-icon">⚡</span>
+        <div>
+          <h1>Python Functions</h1>
+        </div>
+      </div>
+      <p class="intro-text">Functions are the fundamental building blocks of Python programming. They allow you to encapsulate logic, reuse code, and create abstractions that make your programs cleaner, more maintainable, and infinitely more powerful. From simple utilities to complex generators and decorators, mastering functions is essential to writing Pythonic code.</p>
+    </section>
+
+    <!-- 1. Defining Functions -->
+    <section id="defining">
+      <h2>1. Defining Functions</h2>
+      <p>A function is a reusable block of code that performs a specific task. In Python, you define functions using the <span class="mono">def</span> keyword, followed by the function name, parameters, and a colon.</p>
+
+      <h3>Basic Function Definition</h3>
+      <div class="code-block">
+        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>functions_basics.py</span></div>
+        <pre class="code-content"><span class="kw">def</span> <span class="fn-name">greet</span>(name):
+    <span class="str">"""Return a personalized greeting."""</span>
+    <span class="kw">return</span> <span class="str">f"Hello, {name}!"</span>
+
+result = <span class="fn-name">greet</span>(<span class="str">"Alice"</span>)
+<span class="fn-name">print</span>(result)  <span class="comment"># Output: Hello, Alice!</span></pre>
+      </div>
+
+      <h3>Docstrings & Documentation</h3>
+      <p>Docstrings (triple-quoted strings immediately after the <span class="mono">def</span> line) document what your function does. They're essential for code clarity and are accessible via the <span class="mono">help()</span> function.</p>
+
+      <div class="code-block">
+        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>docstrings.py</span></div>
+        <pre class="code-content"><span class="kw">def</span> <span class="fn-name">calculate_area</span>(radius):
+    <span class="str">"""Calculate the area of a circle.
+
+    Args:
+        radius (float): The radius of the circle.
+
+    Returns:
+        float: The area of the circle.
+    """</span>
+    <span class="kw">import</span> math
+    <span class="kw">return</span> math.pi * radius ** <span class="num">2</span>
+
+<span class="fn-name">print</span>(<span class="fn-name">calculate_area</span>(<span class="num">5</span>))  <span class="comment"># Output: 78.53981633974483</span></pre>
+      </div>
+
+      <div class="callout tip">
+        <div class="callout-title">Pro Tip: Function Naming</div>
+        <p>Use lowercase with underscores (snake_case) for function names. Make names descriptive: <span class="mono">calculate_total_price()</span> is clearer than <span class="mono">calc()</span>.</p>
+      </div>
+
+      <h3>Return Statement</h3>
+      <p>The <span class="mono">return</span> keyword sends a value back to the caller. Without a <span class="mono">return</span>, a function returns <span class="mono">None</span>.</p>
+
+      <div class="code-block">
+        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>return_demo.py</span></div>
+        <pre class="code-content"><span class="kw">def</span> <span class="fn-name">add</span>(a, b):
+    <span class="kw">return</span> a + b
+
+<span class="kw">def</span> <span class="fn-name">print_message</span>(msg):
+    <span class="fn-name">print</span>(msg)  <span class="comment"># No return statement</span>
+
+result1 = <span class="fn-name">add</span>(<span class="num">3</span>, <span class="num">5</span>)          <span class="comment"># result1 = 8</span>
+result2 = <span class="fn-name">print_message</span>(<span class="str">"Hi"</span>)  <span class="comment"># result2 = None</span></pre>
+      </div>
+    </section>
+
+    <!-- 2. Parameters & Arguments -->
+    <section id="parameters">
+      <h2>2. Parameters & Arguments</h2>
+      <p><strong>Parameters</strong> are the variables in the function definition; <strong>arguments</strong> are the values you pass when calling the function. Python supports several types: positional, keyword, and default values.</p>
+
+      <h3>Positional Arguments</h3>
+      <p>Arguments matched by position, in order. The caller must pass them in the correct order.</p>
+
+      <div class="code-block">
+        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>positional.py</span></div>
+        <pre class="code-content"><span class="kw">def</span> <span class="fn-name">subtract</span>(a, b):
+    <span class="kw">return</span> a - b
+
+<span class="fn-name">subtract</span>(<span class="num">10</span>, <span class="num">3</span>)  <span class="comment"># = 7 (order matters!)</span>
+<span class="fn-name">subtract</span>(<span class="num">3</span>, <span class="num">10</span>)  <span class="comment"># = -7 (different result)</span></pre>
+      </div>
+
+      <h3>Keyword Arguments</h3>
+      <p>Arguments specified by name, allowing any order. Improves readability for functions with many parameters.</p>
+
+      <div class="code-block">
+        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>keyword.py</span></div>
+        <pre class="code-content"><span class="kw">def</span> <span class="fn-name">describe_person</span>(name, age, city):
+    <span class="kw">return</span> <span class="str">f"{name} is {age} years old and lives in {city}"</span>
+
+<span class="comment"># All of these are equivalent:</span>
+<span class="fn-name">describe_person</span>(<span class="str">"Alice"</span>, <span class="num">30</span>, <span class="str">"NYC"</span>)
+<span class="fn-name">describe_person</span>(age=<span class="num">30</span>, name=<span class="str">"Alice"</span>, city=<span class="str">"NYC"</span>)
+<span class="fn-name">describe_person</span>(<span class="str">"Alice"</span>, city=<span class="str">"NYC"</span>, age=<span class="num">30</span>)</pre>
+      </div>
+
+      <h3>Default Values</h3>
+      <p>Parameters can have default values. If the caller doesn't provide an argument, the default is used.</p>
+
+      <div class="code-block">
+        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>defaults.py</span></div>
+        <pre class="code-content"><span class="kw">def</span> <span class="fn-name">power</span>(base, exponent=<span class="num">2</span>):
+    <span class="kw">return</span> base ** exponent
+
+<span class="fn-name">power</span>(<span class="num">5</span>)        <span class="comment"># = 25 (uses default: 5^2)</span>
+<span class="fn-name">power</span>(<span class="num">5</span>, <span class="num">3</span>)     <span class="comment"># = 125 (5^3)</span>
+<span class="fn-name">power</span>(exponent=<span class="num">4</span>, base=<span class="num">2</span>)  <span class="comment"># = 16 (2^4)</span></pre>
+      </div>
+
+      <div class="callout warning">
+        <div class="callout-title">Caution: Mutable Defaults</div>
+        <p>Never use mutable objects (lists, dicts) as defaults. They persist across calls, leading to unexpected behavior. Use <span class="mono">None</span> instead and create new instances inside the function.</p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>mutable_default.py</span></div>
+        <pre class="code-content"><span class="comment"># ❌ WRONG:</span>
+<span class="kw">def</span> <span class="fn-name">add_item_wrong</span>(item, items=[]):
+    items.append(item)
+    <span class="kw">return</span> items
+
+<span class="comment"># ✅ CORRECT:</span>
+<span class="kw">def</span> <span class="fn-name">add_item_right</span>(item, items=<span class="kw">None</span>):
+    <span class="kw">if</span> items <span class="kw">is</span> <span class="kw">None</span>:
+        items = []
+    items.append(item)
+    <span class="kw">return</span> items</pre>
+      </div>
+    </section>
+
+    <!-- 3. *args and **kwargs -->
+    <section id="varargs">
+      <h2>3. *args and **kwargs</h2>
+      <p>These allow functions to accept a variable number of arguments. <span class="mono">*args</span> captures positional arguments as a tuple; <span class="mono">**kwargs</span> captures keyword arguments as a dictionary.</p>
+
+      <h3>*args: Variable Positional Arguments</h3>
+      <p>The asterisk unpacks multiple positional arguments into a tuple named <span class="mono">args</span> (the name can vary, but the asterisk is key).</p>
+
+      <div class="code-block">
+        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>args_demo.py</span></div>
+        <pre class="code-content"><span class="kw">def</span> <span class="fn-name">sum_all</span>(*args):
+    <span class="kw">return</span> <span class="fn-name">sum</span>(args)
+
+<span class="fn-name">sum_all</span>(<span class="num">1</span>)              <span class="comment"># = 1, args = (1,)</span>
+<span class="fn-name">sum_all</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>)        <span class="comment"># = 6, args = (1, 2, 3)</span>
+<span class="fn-name">sum_all</span>(<span class="num">10</span>, <span class="num">20</span>, <span class="num">30</span>, <span class="num">40</span>)  <span class="comment"># = 100</span></pre>
+      </div>
+
+      <h3>**kwargs: Variable Keyword Arguments</h3>
+      <p>Double asterisks collect keyword arguments into a dictionary named <span class="mono">kwargs</span>.</p>
+
+      <div class="code-block">
+        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>kwargs_demo.py</span></div>
+        <pre class="code-content"><span class="kw">def</span> <span class="fn-name">print_info</span>(**kwargs):
+    <span class="kw">for</span> key, value <span class="kw">in</span> kwargs.items():
+        <span class="fn-name">print</span>(<span class="str">f"{key}: {value}"</span>)
+
+<span class="fn-name">print_info</span>(name=<span class="str">"Alice"</span>, age=<span class="num">30</span>, city=<span class="str">"NYC"</span>)
+<span class="comment"># Output:</span>
+<span class="comment"># name: Alice</span>
+<span class="comment"># age: 30</span>
+<span class="comment"># city: NYC</span></pre>
+      </div>
+
+      <h3>Combining All Three</h3>
+      <p>You can mix positional, *args, keyword, and **kwargs. The order must be: positional → *args → keyword-only → **kwargs.</p>
+
+      <div class="code-block">
+        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>combined.py</span></div>
+        <pre class="code-content"><span class="kw">def</span> <span class="fn-name">flexible_func</span>(a, b, *args, debug=<span class="kw">False</span>, **kwargs):
+    <span class="fn-name">print</span>(<span class="str">f"a={a}, b={b}"</span>)
+    <span class="fn-name">print</span>(<span class="str">f"args={args}"</span>)
+    <span class="fn-name">print</span>(<span class="str">f"debug={debug}"</span>)
+    <span class="fn-name">print</span>(<span class="str">f"kwargs={kwargs}"</span>)
+
+<span class="fn-name">flexible_func</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, debug=<span class="kw">True</span>, x=<span class="num">10</span>, y=<span class="num">20</span>)</pre>
+      </div>
+
+      <h3>Unpacking with * and **</h3>
+      <p>You can also use <span class="mono">*</span> and <span class="mono">**</span> when calling functions to unpack sequences and dictionaries.</p>
+
+      <div class="code-block">
+        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>unpacking.py</span></div>
+        <pre class="code-content"><span class="kw">def</span> <span class="fn-name">multiply</span>(a, b, c):
+    <span class="kw">return</span> a * b * c
+
+<span class="comment"># Unpacking a list with *</span>
+numbers = [<span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>]
+result = <span class="fn-name">multiply</span>(*numbers)  <span class="comment"># multiply(2, 3, 4)</span>
+
+<span class="comment"># Unpacking a dict with **</span>
+params = {<span class="str">'a'</span>: <span class="num">2</span>, <span class="str">'b'</span>: <span class="num">3</span>, <span class="str">'c'</span>: <span class="num">4</span>}
+result = <span class="fn-name">multiply</span>(**params)</pre>
+      </div>
+    </section>
+
+    <!-- 4. Return Values -->
+    <section id="returns">
+      <h2>4. Return Values</h2>
+      <p>Functions return data using the <span class="mono">return</span> statement. You can return any Python object: numbers, strings, lists, dicts, even other functions.</p>
+
+      <h3>Single vs. Multiple Returns</h3>
+      <div class="code-block">
+        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>return_values.py</span></div>
+        <pre class="code-content"><span class="comment"># Single return value</span>
+<span class="kw">def</span> <span class="fn-name">square</span>(x):
+    <span class="kw">return</span> x ** <span class="num">2</span>
+
+<span class="comment"># Multiple returns (as tuple)</span>
+<span class="kw">def</span> <span class="fn-name">divmod_custom</span>(a, b):
+    <span class="kw">return</span> a // b, a % b
+
+quotient, remainder = <span class="fn-name">divmod_custom</span>(<span class="num">17</span>, <span class="num">5</span>)
+<span class="comment"># quotient = 3, remainder = 2</span></pre>
+      </div>
+
+      <h3>Early Return</h3>
+      <p>Use <span class="mono">return</span> early to exit a function and avoid deep nesting. This improves readability and reduces cognitive load.</p>
+
+      <div class="code-block">
+        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>early_return.py</span></div>
+        <pre class="code-content"><span class="comment"># ❌ Nested (hard to read)</span>
+<span class="kw">def</span> <span class="fn-name">process_bad</span>(value):
+    <span class="kw">if</span> value > <span class="num">0</span>:
+        <span class="kw">if</span> value < <span class="num">100</span>:
+            result = value * <span class="num">2</span>
+        <span class="kw">else</span>:
+            result = <span class="num">-1</span>
+    <span class="kw">else</span>:
+        result = <span class="num">-1</span>
+    <span class="kw">return</span> result
+
+<span class="comment"># ✅ Early return (clear flow)</span>
+<span class="kw">def</span> <span class="fn-name">process_good</span>(value):
+    <span class="kw">if</span> value <= <span class="num">0</span> <span class="kw">or</span> value >= <span class="num">100</span>:
+        <span class="kw">return</span> <span class="num">-1</span>
+    <span class="kw">return</span> value * <span class="num">2</span></pre>
+      </div>
+
+      <h3>None as Default Return</h3>
+      <p>Functions without an explicit <span class="mono">return</span> statement return <span class="mono">None</span>. Use this for functions that perform side effects (printing, updating state) rather than returning values.</p>
+
+      <div class="code-block">
+        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>none_return.py</span></div>
+        <pre class="code-content"><span class="kw">def</span> <span class="fn-name">log_message</span>(msg):
+    <span class="fn-name">print</span>(<span class="str">f"[LOG] {msg}"</span>)
+    <span class="comment"># Implicitly returns None</span>
+
+result = <span class="fn-name">log_message</span>(<span class="str">"Hello"</span>)
+<span class="fn-name">print</span>(result)  <span class="comment"># Output: None</span></pre>
+      </div>
+    </section>
+
+    <!-- 5. Scope & Variables -->
+    <section id="scope">
+      <h2>5. Scope & Variables</h2>
+      <p>Scope determines where a variable is accessible. Python uses the <strong>LEGB rule</strong>: Local → Enclosing → Global → Built-in.</p>
+
+      <div class="diagram-box">
+        <div class="diagram-title">Python Scope Hierarchy (LEGB)</div>
+        <div class="scope-diagram">
+          <div class="scope-level scope-level-1">Local: Inside a function</div>
+          <div class="scope-level scope-level-2">Enclosing: In an outer function (nested)</div>
+          <div class="scope-level scope-level-3">Global: At module level</div>
+          <div class="scope-level scope-level-4">Built-in: Python's built-in namespace</div>
+        </div>
+      </div>
+
+      <h3>Local Scope</h3>
+      <p>Variables defined inside a function exist only within that function. They're created when the function is called and destroyed when it exits.</p>
+
+      <div class="code-block">
+        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>local_scope.py</span></div>
+        <pre class="code-content"><span class="kw">def</span> <span class="fn-name">my_func</span>():
+    x = <span class="num">10</span>  <span class="comment"># Local variable</span>
+    <span class="kw">return</span> x
+
+<span class="fn-name">my_func</span>()   <span class="comment"># = 10</span>
+<span class="comment"># print(x)  # ❌ NameError: x not defined</span></pre>
+      </div>
+
+      <h3>Global Scope</h3>
+      <p>Variables defined outside functions are global. Functions can read global variables, but to modify them, use the <span class="mono">global</span> keyword.</p>
+
+      <div class="code-block">
+        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>global_scope.py</span></div>
+        <pre class="code-content">x = <span class="num">5</span>  <span class="comment"># Global</span>
+
+<span class="kw">def</span> <span class="fn-name">read_global</span>():
+    <span class="fn-name">print</span>(x)  <span class="comment"># Can read x</span>
+
+<span class="kw">def</span> <span class="fn-name">modify_global</span>():
+    <span class="kw">global</span> x
+    x = <span class="num">10</span>  <span class="comment"># Now modifies global x</span>
+
+<span class="fn-name">read_global</span>()      <span class="comment"># Output: 5</span>
+<span class="fn-name">modify_global</span>()
+<span class="fn-name">read_global</span>()      <span class="comment"># Output: 10</span></pre>
+      </div>
+
+      <h3>Enclosing Scope & nonlocal</h3>
+      <p>In nested functions, the enclosing scope refers to variables in an outer function. Use <span class="mono">nonlocal</span> to modify them.</p>
+
+      <div class="code-block">
+        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>enclosing_scope.py</span></div>
+        <pre class="code-content"><span class="kw">def</span> <span class="fn-name">outer</span>():
+    x = <span class="num">5</span>  <span class="comment"># Enclosing scope</span>
+
+    <span class="kw">def</span> <span class="fn-name">inner</span>():
+        <span class="kw">nonlocal</span> x
+        x = <span class="num">10</span>  <span class="comment"># Modifies outer's x</span>
+
+    <span class="fn-name">inner</span>()
+    <span class="kw">return</span> x  <span class="comment"># = 10</span>
+
+<span class="fn-name">outer</span>()  <span class="comment"># = 10</span></pre>
+      </div>
+
+      <div class="callout warning">
+        <div class="callout-title">Best Practice: Limit Global Use</div>
+        <p>Overuse of <span class="mono">global</span> can make code hard to debug. Prefer passing variables as parameters and returning values.</p>
+      </div>
+    </section>
+
+    <!-- 6. Recursion -->
+    <section id="recursion">
+      <h2>6. Recursion</h2>
+      <p>Recursion is when a function calls itself. Every recursive function must have a <strong>base case</strong> (where it stops) and a <strong>recursive case</strong> (where it calls itself with simpler input).</p>
+
+      <h3>Anatomy of Recursion</h3>
+      <div class="code-block">
+        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>factorial.py</span></div>
+        <pre class="code-content"><span class="kw">def</span> <span class="fn-name">factorial</span>(n):
+    <span class="comment"># Base case: stop recursion</span>
+    <span class="kw">if</span> n <= <span class="num">1</span>:
+        <span class="kw">return</span> <span class="num">1</span>
+
+    <span class="comment"># Recursive case: call itself with n-1</span>
+    <span class="kw">return</span> n * <span class="fn-name">factorial</span>(n - <span class="num">1</span>)
+
+<span class="fn-name">factorial</span>(<span class="num">5</span>)  <span class="comment"># = 120</span></pre>
+      </div>
+
+      <h3>Call Stack Visualization</h3>
+      <p>When <span class="mono">factorial(5)</span> is called, each recursive call stacks on top of the previous one until the base case is reached, then results "bubble up."</p>
+
+      <div class="call-stack">
+        <div class="stack-frame">factorial(1) → 1</div>
+        <div class="stack-arrow">↑</div>
+        <div class="stack-frame">2 × result = 2</div>
+        <div class="stack-arrow">↑</div>
+        <div class="stack-frame">3 × result = 6</div>
+        <div class="stack-arrow">↑</div>
+        <div class="stack-frame">4 × result = 24</div>
+        <div class="stack-arrow">↑</div>
+        <div class="stack-frame">5 × result = 120</div>
+      </div>
+
+      <h3>Classic Examples: Fibonacci</h3>
+      <div class="code-block">
+        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>fibonacci.py</span></div>
+        <pre class="code-content"><span class="comment"># Simple but slow (lots of redundant calls)</span>
+<span class="kw">def</span> <span class="fn-name">fib_slow</span>(n):
+    <span class="kw">if</span> n <= <span class="num">1</span>:
+        <span class="kw">return</span> n
+    <span class="kw">return</span> <span class="fn-name">fib_slow</span>(n - <span class="num">1</span>) + <span class="fn-name">fib_slow</span>(n - <span class="num">2</span>)
+
+<span class="comment"># Optimized with memoization</span>
+<span class="kw">def</span> <span class="fn-name">fib_fast</span>(n, memo={}):
+    <span class="kw">if</span> n <span class="kw">in</span> memo:
+        <span class="kw">return</span> memo[n]
+    <span class="kw">if</span> n <= <span class="num">1</span>:
+        <span class="kw">return</span> n
+
+    memo[n] = <span class="fn-name">fib_fast</span>(n - <span class="num">1</span>, memo) + <span class="fn-name">fib_fast</span>(n - <span class="num">2</span>, memo)
+    <span class="kw">return</span> memo[n]</pre>
+      </div>
+
+      <h3>Recursion Depth Limit</h3>
+      <p>Python has a default recursion depth limit (usually 1000) to prevent stack overflow. Use <span class="mono">sys.setrecursionlimit()</span> carefully, or prefer iteration for deep recursions.</p>
+
+      <div class="code-block">
+        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>recursion_limit.py</span></div>
+        <pre class="code-content"><span class="kw">import</span> sys
+
+<span class="comment"># Check current limit</span>
+<span class="fn-name">print</span>(sys.getrecursionlimit())  <span class="comment"># Usually 1000</span>
+
+<span class="comment"># Increase if needed (use cautiously)</span>
+sys.setrecursionlimit(<span class="num">5000</span>)
+
+<span class="comment"># Better: use iteration instead for deep recursions</span>
+<span class="kw">def</span> <span class="fn-name">sum_iterative</span>(n):
+    total = <span class="num">0</span>
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn-name">range</span>(n + <span class="num">1</span>):
+        total += i
+    <span class="kw">return</span> total</pre>
+      </div>
+
+      <div class="callout info">
+        <div class="callout-title">When to Use Recursion</div>
+        <p>Use recursion for problems with recursive structure (trees, graphs, divide-and-conquer). Use iteration for simple loops. Remember: "If it can be done iteratively, it should be done iteratively."</p>
+      </div>
+    </section>
+
+    <!-- 7. Lambda Functions -->
+    <section id="lambda">
+      <h2>7. Lambda Functions</h2>
+      <p>Lambda functions are small, anonymous functions defined with the <span class="mono">lambda</span> keyword. They're useful for short operations but shouldn't replace regular functions for complex logic.</p>
+
+      <h3>Basic Lambda Syntax</h3>
+      <div class="code-block">
+        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>lambda_basics.py</span></div>
+        <pre class="code-content"><span class="comment"># Lambda: lambda arguments: expression</span>
+
+<span class="comment"># Simple square function</span>
+square = <span class="kw">lambda</span> x: x ** <span class="num">2</span>
+<span class="fn-name">square</span>(<span class="num">5</span>)  <span class="comment"># = 25</span>
+
+<span class="comment"># Multiple arguments</span>
+add = <span class="kw">lambda</span> a, b: a + b
+<span class="fn-name">add</span>(<span class="num">3</span>, <span class="num">7</span>)  <span class="comment"># = 10</span>
+
+<span class="comment"># With default argument</span>
+power = <span class="kw">lambda</span> x, p=<span class="num">2</span>: x ** p
+<span class="fn-name">power</span>(<span class="num">3</span>)      <span class="comment"># = 9</span>
+<span class="fn-name">power</span>(<span class="num">3</span>, <span class="num">3</span>)   <span class="comment"># = 27</span></pre>
+      </div>
+
+      <h3>When to Use Lambdas</h3>
+      <p>Use lambdas for <strong>short, simple operations</strong>, especially as arguments to higher-order functions like <span class="mono">map()</span>, <span class="mono">filter()</span>, and <span class="mono">sorted()</span>.</p>
+
+      <div class="code-block">
+        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>lambda_usage.py</span></div>
+        <pre class="code-content"><span class="comment"># Sort tuples by second element</span>
+students = [(<span class="str">"Alice"</span>, <span class="num">85</span>), (<span class="str">"Bob"</span>, <span class="num">92</span>), (<span class="str">"Charlie"</span>, <span class="num">78</span>)]
+sorted_students = <span class="fn-name">sorted</span>(students, key=<span class="kw">lambda</span> x: x[<span class="num">1</span>])
+
+<span class="comment"># Double each number in a list</span>
+numbers = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>]
+doubled = <span class="fn-name">list</span>(<span class="fn-name">map</span>(<span class="kw">lambda</span> x: x * <span class="num">2</span>, numbers))
+<span class="comment"># Result: [2, 4, 6, 8, 10]</span>
+
+<span class="comment"># Filter even numbers</span>
+evens = <span class="fn-name">list</span>(<span class="fn-name">filter</span>(<span class="kw">lambda</span> x: x % <span class="num">2</span> == <span class="num">0</span>, numbers))
+<span class="comment"># Result: [2, 4]</span></pre>
+      </div>
+
+      <div class="callout warning">
+        <div class="callout-title">Lambda Limitations</div>
+        <p>Lambdas can only contain a single expression. For multi-line logic, use a regular <span class="mono">def</span> function. Also, lambdas can't have docstrings, so they're harder to document.</p>
+      </div>
+    </section>
+
+    <!-- 8. Higher-Order Functions -->
+    <section id="higher-order">
+      <h2>8. Higher-Order Functions</h2>
+      <p>Higher-order functions take other functions as arguments or return functions. They're powerful tools for functional programming and code abstraction.</p>
+
+      <h3>Functions as Arguments</h3>
+      <div class="code-block">
+        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>higher_order.py</span></div>
+        <pre class="code-content"><span class="kw">def</span> <span class="fn-name">apply_twice</span>(func, x):
+    <span class="kw">return</span> <span class="fn-name">func</span>(<span class="fn-name">func</span>(x))
+
+<span class="kw">def</span> <span class="fn-name">increment</span>(n):
+    <span class="kw">return</span> n + <span class="num">1</span>
+
+result = <span class="fn-name">apply_twice</span>(increment, <span class="num">5</span>)
+<span class="comment"># increment(increment(5)) = increment(6) = 7</span></pre>
+      </div>
+
+      <h3>Built-in Higher-Order: map(), filter(), reduce()</h3>
+      <div class="code-block">
+        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>map_filter_reduce.py</span></div>
+        <pre class="code-content"><span class="kw">from</span> functools <span class="kw">import</span> reduce
+
+numbers = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>]
+
+<span class="comment"># map: apply function to each element</span>
+squared = <span class="fn-name">list</span>(<span class="fn-name">map</span>(<span class="kw">lambda</span> x: x ** <span class="num">2</span>, numbers))
+<span class="comment"># [1, 4, 9, 16, 25]</span>
+
+<span class="comment"># filter: keep elements where condition is True</span>
+evens = <span class="fn-name">list</span>(<span class="fn-name">filter</span>(<span class="kw">lambda</span> x: x % <span class="num">2</span> == <span class="num">0</span>, numbers))
+<span class="comment"># [2, 4]</span>
+
+<span class="comment"># reduce: combine all elements into one value</span>
+product = <span class="fn-name">reduce</span>(<span class="kw">lambda</span> a, b: a * b, numbers)
+<span class="comment"># 1 * 2 * 3 * 4 * 5 = 120</span></pre>
+      </div>
+
+      <div class="flow-diagram">
+        <div class="flow-node fn-input">Input List</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node fn-process">map/filter</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node fn-output">Output List</div>
+      </div>
+
+      <h3>Returning Functions</h3>
+      <p>Functions can return other functions, enabling powerful patterns like function factories.</p>
+
+      <div class="code-block">
+        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>function_factory.py</span></div>
+        <pre class="code-content"><span class="kw">def</span> <span class="fn-name">make_multiplier</span>(n):
+    <span class="kw">def</span> <span class="fn-name">multiplier</span>(x):
+        <span class="kw">return</span> x * n
+    <span class="kw">return</span> multiplier
+
+<span class="comment"># Create specialized functions</span>
+double = <span class="fn-name">make_multiplier</span>(<span class="num">2</span>)
+triple = <span class="fn-name">make_multiplier</span>(<span class="num">3</span>)
+
+<span class="fn-name">double</span>(<span class="num">5</span>)  <span class="comment"># = 10</span>
+<span class="fn-name">triple</span>(<span class="num">5</span>)  <span class="comment"># = 15</span></pre>
+      </div>
+    </section>
+
+    <!-- 9. Closures -->
+    <section id="closures">
+      <h2>9. Closures</h2>
+      <p>A closure is a function that "remembers" variables from its enclosing scope, even after the outer function has returned. Closures are fundamental to decorators, callbacks, and functional programming.</p>
+
+      <h3>Anatomy of a Closure</h3>
+      <div class="code-block">
+        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>closure_basic.py</span></div>
+        <pre class="code-content"><span class="kw">def</span> <span class="fn-name">outer</span>(x):
+    <span class="comment"># Inner function "closes over" x</span>
+    <span class="kw">def</span> <span class="fn-name">inner</span>(y):
+        <span class="kw">return</span> x + y
+    <span class="kw">return</span> inner
+
+<span class="comment"># add_5 is a closure with x=5 captured</span>
+add_5 = <span class="fn-name">outer</span>(<span class="num">5</span>)
+<span class="fn-name">add_5</span>(<span class="num">3</span>)  <span class="comment"># = 8</span>
+
+add_10 = <span class="fn-name">outer</span>(<span class="num">10</span>)
+<span class="fn-name">add_10</span>(<span class="num">3</span>)  <span class="comment"># = 13</span></pre>
+      </div>
+
+      <h3>Practical: make_counter()</h3>
+      <p>A classic closure pattern: create a counter function that maintains state.</p>
+
+      <div class="code-block">
+        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>counter.py</span></div>
+        <pre class="code-content"><span class="kw">def</span> <span class="fn-name">make_counter</span>(start=<span class="num">0</span>):
+    count = start
+
+    <span class="kw">def</span> <span class="fn-name">increment</span>():
+        <span class="kw">nonlocal</span> count
+        count += <span class="num">1</span>
+        <span class="kw">return</span> count
+
+    <span class="kw">return</span> increment
+
+<span class="comment"># Each call to make_counter creates a new closure</span>
+counter1 = <span class="fn-name">make_counter</span>()
+counter2 = <span class="fn-name">make_counter</span>(<span class="num">100</span>)
+
+<span class="fn-name">counter1</span>()  <span class="comment"># = 1</span>
+<span class="fn-name">counter1</span>()  <span class="comment"># = 2</span>
+<span class="fn-name">counter1</span>()  <span class="comment"># = 3</span>
+
+<span class="fn-name">counter2</span>()  <span class="comment"># = 101</span>
+<span class="fn-name">counter2</span>()  <span class="comment"># = 102</span></pre>
+      </div>
+
+      <div class="callout tip">
+        <div class="callout-title">Closures in Real Code</div>
+        <p>Closures enable decorators (wrapping functions), event handlers (callbacks), and data encapsulation without classes. They're especially useful in event-driven and functional programming.</p>
+      </div>
+    </section>
+
+    <!-- 10. Decorators -->
+    <section id="decorators">
+      <h2>10. Decorators</h2>
+      <p>Decorators wrap a function to modify its behavior without changing its code. They use closures and higher-order functions to add functionality like logging, timing, caching, and retry logic.</p>
+
+      <h3>Basic Decorator Pattern</h3>
+      <div class="code-block">
+        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>decorator_basic.py</span></div>
+        <pre class="code-content"><span class="kw">def</span> <span class="fn-name">my_decorator</span>(func):
+    <span class="kw">def</span> <span class="fn-name">wrapper</span>(*args, **kwargs):
+        <span class="fn-name">print</span>(<span class="str">f"Calling {func.__name__}"</span>)
+        result = <span class="fn-name">func</span>(*args, **kwargs)
+        <span class="fn-name">print</span>(<span class="str">f"Finished {func.__name__}"</span>)
+        <span class="kw">return</span> result
+    <span class="kw">return</span> wrapper
+
+<span class="comment"># Using the decorator with @ syntax</span>
+@my_decorator
+<span class="kw">def</span> <span class="fn-name">say_hello</span>(name):
+    <span class="fn-name">print</span>(<span class="str">f"Hello, {name}!"</span>)
+
+<span class="fn-name">say_hello</span>(<span class="str">"Alice"</span>)
+<span class="comment"># Output:</span>
+<span class="comment"># Calling say_hello</span>
+<span class="comment"># Hello, Alice!</span>
+<span class="comment"># Finished say_hello</span></pre>
+      </div>
+
+      <h3>Practical: @timing Decorator</h3>
+      <p>Measure how long a function takes to execute.</p>
+
+      <div class="code-block">
+        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>timing_decorator.py</span></div>
+        <pre class="code-content"><span class="kw">import</span> time
+<span class="kw">from</span> functools <span class="kw">import</span> wraps
+
+<span class="kw">def</span> <span class="fn-name">timing</span>(func):
+    @wraps(func)
+    <span class="kw">def</span> <span class="fn-name">wrapper</span>(*args, **kwargs):
+        start = time.time()
+        result = <span class="fn-name">func</span>(*args, **kwargs)
+        elapsed = time.time() - start
+        <span class="fn-name">print</span>(<span class="str">f"{func.__name__} took {elapsed:.4f}s"</span>)
+        <span class="kw">return</span> result
+    <span class="kw">return</span> wrapper
+
+@timing
+<span class="kw">def</span> <span class="fn-name">slow_function</span>():
+    time.sleep(<span class="num">2</span>)
+    <span class="kw">return</span> <span class="str">"Done"</span>
+
+<span class="fn-name">slow_function</span>()  <span class="comment"># slow_function took 2.0005s</span></pre>
+      </div>
+
+      <h3>Practical: @memoize Decorator</h3>
+      <p>Cache function results to avoid redundant computation.</p>
+
+      <div class="code-block">
+        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>memoize_decorator.py</span></div>
+        <pre class="code-content"><span class="kw">from</span> functools <span class="kw">import</span> lru_cache
+
+<span class="comment"># Built-in memoization (Python 3.2+)</span>
+@lru_cache(maxsize=<span class="num">128</span>)
+<span class="kw">def</span> <span class="fn-name">fibonacci</span>(n):
+    <span class="kw">if</span> n <= <span class="num">1</span>:
+        <span class="kw">return</span> n
+    <span class="kw">return</span> <span class="fn-name">fibonacci</span>(n - <span class="num">1</span>) + <span class="fn-name">fibonacci</span>(n - <span class="num">2</span>)
+
+<span class="comment"># Much faster than naive recursion!</span>
+<span class="fn-name">fibonacci</span>(<span class="num">35</span>)  <span class="comment"># Instant (with memoization)</span></pre>
+      </div>
+
+      <h3>Decorators with Arguments</h3>
+      <p>To pass arguments to a decorator, add another layer of nesting.</p>
+
+      <div class="code-block">
+        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>decorator_args.py</span></div>
+        <pre class="code-content"><span class="kw">def</span> <span class="fn-name">repeat</span>(times):
+    <span class="comment"># Decorator factory</span>
+    <span class="kw">def</span> <span class="fn-name">decorator</span>(func):
+        <span class="kw">def</span> <span class="fn-name">wrapper</span>(*args, **kwargs):
+            results = []
+            <span class="kw">for</span> _ <span class="kw">in</span> <span class="fn-name">range</span>(times):
+                results.append(<span class="fn-name">func</span>(*args, **kwargs))
+            <span class="kw">return</span> results
+        <span class="kw">return</span> wrapper
+    <span class="kw">return</span> decorator
+
+@repeat(times=<span class="num">3</span>)
+<span class="kw">def</span> <span class="fn-name">greet</span>(name):
+    <span class="kw">return</span> <span class="str">f"Hello, {name}!"</span>
+
+<span class="fn-name">greet</span>(<span class="str">"Bob"</span>)
+<span class="comment"># ['Hello, Bob!', 'Hello, Bob!', 'Hello, Bob!']</span></pre>
+      </div>
+
+      <div class="callout info">
+        <div class="callout-title">Use functools.wraps()</div>
+        <p>Always use <span class="mono">@functools.wraps(func)</span> in your decorator's wrapper to preserve the original function's metadata (name, docstring, etc.).</p>
+      </div>
+    </section>
+
+    <!-- 11. Generators -->
+    <section id="generators">
+      <h2>11. Generators</h2>
+      <p>Generators are functions that use <span class="mono">yield</span> instead of <span class="mono">return</span>. They produce values one at a time, using less memory than creating entire lists. Perfect for large datasets or infinite sequences.</p>
+
+      <h3>yield: Lazy Evaluation</h3>
+      <div class="code-block">
+        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>generator_basic.py</span></div>
+        <pre class="code-content"><span class="comment"># Regular function: returns entire list</span>
+<span class="kw">def</span> <span class="fn-name">range_list</span>(n):
+    result = []
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn-name">range</span>(n):
+        result.append(i)
+    <span class="kw">return</span> result
+
+<span class="comment"># Generator: yields one value at a time</span>
+<span class="kw">def</span> <span class="fn-name">range_gen</span>(n):
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn-name">range</span>(n):
+        <span class="kw">yield</span> i
+
+<span class="comment"># range_list(5) creates [0,1,2,3,4] in memory</span>
+<span class="comment"># range_gen(5) yields on demand; memory efficient</span></pre>
+      </div>
+
+      <h3>Iterating Over Generators</h3>
+      <div class="code-block">
+        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>generator_iteration.py</span></div>
+        <pre class="code-content"><span class="kw">def</span> <span class="fn-name">fibonacci_gen</span>():
+    a, b = <span class="num">0</span>, <span class="num">1</span>
+    <span class="kw">while</span> <span class="kw">True</span>:
+        <span class="kw">yield</span> a
+        a, b = b, a + b
+
+<span class="comment"># Use in a for loop</span>
+<span class="kw">for</span> fib <span class="kw">in</span> <span class="fn-name">fibonacci_gen</span>():
+    <span class="kw">if</span> fib > <span class="num">100</span>:
+        <span class="kw">break</span>
+    <span class="fn-name">print</span>(fib)
+
+<span class="comment"># Or manually with next()</span>
+gen = <span class="fn-name">fibonacci_gen</span>()
+<span class="fn-name">next</span>(gen)  <span class="comment"># = 0</span>
+<span class="fn-name">next</span>(gen)  <span class="comment"># = 1</span>
+<span class="fn-name">next</span>(gen)  <span class="comment"># = 1</span>
+<span class="fn-name">next</span>(gen)  <span class="comment"># = 2</span></pre>
+      </div>
+
+      <h3>Generator Expressions</h3>
+      <p>Similar to list comprehensions, but with parentheses instead of brackets. Generate values lazily.</p>
+
+      <div class="code-block">
+        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>generator_expressions.py</span></div>
+        <pre class="code-content"><span class="comment"># List comprehension (eager; all values at once)</span>
+squares_list = [x ** <span class="num">2</span> <span class="kw">for</span> x <span class="kw">in</span> <span class="fn-name">range</span>(<span class="num">5</span>)]
+
+<span class="comment"># Generator expression (lazy; values on demand)</span>
+squares_gen = (x ** <span class="num">2</span> <span class="kw">for</span> x <span class="kw">in</span> <span class="fn-name">range</span>(<span class="num">5</span>))
+
+<span class="fn-name">sum</span>(squares_list)  <span class="comment"># Works fine</span>
+<span class="fn-name">sum</span>(squares_gen)   <span class="comment"># Also works, more memory efficient</span></pre>
+      </div>
+
+      <div class="callout tip">
+        <div class="callout-title">When to Use Generators</div>
+        <p>Use generators for: large datasets, streaming data, infinite sequences, and when you only need values one at a time. They're memory-efficient and can improve performance significantly.</p>
+      </div>
+    </section>
+
+    <!-- 12. Functional Composition -->
+    <section id="composition">
+      <h2>12. Functional Composition</h2>
+      <p>Composition combines simple functions into more complex ones. It's about building complex operations from smaller, reusable pieces.</p>
+
+      <h3>Simple Function Composition</h3>
+      <div class="code-block">
+        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>composition.py</span></div>
+        <pre class="code-content"><span class="comment"># Small, single-purpose functions</span>
+<span class="kw">def</span> <span class="fn-name">add_one</span>(x):
+    <span class="kw">return</span> x + <span class="num">1</span>
+
+<span class="kw">def</span> <span class="fn-name">double</span>(x):
+    <span class="kw">return</span> x * <span class="num">2</span>
+
+<span class="kw">def</span> <span class="fn-name">square</span>(x):
+    <span class="kw">return</span> x ** <span class="num">2</span>
+
+<span class="comment"># Compose manually</span>
+x = <span class="num">3</span>
+result = <span class="fn-name">square</span>(<span class="fn-name">double</span>(<span class="fn-name">add_one</span>(x)))
+<span class="comment"># (3+1)*2 squared = 4*2 = 8, 8^2 = 64</span></pre>
+      </div>
+
+      <h3>Compose Function</h3>
+      <p>Create a higher-order function that composes functions together.</p>
+
+      <div class="code-block">
+        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>compose_function.py</span></div>
+        <pre class="code-content"><span class="kw">from</span> functools <span class="kw">import</span> reduce
+
+<span class="kw">def</span> <span class="fn-name">compose</span>(*funcs):
+    <span class="str">"""Compose functions right-to-left: compose(f,g,h)(x) = f(g(h(x)))</span>
+<span class="str">    """</span>
+    <span class="kw">def</span> <span class="fn-name">composed</span>(x):
+        <span class="kw">return</span> <span class="fn-name">reduce</span>(<span class="kw">lambda</span> val, func: <span class="fn-name">func</span>(val),
+                         <span class="fn-name">reversed</span>(funcs), x)
+    <span class="kw">return</span> composed
+
+<span class="comment"># Now we can compose cleanly</span>
+pipeline = <span class="fn-name">compose</span>(square, double, add_one)
+<span class="fn-name">pipeline</span>(<span class="num">3</span>)  <span class="comment"># = 64</span></pre>
+      </div>
+
+      <h3>Pipe: Left-to-Right Composition</h3>
+      <p>Sometimes it's more readable to apply functions left-to-right, like a pipeline.</p>
+
+      <div class="code-block">
+        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>pipe.py</span></div>
+        <pre class="code-content"><span class="kw">from</span> functools <span class="kw">import</span> reduce
+
+<span class="kw">def</span> <span class="fn-name">pipe</span>(*funcs):
+    <span class="str">"""Pipe functions left-to-right: pipe(f,g,h)(x) = h(g(f(x)))</span>
+<span class="str">    """</span>
+    <span class="kw">def</span> <span class="fn-name">piped</span>(x):
+        <span class="kw">return</span> <span class="fn-name">reduce</span>(<span class="kw">lambda</span> val, func: <span class="fn-name">func</span>(val), funcs, x)
+    <span class="kw">return</span> piped
+
+<span class="comment"># Read top-to-bottom, like a pipeline</span>
+pipeline = <span class="fn-name">pipe</span>(add_one, double, square)
+<span class="fn-name">pipeline</span>(<span class="num">3</span>)  <span class="comment"># = 64</span></pre>
+      </div>
+
+      <h3>Partial Application</h3>
+      <p>Fix some arguments of a function to create a new, specialized function.</p>
+
+      <div class="code-block">
+        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>partial.py</span></div>
+        <pre class="code-content"><span class="kw">from</span> functools <span class="kw">import</span> partial
+
+<span class="kw">def</span> <span class="fn-name">multiply</span>(a, b):
+    <span class="kw">return</span> a * b
+
+<span class="comment"># Create specialized functions</span>
+double = partial(<span class="fn-name">multiply</span>, <span class="num">2</span>)  <span class="comment"># fix a=2</span>
+triple = partial(<span class="fn-name">multiply</span>, <span class="num">3</span>)  <span class="comment"># fix a=3</span>
+
+<span class="fn-name">double</span>(<span class="num">5</span>)  <span class="comment"># = 10</span>
+<span class="fn-name">triple</span>(<span class="num">5</span>)  <span class="comment"># = 15</span></pre>
+      </div>
+
+      <div class="callout info">
+        <div class="callout-title">Benefits of Composition</div>
+        <p>Composition promotes code reusability, testability, and clarity. Small, pure functions are easier to reason about and combine in different ways.</p>
+      </div>
+    </section>
+
+    <!-- Practice CTA -->
+    <div class="practice-cta">
+      <div class="cta-text">
+        <div class="cta-title">Ready to Practice?</div>
+        <div class="cta-sub">50 function challenges from easy to hard await.</div>
+      </div>
+      <a href="challenges_functions.html" class="cta-btn" style="text-decoration:none;color:#fff">Start Challenges →</a>
+    </div>
+
+  </main>
+
+</div>
+
+<footer>
+  <p>Bhujanga Abhyāsa: Python Mastery Through Practice</p>
+  <p style="font-size: 0.9rem; margin-top: 0.5rem;">⚡ Master functions, one challenge at a time.</p>
+</footer>
+
+<script>
+  // Sidebar active link tracking
+  const sidebarLinks = document.querySelectorAll('.sidebar-nav a');
+  const sections = document.querySelectorAll('section[id]');
+
+  function updateActiveLink() {
+    let current = '';
+    for (let section of sections) {
+      const sectionTop = section.offsetTop;
+      const sectionHeight = section.clientHeight;
+      if (window.scrollY >= sectionTop - 150) {
+        current = section.getAttribute('id');
+      }
+    }
+
+    sidebarLinks.forEach(link => {
+      link.classList.remove('active');
+      if (link.getAttribute('href') === `#${current}`) {
+        link.classList.add('active');
+      }
+    });
+  }
+
+  window.addEventListener('scroll', updateActiveLink);
+
+  // Smooth scroll for sidebar links
+  sidebarLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const targetId = link.getAttribute('href').substring(1);
+      const target = document.getElementById(targetId);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  // Initial active link
+  updateActiveLink();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Strings - Bhujanga Abhyāsa</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Sora:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f5f4f0;
+            --bg2: #eeecea;
+            --surface: #ffffff;
+            --surface2: #fafaf8;
+            --border: #e2dfd9;
+            --border2: #cdc9c2;
+            --text: #1e1c18;
+            --text2: #6b6760;
+            --text3: #9e9b96;
+            --blue: #3b6fd4;
+            --blue-bg: #eef2fb;
+            --green: #2e7d52;
+            --green-bg: #edf5f0;
+            --amber: #b45309;
+            --amber-bg: #fef6ec;
+            --red: #c0392b;
+            --red-bg: #fdf0ee;
+            --purple: #6d4fc2;
+            --purple-bg: #f2eefb;
+            --teal: #1a7a7a;
+            --str-color: #c0392b;
+            --code-bg: #1e1c18;
+            --code-text: #e8e4db;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Sora', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* Top Navigation */
+        .top-nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background-color: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--str-color);
+        }
+
+        .logo-icon {
+            font-size: 1.75rem;
+        }
+
+        .back-link {
+            color: var(--text2);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: var(--str-color);
+        }
+
+        /* Main Container */
+        .container {
+            display: flex;
+            gap: 2rem;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 280px;
+            position: sticky;
+            top: 80px;
+            height: calc(100vh - 100px);
+            overflow-y: auto;
+            background-color: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: var(--border2);
+            border-radius: 3px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb:hover {
+            background: var(--text3);
+        }
+
+        .sidebar-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--str-color);
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--red-bg);
+        }
+
+        .nav-list {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-link {
+            display: block;
+            padding: 0.6rem 0.8rem;
+            color: var(--text2);
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.2s;
+            font-size: 0.95rem;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background-color: var(--red-bg);
+            color: var(--str-color);
+            font-weight: 500;
+        }
+
+        /* Main Content */
+        .main {
+            flex: 1;
+            background-color: var(--surface);
+            border-radius: 8px;
+            padding: 2.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .hero {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--str-color);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            color: var(--text2);
+            font-weight: 300;
+        }
+
+        .section {
+            margin-bottom: 3.5rem;
+            scroll-margin-top: 100px;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--str-color);
+            margin-bottom: 1rem;
+            margin-top: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            background-color: var(--red-bg);
+            color: var(--str-color);
+            border-radius: 50%;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .subsection {
+            margin: 1.5rem 0;
+        }
+
+        .subsection-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 0.75rem;
+            margin-top: 1.5rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        /* Code Blocks */
+        .code-block {
+            background-color: var(--code-bg);
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            overflow: hidden;
+            border: 1px solid var(--border2);
+        }
+
+        .code-block-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 1rem;
+            background-color: rgba(0, 0, 0, 0.2);
+            border-bottom: 1px solid var(--border2);
+        }
+
+        .code-dot {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 0.4rem;
+        }
+
+        .d1 {
+            background-color: #ff5f56;
+        }
+
+        .d2 {
+            background-color: #ffbd2e;
+        }
+
+        .d3 {
+            background-color: #27c93f;
+        }
+
+        .code-block-header span:last-child {
+            color: var(--text3);
+            font-size: 0.85rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .code-content {
+            padding: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.95rem;
+            color: var(--code-text);
+            overflow-x: auto;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .kw {
+            color: #ff79c6;
+        }
+
+        .fn-name {
+            color: #50fa7b;
+        }
+
+        .str {
+            color: #f1fa8c;
+        }
+
+        .num {
+            color: #bd93f9;
+        }
+
+        .comment {
+            color: #6272a4;
+            font-style: italic;
+        }
+
+        .var {
+            color: #8be9fd;
+        }
+
+        .op {
+            color: #50fa7b;
+        }
+
+        /* Diagrams */
+        .diagram-box {
+            background-color: var(--surface2);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .diagram-title {
+            font-weight: 600;
+            color: var(--str-color);
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        svg {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* String Visualization */
+        .str-vis {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .str-cells {
+            display: flex;
+            gap: 0.3rem;
+            justify-content: flex-start;
+            flex-wrap: wrap;
+        }
+
+        .str-cell {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: var(--blue-bg);
+            border: 2px solid var(--blue);
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 500;
+            color: var(--blue);
+            font-size: 0.9rem;
+        }
+
+        .str-indices {
+            display: flex;
+            gap: 0.3rem;
+            justify-content: flex-start;
+            flex-wrap: wrap;
+        }
+
+        .str-idx {
+            width: 40px;
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--blue);
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 500;
+        }
+
+        .str-neg {
+            color: var(--purple);
+        }
+
+        /* Callouts */
+        .callout {
+            border-left: 4px solid var(--border);
+            background-color: var(--surface2);
+            padding: 1rem 1.25rem;
+            border-radius: 6px;
+            margin: 1.5rem 0;
+        }
+
+        .callout.info {
+            border-color: var(--blue);
+            background-color: var(--blue-bg);
+        }
+
+        .callout.warning {
+            border-color: var(--amber);
+            background-color: var(--amber-bg);
+        }
+
+        .callout.tip {
+            border-color: var(--green);
+            background-color: var(--green-bg);
+        }
+
+        .callout strong {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .callout.info strong {
+            color: var(--blue);
+        }
+
+        .callout.warning strong {
+            color: var(--amber);
+        }
+
+        .callout.tip strong {
+            color: var(--green);
+        }
+
+        /* Compare Table */
+        .compare-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            background-color: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .compare-table th {
+            background-color: var(--red-bg);
+            color: var(--str-color);
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .compare-table td {
+            padding: 0.9rem 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .compare-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .compare-table code {
+            background-color: var(--code-bg);
+            color: var(--str);
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+        }
+
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+            background-color: var(--code-bg);
+            color: var(--str);
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-size: 0.9rem;
+        }
+
+        /* Practice CTA */
+        .practice-cta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(135deg, var(--red-bg) 0%, var(--purple-bg) 100%);
+            border: 2px solid var(--str-color);
+            border-radius: 12px;
+            padding: 2rem 2.5rem;
+            margin-top: 3rem;
+            gap: 2rem;
+        }
+
+        .cta-text {
+            flex: 1;
+        }
+
+        .cta-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--str-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .cta-sub {
+            color: var(--text2);
+            font-size: 1rem;
+        }
+
+        .cta-btn {
+            background-color: var(--str-color);
+            color: white;
+            padding: 0.9rem 1.75rem;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: all 0.3s;
+            white-space: nowrap;
+            display: inline-block;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .cta-btn:hover {
+            background-color: #a02d1f;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(192, 57, 43, 0.3);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                position: relative;
+                top: 0;
+                height: auto;
+                max-height: 400px;
+                margin-bottom: 2rem;
+            }
+
+            .main {
+                padding: 1.5rem;
+            }
+
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .practice-cta {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation -->
+    <div class="top-nav">
+        <div class="logo">
+            <span class="logo-icon">🔤</span>
+            <span>Strings</span>
+        </div>
+        <a href="abhyasa_prathama.html" class="back-link">← Back to Prathama</a>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-title">Topics</div>
+            <ul class="nav-list">
+                <li class="nav-item"><a href="#string-basics" class="nav-link active">String Basics</a></li>
+                <li class="nav-item"><a href="#indexing-negatives" class="nav-link">Indexing & Negatives</a></li>
+                <li class="nav-item"><a href="#slicing" class="nav-link">Slicing</a></li>
+                <li class="nav-item"><a href="#methods" class="nav-link">String Methods</a></li>
+                <li class="nav-item"><a href="#formatting" class="nav-link">Formatting</a></li>
+                <li class="nav-item"><a href="#testing-methods" class="nav-link">Testing Methods</a></li>
+                <li class="nav-item"><a href="#iteration" class="nav-link">Iteration</a></li>
+                <li class="nav-item"><a href="#comparison" class="nav-link">Comparison & Sorting</a></li>
+                <li class="nav-item"><a href="#regex" class="nav-link">Regular Expressions</a></li>
+                <li class="nav-item"><a href="#encoding" class="nav-link">Encoding Patterns</a></li>
+                <li class="nav-item"><a href="#algorithms" class="nav-link">String Algorithms</a></li>
+                <li class="nav-item"><a href="#advanced" class="nav-link">Advanced Operations</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main">
+            <!-- Hero Section -->
+            <div class="hero">
+                <div class="hero-title">
+                    <span>🔤</span>
+                    <span>Python Strings</span>
+                </div>
+                <p class="hero-subtitle">Master the art of text manipulation, from creation to advanced algorithms. Strings are immutable sequences of characters that power everything from simple messages to complex natural language processing.</p>
+            </div>
+
+            <!-- 1. String Basics -->
+            <section id="string-basics" class="section">
+                <div class="section-title">
+                    <span class="section-number">1</span>
+                    String Basics
+                </div>
+
+                <p>Strings are one of Python's fundamental data types. A string is an immutable sequence of Unicode characters. Whether you're building a web application, processing logs, or analyzing text, understanding string fundamentals is essential.</p>
+
+                <div class="subsection">
+                    <div class="subsection-title">Creating Strings</div>
+                    <p>Python allows you to create strings using single quotes, double quotes, or triple quotes. All three are equivalent—the choice is yours, though consistency matters for readability.</p>
+
+                    <div class="code-block">
+                        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>string_creation.py</span></div>
+                        <pre class="code-content"><span class="comment"># Single quotes</span>
+<span class="var">greeting</span> = <span class="str">'Hello, World!'</span>
+
+<span class="comment"># Double quotes</span>
+<span class="var">message</span> = <span class="str">"Python is awesome"</span>
+
+<span class="comment"># Triple quotes (allow newlines)</span>
+<span class="var">poem</span> = <span class="str">"""Roses are red,
+Violets are blue,
+Python's elegant,
+And Strings are too"""</span>
+
+<span class="comment"># Empty string</span>
+<span class="var">empty</span> = <span class="str">""</span>
+
+<span class="comment"># String with special characters</span>
+<span class="var">special</span> = <span class="str">"Line 1\nLine 2\tTabbed"</span></pre>
+                    </div>
+
+                    <div class="diagram-box">
+                        <div class="diagram-title">String Quotes Equivalence</div>
+                        <p>These three declarations are identical:</p>
+                        <div style="font-family: 'JetBrains Mono', monospace; margin-top: 1rem;">
+                            <div style="margin-bottom: 0.5rem;"><span class="str">s1 = 'text'</span></div>
+                            <div style="margin-bottom: 0.5rem;"><span class="str">s2 = "text"</span></div>
+                            <div><span class="str">s3 = """text"""</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <div class="subsection-title">String Immutability</div>
+                    <p>Strings in Python are immutable. Once created, you cannot change individual characters. Operations that appear to modify a string actually create a new string.</p>
+
+                    <div class="code-block">
+                        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>immutability.py</span></div>
+                        <pre class="code-content"><span class="var">text</span> = <span class="str">"Python"</span>
+
+<span class="comment"># This will raise a TypeError</span>
+<span class="comment"># text[0] = 'J'  # TypeError: 'str' object does not support item assignment</span>
+
+<span class="comment"># Instead, create a new string</span>
+<span class="var">new_text</span> = <span class="str">"J"</span> + <span class="var">text</span>[<span class="num">1</span>:]
+<span class="fn-name">print</span>(<span class="var">new_text</span>)  <span class="comment"># Output: Jython</span>
+
+<span class="comment"># The original remains unchanged</span>
+<span class="fn-name">print</span>(<span class="var">text</span>)  <span class="comment"># Output: Python</span></pre>
+                    </div>
+
+                    <div class="callout tip">
+                        <strong>Why Immutability?</strong> Immutability makes strings safe to use as dictionary keys and in sets. It also enables Python to optimize string storage and sharing behind the scenes.
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. Indexing & Negative Indexing -->
+            <section id="indexing-negatives" class="section">
+                <div class="section-title">
+                    <span class="section-number">2</span>
+                    Indexing & Negative Indexing
+                </div>
+
+                <p>Access individual characters in a string using indices. Python supports both positive indexing (starting from 0) and negative indexing (starting from -1).</p>
+
+                <div class="subsection">
+                    <div class="subsection-title">Positive Indexing</div>
+                    <p>Characters are indexed from left to right, starting at 0. The index increases with each position.</p>
+
+                    <div class="diagram-box">
+                        <div class="diagram-title">String Index Visualization</div>
+                        <div class="str-vis" style="margin: 1.5rem 0;">
+                            <div style="font-family: 'JetBrains Mono', monospace; margin-bottom: 0.5rem; color: var(--text2); font-size: 0.85rem;">string = "Python"</div>
+                            <div style="text-align: center;">
+                                <div class="str-indices" style="justify-content: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                    <div class="str-idx">0</div>
+                                    <div class="str-idx">1</div>
+                                    <div class="str-idx">2</div>
+                                    <div class="str-idx">3</div>
+                                    <div class="str-idx">4</div>
+                                    <div class="str-idx">5</div>
+                                </div>
+                                <div class="str-cells" style="justify-content: center;">
+                                    <div class="str-cell">P</div>
+                                    <div class="str-cell">y</div>
+                                    <div class="str-cell">t</div>
+                                    <div class="str-cell">h</div>
+                                    <div class="str-cell">o</div>
+                                    <div class="str-cell">n</div>
+                                </div>
+                                <div class="str-indices" style="justify-content: center; gap: 0.5rem; margin-top: 0.5rem;">
+                                    <div class="str-idx str-neg">-6</div>
+                                    <div class="str-idx str-neg">-5</div>
+                                    <div class="str-idx str-neg">-4</div>
+                                    <div class="str-idx str-neg">-3</div>
+                                    <div class="str-idx str-neg">-2</div>
+                                    <div class="str-idx str-neg">-1</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>indexing.py</span></div>
+                        <pre class="code-content"><span class="var">text</span> = <span class="str">"Python"</span>
+
+<span class="comment"># Positive indexing</span>
+<span class="fn-name">print</span>(<span class="var">text</span>[<span class="num">0</span>])  <span class="comment"># Output: P (first character)</span>
+<span class="fn-name">print</span>(<span class="var">text</span>[<span class="num">2</span>])  <span class="comment"># Output: t</span>
+<span class="fn-name">print</span>(<span class="var">text</span>[<span class="num">5</span>])  <span class="comment"># Output: n (last character)</span></pre>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <div class="subsection-title">Negative Indexing</div>
+                    <p>Negative indices count backward from the end of the string. -1 refers to the last character, -2 to the second-to-last, and so on.</p>
+
+                    <div class="code-block">
+                        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>negative_indexing.py</span></div>
+                        <pre class="code-content"><span class="var">text</span> = <span class="str">"Python"</span>
+
+<span class="comment"># Negative indexing</span>
+<span class="fn-name">print</span>(<span class="var">text</span>[<span class="op">-</span><span class="num">1</span>])  <span class="comment"># Output: n (last character)</span>
+<span class="fn-name">print</span>(<span class="var">text</span>[<span class="op">-</span><span class="num">2</span>])  <span class="comment"># Output: o</span>
+<span class="fn-name">print</span>(<span class="var">text</span>[<span class="op">-</span><span class="num">6</span>])  <span class="comment"># Output: P (first character)</span>
+
+<span class="comment"># Both approaches are equivalent</span>
+<span class="fn-name">print</span>(<span class="var">text</span>[<span class="num">0</span>] == <span class="var">text</span>[<span class="op">-</span><span class="num">6</span>])  <span class="comment"># Output: True</span></pre>
+                    </div>
+
+                    <div class="callout warning">
+                        <strong>Index Out of Range:</strong> Accessing an index that doesn't exist raises an <span class="mono">IndexError</span>. Always ensure your index is within valid bounds.
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <div class="subsection-title">Getting String Length</div>
+                    <p>Use the <span class="mono">len()</span> function to determine how many characters are in a string. Valid indices range from 0 to <span class="mono">len(string) - 1</span>.</p>
+
+                    <div class="code-block">
+                        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>string_length.py</span></div>
+                        <pre class="code-content"><span class="var">text</span> = <span class="str">"Python"</span>
+<span class="var">length</span> = <span class="fn-name">len</span>(<span class="var">text</span>)
+
+<span class="fn-name">print</span>(<span class="var">length</span>)  <span class="comment"># Output: 6</span>
+
+<span class="comment"># Valid indices: 0 to 5</span>
+<span class="fn-name">print</span>(<span class="var">text</span>[<span class="var">length</span> <span class="op">-</span> <span class="num">1</span>])  <span class="comment"># Output: n (last character)</span></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. Slicing -->
+            <section id="slicing" class="section">
+                <div class="section-title">
+                    <span class="section-number">3</span>
+                    Slicing
+                </div>
+
+                <p>Slicing extracts a substring from a string using the syntax <span class="mono">string[start:stop:step]</span>. This is one of Python's most powerful features for string manipulation.</p>
+
+                <div class="subsection">
+                    <div class="subsection-title">Basic Slicing</div>
+                    <p>Extract a contiguous subsequence using <span class="mono">string[start:stop]</span>. The start index is inclusive; the stop index is exclusive.</p>
+
+                    <div class="code-block">
+                        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>basic_slicing.py</span></div>
+                        <pre class="code-content"><span class="var">text</span> = <span class="str">"Python"</span>
+
+<span class="fn-name">print</span>(<span class="var">text</span>[<span class="num">0</span>:<span class="num">3</span>])  <span class="comment"># Output: Pyt (indices 0, 1, 2)</span>
+<span class="fn-name">print</span>(<span class="var">text</span>[<span class="num">2</span>:<span class="num">5</span>])  <span class="comment"># Output: tho (indices 2, 3, 4)</span>
+<span class="fn-name">print</span>(<span class="var">text</span>[<span class="num">1</span>:])   <span class="comment"># Output: ython (from index 1 to end)</span>
+<span class="fn-name">print</span>(<span class="var">text</span>[:<span class="num">4</span>])   <span class="comment"># Output: Pyth (from start to index 3)</span>
+<span class="fn-name">print</span>(<span class="var">text</span>[:])    <span class="comment"># Output: Python (entire string)</span></pre>
+                    </div>
+
+                    <div class="diagram-box">
+                        <div class="diagram-title">Slicing Visualization: text[1:4]</div>
+                        <div style="text-align: center; margin-top: 1.5rem;">
+                            <div class="str-indices" style="justify-content: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                <div class="str-idx">0</div>
+                                <div class="str-idx" style="color: var(--red);">1</div>
+                                <div class="str-idx" style="color: var(--red);">2</div>
+                                <div class="str-idx" style="color: var(--red);">3</div>
+                                <div class="str-idx">4</div>
+                                <div class="str-idx">5</div>
+                            </div>
+                            <div class="str-cells" style="justify-content: center;">
+                                <div class="str-cell">P</div>
+                                <div class="str-cell" style="background-color: var(--red-bg); border-color: var(--red); color: var(--red);">y</div>
+                                <div class="str-cell" style="background-color: var(--red-bg); border-color: var(--red); color: var(--red);">t</div>
+                                <div class="str-cell" style="background-color: var(--red-bg); border-color: var(--red); color: var(--red);">h</div>
+                                <div class="str-cell">o</div>
+                                <div class="str-cell">n</div>
+                            </div>
+                            <div style="margin-top: 1rem; font-family: 'JetBrains Mono', monospace; color: var(--red);">Result: "yth"</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <div class="subsection-title">Step Parameter</div>
+                    <p>The step parameter determines how many characters to skip. A negative step reverses the string.</p>
+
+                    <div class="code-block">
+                        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>slicing_step.py</span></div>
+                        <pre class="code-content"><span class="var">text</span> = <span class="str">"Python"</span>
+
+<span class="comment"># Every 2nd character</span>
+<span class="fn-name">print</span>(<span class="var">text</span>[<span class="num">0</span>:<span class="num">6</span>:<span class="num">2</span>])  <span class="comment"># Output: Pto</span>
+
+<span class="comment"># Reverse the string</span>
+<span class="fn-name">print</span>(<span class="var">text</span>[::<span class="op">-</span><span class="num">1</span>])     <span class="comment"># Output: nohtyP</span>
+
+<span class="comment"># Every 3rd character, reversed</span>
+<span class="fn-name">print</span>(<span class="var">text</span>[::<span class="op">-</span><span class="num">3</span>])    <span class="comment"># Output: nP</span></pre>
+                    </div>
+
+                    <div class="callout tip">
+                        <strong>Reversing Strings:</strong> To reverse a string, use <span class="mono">string[::-1]</span>. This is a common idiom in Python and very efficient.
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <div class="subsection-title">Negative Indices in Slices</div>
+                    <p>You can use negative indices in slices just as you would with positive ones.</p>
+
+                    <div class="code-block">
+                        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>negative_slicing.py</span></div>
+                        <pre class="code-content"><span class="var">text</span> = <span class="str">"Python"</span>
+
+<span class="comment"># Last 3 characters</span>
+<span class="fn-name">print</span>(<span class="var">text</span>[<span class="op">-</span><span class="num">3</span>:])  <span class="comment"># Output: hon</span>
+
+<span class="comment"># All except first and last</span>
+<span class="fn-name">print</span>(<span class="var">text</span>[<span class="num">1</span>:<span class="op">-</span><span class="num">1</span>])  <span class="comment"># Output: ytho</span>
+
+<span class="comment"># Characters from -4 to -1 (exclusive)</span>
+<span class="fn-name">print</span>(<span class="var">text</span>[<span class="op">-</span><span class="num">4</span>:<span class="op">-</span><span class="num">1</span>])  <span class="comment"># Output: tho</span></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. String Methods -->
+            <section id="methods" class="section">
+                <div class="section-title">
+                    <span class="section-number">4</span>
+                    Common String Methods
+                </div>
+
+                <p>Python strings come with numerous built-in methods that perform common operations. These methods return new strings (since strings are immutable) and never modify the original.</p>
+
+                <div class="subsection">
+                    <div class="subsection-title">Case Conversion</div>
+                    <p>Convert strings to different cases for consistent data processing.</p>
+
+                    <div class="code-block">
+                        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>case_methods.py</span></div>
+                        <pre class="code-content"><span class="var">text</span> = <span class="str">"Hello World"</span>
+
+<span class="fn-name">print</span>(<span class="var">text</span>.<span class="fn-name">upper</span>())     <span class="comment"># Output: HELLO WORLD</span>
+<span class="fn-name">print</span>(<span class="var">text</span>.<span class="fn-name">lower</span>())     <span class="comment"># Output: hello world</span>
+<span class="fn-name">print</span>(<span class="var">text</span>.<span class="fn-name">title</span>())     <span class="comment"># Output: Hello World</span>
+<span class="fn-name">print</span>(<span class="var">text</span>.<span class="fn-name">capitalize</span>()) <span class="comment"># Output: Hello world</span>
+<span class="fn-name">print</span>(<span class="var">text</span>.<span class="fn-name">swapcase</span>())  <span class="comment"># Output: hELLO wORLD</span></pre>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <div class="subsection-title">Searching & Replacing</div>
+                    <p>Find substrings and replace occurrences with ease.</p>
+
+                    <div class="code-block">
+                        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>search_replace.py</span></div>
+                        <pre class="code-content"><span class="var">text</span> = <span class="str">"The quick brown fox jumps"</span>
+
+<span class="comment"># find() - returns index or -1 if not found</span>
+<span class="fn-name">print</span>(<span class="var">text</span>.<span class="fn-name">find</span>(<span class="str">"quick"</span>))  <span class="comment"># Output: 4</span>
+<span class="fn-name">print</span>(<span class="var">text</span>.<span class="fn-name">find</span>(<span class="str">"xyz"</span>))    <span class="comment"># Output: -1</span>
+
+<span class="comment"># index() - like find() but raises ValueError if not found</span>
+<span class="fn-name">print</span>(<span class="var">text</span>.<span class="fn-name">index</span>(<span class="str">"brown"</span>))  <span class="comment"># Output: 10</span>
+
+<span class="comment"># count() - count occurrences</span>
+<span class="fn-name">print</span>(<span class="var">text</span>.<span class="fn-name">count</span>(<span class="str">"o"</span>))  <span class="comment"># Output: 4</span>
+
+<span class="comment"># replace() - replace all occurrences</span>
+<span class="var">new_text</span> = <span class="var">text</span>.<span class="fn-name">replace</span>(<span class="str">"brown"</span>, <span class="str">"lazy"</span>)
+<span class="fn-name">print</span>(<span class="var">new_text</span>)  <span class="comment"># Output: The quick lazy fox jumps</span>
+
+<span class="comment"># replace with count limit</span>
+<span class="var">result</span> = <span class="str">"aaa"</span>.<span class="fn-name">replace</span>(<span class="str">"a"</span>, <span class="str">"b"</span>, <span class="num">2</span>)
+<span class="fn-name">print</span>(<span class="var">result</span>)  <span class="comment"># Output: bba</span></pre>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <div class="subsection-title">Splitting & Joining</div>
+                    <p>Break strings into parts and combine them back together.</p>
+
+                    <div class="code-block">
+                        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>split_join.py</span></div>
+                        <pre class="code-content"><span class="var">text</span> = <span class="str">"apple,banana,cherry"</span>
+
+<span class="comment"># split() - returns a list</span>
+<span class="var">fruits</span> = <span class="var">text</span>.<span class="fn-name">split</span>(<span class="str">","</span>)
+<span class="fn-name">print</span>(<span class="var">fruits</span>)  <span class="comment"># Output: ['apple', 'banana', 'cherry']</span>
+
+<span class="comment"># join() - combines list items into a string</span>
+<span class="var">joined</span> = <span class="str">" | "</span>.<span class="fn-name">join</span>(<span class="var">fruits</span>)
+<span class="fn-name">print</span>(<span class="var">joined</span>)  <span class="comment"># Output: apple | banana | cherry</span>
+
+<span class="comment"># splitlines() - split on line breaks</span>
+<span class="var">lines</span> = <span class="str">"Line 1\nLine 2\nLine 3"</span>.<span class="fn-name">splitlines</span>()
+<span class="fn-name">print</span>(<span class="var">lines</span>)  <span class="comment"># Output: ['Line 1', 'Line 2', 'Line 3']</span></pre>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <div class="subsection-title">Whitespace Handling</div>
+                    <p>Remove or manage whitespace in strings.</p>
+
+                    <div class="code-block">
+                        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>whitespace.py</span></div>
+                        <pre class="code-content"><span class="var">text</span> = <span class="str">"  Hello World  \n"</span>
+
+<span class="comment"># strip() - remove leading and trailing whitespace</span>
+<span class="fn-name">print</span>(<span class="str">"|"</span> + <span class="var">text</span>.<span class="fn-name">strip</span>() + <span class="str">"|"</span>)  <span class="comment"># Output: |Hello World|</span>
+
+<span class="comment"># lstrip() and rstrip() - strip left or right only</span>
+<span class="fn-name">print</span>(<span class="var">text</span>.<span class="fn-name">lstrip</span>())  <span class="comment"># Left whitespace removed</span>
+<span class="fn-name">print</span>(<span class="var">text</span>.<span class="fn-name">rstrip</span>())  <span class="comment"># Right whitespace removed</span>
+
+<span class="comment"># strip with specific characters</span>
+<span class="var">text2</span> = <span class="str">"###Hello###"</span>
+<span class="fn-name">print</span>(<span class="var">text2</span>.<span class="fn-name">strip</span>(<span class="str">"#"</span>))  <span class="comment"># Output: Hello</span></pre>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <div class="subsection-title">Prefix & Suffix Checking</div>
+                    <p>Test whether a string starts or ends with a particular substring.</p>
+
+                    <div class="code-block">
+                        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>prefix_suffix.py</span></div>
+                        <pre class="code-content"><span class="var">filename</span> = <span class="str">"document.pdf"</span>
+
+<span class="comment"># startswith() and endswith()</span>
+<span class="fn-name">print</span>(<span class="var">filename</span>.<span class="fn-name">startswith</span>(<span class="str">"doc"</span>))  <span class="comment"># Output: True</span>
+<span class="fn-name">print</span>(<span class="var">filename</span>.<span class="fn-name">endswith</span>(<span class="str">".pdf"</span>))  <span class="comment"># Output: True</span>
+<span class="fn-name">print</span>(<span class="var">filename</span>.<span class="fn-name">endswith</span>(<span class="str">".txt"</span>))  <span class="comment"># Output: False</span>
+
+<span class="comment"># Check for multiple prefixes</span>
+<span class="fn-name">print</span>(<span class="var">filename</span>.<span class="fn-name">startswith</span>((<span class="str">"test"</span>, <span class="str">"doc"</span>)))  <span class="comment"># Output: True</span></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5. String Formatting -->
+            <section id="formatting" class="section">
+                <div class="section-title">
+                    <span class="section-number">5</span>
+                    String Formatting
+                </div>
+
+                <p>Python offers multiple ways to insert variables into strings. Modern Python (3.6+) favors f-strings, but all methods remain useful.</p>
+
+                <div class="subsection">
+                    <div class="subsection-title">F-Strings (Python 3.6+)</div>
+                    <p>F-strings are the most readable and performant method. Prefix a string with <span class="mono">f</span> and place expressions in curly braces.</p>
+
+                    <div class="code-block">
+                        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>fstring.py</span></div>
+                        <pre class="code-content"><span class="var">name</span> = <span class="str">"Alice"</span>
+<span class="var">age</span> = <span class="num">28</span>
+<span class="var">score</span> = <span class="num">95.678</span>
+
+<span class="comment"># Simple variable insertion</span>
+<span class="fn-name">print</span>(<span class="kw">f</span><span class="str">"Name: {name}, Age: {age}"</span>)
+
+<span class="comment"># Expressions in f-strings</span>
+<span class="fn-name">print</span>(<span class="kw">f</span><span class="str">"Next year I'll be {age + 1}"</span>)
+
+<span class="comment"># Format specifiers</span>
+<span class="fn-name">print</span>(<span class="kw">f</span><span class="str">"Score: {score:.2f}%"</span>)  <span class="comment"># Output: Score: 95.68%</span>
+
+<span class="comment"># Alignment and padding</span>
+<span class="fn-name">print</span>(<span class="kw">f</span><span class="str">"{name:>10}"</span>)  <span class="comment"># Right-aligned, width 10</span>
+<span class="fn-name">print</span>(<span class="kw">f</span><span class="str">"{name:<10}"</span>)  <span class="comment"># Left-aligned, width 10</span>
+<span class="fn-name">print</span>(<span class="kw">f</span><span class="str">"{name:^10}"</span>)  <span class="comment"># Center-aligned, width 10</span></pre>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <div class="subsection-title">.format() Method</div>
+                    <p>The <span class="mono">format()</span> method works with any Python version and offers similar functionality to f-strings.</p>
+
+                    <div class="code-block">
+                        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>format_method.py</span></div>
+                        <pre class="code-content"><span class="var">name</span> = <span class="str">"Bob"</span>
+<span class="var">score</span> = <span class="num">87.456</span>
+
+<span class="comment"># Positional arguments</span>
+<span class="fn-name">print</span>(<span class="str">"Hello, {}!"</span>.<span class="fn-name">format</span>(<span class="var">name</span>))
+
+<span class="comment"># Multiple placeholders</span>
+<span class="fn-name">print</span>(<span class="str">"{} scored {:.1f}"</span>.<span class="fn-name">format</span>(<span class="var">name</span>, <span class="var">score</span>))
+
+<span class="comment"># Named arguments</span>
+<span class="fn-name">print</span>(<span class="str">"{name} has {count} items"</span>.<span class="fn-name">format</span>(<span class="var">name</span>=<span class="str">"Carol"</span>, <span class="var">count</span>=<span class="num">5</span>))</pre>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <div class="subsection-title">Percent Operator (%)</div>
+                    <p>The older % operator is less preferred but still found in legacy code.</p>
+
+                    <div class="code-block">
+                        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>percent_format.py</span></div>
+                        <pre class="code-content"><span class="var">name</span> = <span class="str">"Dave"</span>
+<span class="var">count</span> = <span class="num">42</span>
+
+<span class="comment"># String (%s) and integer (%d)</span>
+<span class="fn-name">print</span>(<span class="str">"Hello, %s!"</span> % <span class="var">name</span>)
+<span class="fn-name">print</span>(<span class="str">"There are %d items"</span> % <span class="var">count</span>)
+
+<span class="comment"># Multiple values (use tuple)</span>
+<span class="fn-name">print</span>(<span class="str">"%s has %d points"</span> % (<span class="var">name</span>, <span class="var">count</span>))</pre>
+                    </div>
+                </div>
+
+                <div class="callout tip">
+                    <strong>Best Practice:</strong> Use f-strings for new code. They're faster, more readable, and support full expressions. Use <span class="mono">.format()</span> for compatibility with older Python versions.
+                </div>
+            </section>
+
+            <!-- 6. String Testing Methods -->
+            <section id="testing-methods" class="section">
+                <div class="section-title">
+                    <span class="section-number">6</span>
+                    String Testing Methods
+                </div>
+
+                <p>Test properties of strings to validate or categorize text data without regex.</p>
+
+                <div class="subsection">
+                    <div class="subsection-title">Character Class Testing</div>
+                    <p>Determine what types of characters a string contains.</p>
+
+                    <div class="code-block">
+                        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>testing_methods.py</span></div>
+                        <pre class="code-content"><span class="comment"># isalpha() - all characters are alphabetic</span>
+<span class="fn-name">print</span>(<span class="str">"hello"</span>.<span class="fn-name">isalpha</span>())      <span class="comment"># Output: True</span>
+<span class="fn-name">print</span>(<span class="str">"hello123"</span>.<span class="fn-name">isalpha</span>())  <span class="comment"># Output: False</span>
+
+<span class="comment"># isdigit() - all characters are digits</span>
+<span class="fn-name">print</span>(<span class="str">"12345"</span>.<span class="fn-name">isdigit</span>())    <span class="comment"># Output: True</span>
+<span class="fn-name">print</span>(<span class="str">"123abc"</span>.<span class="fn-name">isdigit</span>())  <span class="comment"># Output: False</span>
+
+<span class="comment"># isalnum() - all characters are alphanumeric</span>
+<span class="fn-name">print</span>(<span class="str">"hello123"</span>.<span class="fn-name">isalnum</span>())  <span class="comment"># Output: True</span>
+<span class="fn-name">print</span>(<span class="str">"hello!"</span>.<span class="fn-name">isalnum</span>())   <span class="comment"># Output: False</span>
+
+<span class="comment"># isspace() - all characters are whitespace</span>
+<span class="fn-name">print</span>(<span class="str">"   \t\n"</span>.<span class="fn-name">isspace</span>())  <span class="comment"># Output: True</span>
+<span class="fn-name">print</span>(<span class="str">" a "</span>.<span class="fn-name">isspace</span>())   <span class="comment"># Output: False</span></pre>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <div class="subsection-title">Case Testing</div>
+                    <p>Check the case of alphabetic characters in a string.</p>
+
+                    <div class="code-block">
+                        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>case_testing.py</span></div>
+                        <pre class="code-content"><span class="comment"># isupper() and islower()</span>
+<span class="fn-name">print</span>(<span class="str">"HELLO"</span>.<span class="fn-name">isupper</span>())  <span class="comment"># Output: True</span>
+<span class="fn-name">print</span>(<span class="str">"Hello"</span>.<span class="fn-name">isupper</span>())  <span class="comment"># Output: False</span>
+
+<span class="fn-name">print</span>(<span class="str">"hello"</span>.<span class="fn-name">islower</span>())  <span class="comment"># Output: True</span>
+<span class="fn-name">print</span>(<span class="str">"Hello"</span>.<span class="fn-name">islower</span>())  <span class="comment"># Output: False</span>
+
+<span class="comment"># istitle() - first letter of each word is uppercase</span>
+<span class="fn-name">print</span>(<span class="str">"Hello World"</span>.<span class="fn-name">istitle</span>())  <span class="comment"># Output: True</span>
+<span class="fn-name">print</span>(<span class="str">"hello world"</span>.<span class="fn-name">istitle</span>())  <span class="comment"># Output: False</span></pre>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <div class="subsection-title">Special Methods</div>
+                    <p>Additional testing methods for common patterns.</p>
+
+                    <div class="code-block">
+                        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>special_testing.py</span></div>
+                        <pre class="code-content"><span class="comment"># isdecimal() - all digits can be used to form base-10 numbers</span>
+<span class="fn-name">print</span>(<span class="str">"123"</span>.<span class="fn-name">isdecimal</span>())     <span class="comment"># Output: True</span>
+
+<span class="comment"># isnumeric() - includes fractions, superscripts, etc.</span>
+<span class="fn-name">print</span>(<span class="str">"½"</span>.<span class="fn-name">isnumeric</span>())     <span class="comment"># Output: True</span>
+<span class="fn-name">print</span>(<span class="str">"123"</span>.<span class="fn-name">isnumeric</span>())    <span class="comment"># Output: True</span></pre>
+                    </div>
+                </div>
+
+                <div class="callout warning">
+                    <strong>Empty Strings:</strong> Testing methods return <span class="mono">False</span> for empty strings. An empty string returns <span class="mono">True</span> only for <span class="mono">isspace()</span> with certain implementations.
+                </div>
+            </section>
+
+            <!-- 7. String Iteration -->
+            <section id="iteration" class="section">
+                <div class="section-title">
+                    <span class="section-number">7</span>
+                    String Iteration
+                </div>
+
+                <p>Iterate through string characters using loops. Strings are iterable sequences, making them perfect for character-by-character processing.</p>
+
+                <div class="subsection">
+                    <div class="subsection-title">Basic Iteration</div>
+                    <p>Loop through each character in a string.</p>
+
+                    <div class="code-block">
+                        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>string_iteration.py</span></div>
+                        <pre class="code-content"><span class="var">text</span> = <span class="str">"Hello"</span>
+
+<span class="comment"># Simple for loop</span>
+<span class="kw">for</span> <span class="var">char</span> <span class="kw">in</span> <span class="var">text</span>:
+    <span class="fn-name">print</span>(<span class="var">char</span>)
+
+<span class="comment"># Output:</span>
+<span class="comment"># H</span>
+<span class="comment"># e</span>
+<span class="comment"># l</span>
+<span class="comment"># l</span>
+<span class="comment"># o</span></pre>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <div class="subsection-title">Iteration with Index Using enumerate()</div>
+                    <p>When you need both the index and character, use <span class="mono">enumerate()</span>.</p>
+
+                    <div class="code-block">
+                        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>enumerate_iteration.py</span></div>
+                        <pre class="code-content"><span class="var">text</span> = <span class="str">"Python"</span>
+
+<span class="comment"># Iterate with index</span>
+<span class="kw">for</span> <span class="var">i</span>, <span class="var">char</span> <span class="kw">in</span> <span class="fn-name">enumerate</span>(<span class="var">text</span>):
+    <span class="fn-name">print</span>(<span class="kw">f</span><span class="str">"Index {i}: {char}"</span>)
+
+<span class="comment"># Output:</span>
+<span class="comment"># Index 0: P</span>
+<span class="comment"># Index 1: y</span>
+<span class="comment"># ...</span>
+
+<span class="comment"># Start enumeration at 1</span>
+<span class="kw">for</span> <span class="var">i</span>, <span class="var">char</span> <span class="kw">in</span> <span class="fn-name">enumerate</span>(<span class="var">text</span>, <span class="num">1</span>):
+    <span class="fn-name">print</span>(<span class="kw">f</span><span class="str">"Position {i}: {char}"</span>)</pre>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <div class="subsection-title">Common Iteration Patterns</div>
+                    <p>Practical examples of string iteration.</p>
+
+                    <div class="code-block">
+                        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>iteration_patterns.py</span></div>
+                        <pre class="code-content"><span class="var">text</span> = <span class="str">"Programming"</span>
+
+<span class="comment"># Count specific character</span>
+<span class="var">count</span> = <span class="num">0</span>
+<span class="kw">for</span> <span class="var">char</span> <span class="kw">in</span> <span class="var">text</span>:
+    <span class="kw">if</span> <span class="var">char</span>.<span class="fn-name">lower</span>() == <span class="str">'m'</span>:
+        <span class="var">count</span> += <span class="num">1</span>
+<span class="fn-name">print</span>(<span class="var">count</span>)  <span class="comment"># Output: 2</span>
+
+<span class="comment"># Build reverse string</span>
+<span class="var">reversed_text</span> = <span class="str">""</span>
+<span class="kw">for</span> <span class="var">char</span> <span class="kw">in</span> <span class="var">text</span>:
+    <span class="var">reversed_text</span> = <span class="var">char</span> + <span class="var">reversed_text</span>
+<span class="fn-name">print</span>(<span class="var">reversed_text</span>)  <span class="comment"># Output: gnimmargorP</span>
+
+<span class="comment"># Filter characters</span>
+<span class="var">vowels</span> = <span class="str">""</span>
+<span class="kw">for</span> <span class="var">char</span> <span class="kw">in</span> <span class="var">text</span>:
+    <span class="kw">if</span> <span class="var">char</span>.<span class="fn-name">lower</span>() <span class="kw">in</span> <span class="str">"aeiou"</span>:
+        <span class="var">vowels</span> += <span class="var">char</span>
+<span class="fn-name">print</span>(<span class="var">vowels</span>)  <span class="comment"># Output: oai</span></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 8. String Comparison & Sorting -->
+            <section id="comparison" class="section">
+                <div class="section-title">
+                    <span class="section-number">8</span>
+                    String Comparison & Sorting
+                </div>
+
+                <p>Strings are compared lexicographically using their Unicode values. This enables sorting and equality checks.</p>
+
+                <div class="subsection">
+                    <div class="subsection-title">Lexicographic Comparison</div>
+                    <p>Strings are compared character by character based on Unicode values.</p>
+
+                    <div class="code-block">
+                        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>string_comparison.py</span></div>
+                        <pre class="code-content"><span class="comment"># Equality comparison</span>
+<span class="fn-name">print</span>(<span class="str">"apple"</span> == <span class="str">"apple"</span>)  <span class="comment"># Output: True</span>
+<span class="fn-name">print</span>(<span class="str">"apple"</span> == <span class="str">"Apple"</span>)  <span class="comment"># Output: False (case-sensitive)</span>
+
+<span class="comment"># Ordering comparisons</span>
+<span class="fn-name">print</span>(<span class="str">"apple"</span> < <span class="str">"banana"</span>)  <span class="comment"># Output: True (a < b)</span>
+<span class="fn-name">print</span>(<span class="str">"apple"</span> < <span class="str">"apricot"</span>) <span class="comment"># Output: True (appl < apri)</span>
+<span class="fn-name">print</span>(<span class="str">"zebra"</span> > <span class="str">"apple"</span>)   <span class="comment"># Output: True</span>
+
+<span class="comment"># Unicode values matter</span>
+<span class="fn-name">print</span>(<span class="str">"A"</span> < <span class="str">"a"</span>)  <span class="comment"># Output: True (65 < 97 in Unicode)</span></pre>
+                    </div>
+
+                    <div class="diagram-box">
+                        <div class="diagram-title">Lexicographic Ordering Example</div>
+                        <table class="compare-table">
+                            <tr>
+                                <th>Comparison</th>
+                                <th>Result</th>
+                                <th>Reason</th>
+                            </tr>
+                            <tr>
+                                <td>"apple" == "apple"</td>
+                                <td>True</td>
+                                <td>Identical strings</td>
+                            </tr>
+                            <tr>
+                                <td>"apple" < "apricot"</td>
+                                <td>True</td>
+                                <td>'p' (112) < 'r' (114) at position 2</td>
+                            </tr>
+                            <tr>
+                                <td>"apple" < "apple2"</td>
+                                <td>True</td>
+                                <td>Shorter string comes first</td>
+                            </tr>
+                            <tr>
+                                <td>"Apple" < "apple"</td>
+                                <td>True</td>
+                                <td>'A' (65) < 'a' (97)</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <div class="subsection-title">Case-Insensitive Comparison</div>
+                    <p>Convert to the same case before comparison for case-insensitive matching.</p>
+
+                    <div class="code-block">
+                        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>case_insensitive.py</span></div>
+                        <pre class="code-content"><span class="var">user_input</span> = <span class="str">"HELLO"</span>
+<span class="var">expected</span> = <span class="str">"hello"</span>
+
+<span class="comment"># Method 1: Convert both to lowercase</span>
+<span class="kw">if</span> <span class="var">user_input</span>.<span class="fn-name">lower</span>() == <span class="var">expected</span>.<span class="fn-name">lower</span>():
+    <span class="fn-name">print</span>(<span class="str">"Match!"</span>)
+
+<span class="comment"># Method 2: Use casefold() for more aggressive case folding</span>
+<span class="kw">if</span> <span class="var">user_input</span>.<span class="fn-name">casefold</span>() == <span class="var">expected</span>.<span class="fn-name">casefold</span>():
+    <span class="fn-name">print</span>(<span class="str">"Match!"</span>)</pre>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <div class="subsection-title">Sorting Strings</div>
+                    <p>Sort multiple strings using Python's built-in sorting functions.</p>
+
+                    <div class="code-block">
+                        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>string_sorting.py</span></div>
+                        <pre class="code-content"><span class="var">words</span> = [<span class="str">"zebra"</span>, <span class="str">"apple"</span>, <span class="str">"mango"</span>, <span class="str">"banana"</span>]
+
+<span class="comment"># sorted() - returns new sorted list</span>
+<span class="var">sorted_words</span> = <span class="fn-name">sorted</span>(<span class="var">words</span>)
+<span class="fn-name">print</span>(<span class="var">sorted_words</span>)  <span class="comment"># Output: ['apple', 'banana', 'mango', 'zebra']</span>
+
+<span class="comment"># Reverse order</span>
+<span class="var">reverse_sorted</span> = <span class="fn-name">sorted</span>(<span class="var">words</span>, <span class="var">reverse</span>=<span class="kw">True</span>)
+<span class="fn-name">print</span>(<span class="var">reverse_sorted</span>)  <span class="comment"># Output: ['zebra', 'mango', 'banana', 'apple']</span>
+
+<span class="comment"># Case-insensitive sorting</span>
+<span class="var">mixed_case</span> = [<span class="str">"Apple"</span>, <span class="str">"zebra"</span>, <span class="str">"BANANA"</span>]
+<span class="var">sorted_case</span> = <span class="fn-name">sorted</span>(<span class="var">mixed_case</span>, <span class="var">key</span>=<span class="kw">str</span>.<span class="fn-name">lower</span>)
+<span class="fn-name">print</span>(<span class="var">sorted_case</span>)  <span class="comment"># Output: ['Apple', 'BANANA', 'zebra']</span></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 9. Regular Expressions Basics -->
+            <section id="regex" class="section">
+                <div class="section-title">
+                    <span class="section-number">9</span>
+                    Regular Expressions Basics
+                </div>
+
+                <p>Regular expressions (regex) provide a powerful way to search, match, and manipulate strings using patterns. The <span class="mono">re</span> module is Python's gateway to regex functionality.</p>
+
+                <div class="subsection">
+                    <div class="subsection-title">Basic Pattern Matching</div>
+                    <p>Use <span class="mono">re.search()</span> and <span class="mono">re.match()</span> to find patterns in strings.</p>
+
+                    <div class="code-block">
+                        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>regex_basics.py</span></div>
+                        <pre class="code-content"><span class="kw">import</span> <span class="var">re</span>
+
+<span class="var">text</span> = <span class="str">"The phone number is 123-456-7890"</span>
+
+<span class="comment"># re.search() - finds pattern anywhere in string</span>
+<span class="var">match</span> = <span class="var">re</span>.<span class="fn-name">search</span>(<span class="str">r"\d{3}-\d{3}-\d{4}"</span>, <span class="var">text</span>)
+<span class="kw">if</span> <span class="var">match</span>:
+    <span class="fn-name">print</span>(<span class="var">match</span>.<span class="fn-name">group</span>())  <span class="comment"># Output: 123-456-7890</span>
+
+<span class="comment"># re.match() - matches at string beginning</span>
+<span class="var">text2</span> = <span class="str">"123 Main Street"</span>
+<span class="var">match2</span> = <span class="var">re</span>.<span class="fn-name">match</span>(<span class="str">r"\d+"</span>, <span class="var">text2</span>)
+<span class="kw">if</span> <span class="var">match2</span>:
+    <span class="fn-name">print</span>(<span class="var">match2</span>.<span class="fn-name">group</span>())  <span class="comment"># Output: 123</span></pre>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <div class="subsection-title">Finding All Matches</div>
+                    <p>Use <span class="mono">re.findall()</span> to extract all matches.</p>
+
+                    <div class="code-block">
+                        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>regex_findall.py</span></div>
+                        <pre class="code-content"><span class="kw">import</span> <span class="var">re</span>
+
+<span class="var">text</span> = <span class="str">"Emails: john@example.com, jane@test.org, bob@mail.net"</span>
+
+<span class="comment"># Find all email addresses</span>
+<span class="var">emails</span> = <span class="var">re</span>.<span class="fn-name">findall</span>(<span class="str">r"\w+@\w+\.\w+"</span>, <span class="var">text</span>)
+<span class="fn-name">print</span>(<span class="var">emails</span>)
+<span class="comment"># Output: ['john@example.com', 'jane@test.org', 'bob@mail.net']</span></pre>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <div class="subsection-title">Common Regex Patterns</div>
+                    <p>Essential patterns for everyday string processing.</p>
+
+                    <div class="diagram-box">
+                        <div class="diagram-title">Common Regex Metacharacters</div>
+                        <table class="compare-table">
+                            <tr>
+                                <th>Pattern</th>
+                                <th>Meaning</th>
+                                <th>Example</th>
+                            </tr>
+                            <tr>
+                                <td><code>\d</code></td>
+                                <td>Any digit (0-9)</td>
+                                <td><code>\d{3}</code> matches "123"</td>
+                            </tr>
+                            <tr>
+                                <td><code>\w</code></td>
+                                <td>Word character (alphanumeric + _)</td>
+                                <td><code>\w+</code> matches "hello_123"</td>
+                            </tr>
+                            <tr>
+                                <td><code>\s</code></td>
+                                <td>Whitespace character</td>
+                                <td><code>\s+</code> matches spaces/tabs</td>
+                            </tr>
+                            <tr>
+                                <td><code>.</code></td>
+                                <td>Any character (except newline)</td>
+                                <td><code>h.llo</code> matches "hello", "hallo"</td>
+                            </tr>
+                            <tr>
+                                <td><code>+</code></td>
+                                <td>1 or more repetitions</td>
+                                <td><code>a+</code> matches "a", "aa", "aaa"</td>
+                            </tr>
+                            <tr>
+                                <td><code>*</code></td>
+                                <td>0 or more repetitions</td>
+                                <td><code>ab*c</code> matches "ac", "abc", "abbc"</td>
+                            </tr>
+                            <tr>
+                                <td><code>?</code></td>
+                                <td>0 or 1 repetition</td>
+                                <td><code>colou?r</code> matches "color", "colour"</td>
+                            </tr>
+                            <tr>
+                                <td><code>^</code></td>
+                                <td>Start of string</td>
+                                <td><code>^Hello</code> matches "Hello World"</td>
+                            </tr>
+                            <tr>
+                                <td><code>$</code></td>
+                                <td>End of string</td>
+                                <td><code>world$</code> matches "Hello world"</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <div class="subsection-title">Substitution with re.sub()</div>
+                    <p>Replace text matching a pattern.</p>
+
+                    <div class="code-block">
+                        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>regex_sub.py</span></div>
+                        <pre class="code-content"><span class="kw">import</span> <span class="var">re</span>
+
+<span class="var">text</span> = <span class="str">"The year is 2024, 2025, and 2026"</span>
+
+<span class="comment"># Replace all 4-digit numbers with YEAR</span>
+<span class="var">result</span> = <span class="var">re</span>.<span class="fn-name">sub</span>(<span class="str">r"\d{4}"</span>, <span class="str">"YEAR"</span>, <span class="var">text</span>)
+<span class="fn-name">print</span>(<span class="var">result</span>)  <span class="comment"># Output: The year is YEAR, YEAR, and YEAR</span>
+
+<span class="comment"># Replace only first occurrence</span>
+<span class="var">result2</span> = <span class="var">re</span>.<span class="fn-name">sub</span>(<span class="str">r"\d{4}"</span>, <span class="str">"YEAR"</span>, <span class="var">text</span>, <span class="var">count</span>=<span class="num">1</span>)
+<span class="fn-name">print</span>(<span class="var">result2</span>)  <span class="comment"># Output: The year is YEAR, 2025, and 2026</span></pre>
+                    </div>
+                </div>
+
+                <div class="callout tip">
+                    <strong>Raw Strings:</strong> Use raw strings (prefix with <span class="mono">r</span>) for regex patterns to avoid escaping backslashes: <span class="mono">r"\d+"</span> instead of <span class="mono">"\\d+"</span>.
+                </div>
+            </section>
+
+            <!-- 10. Encoding Patterns -->
+            <section id="encoding" class="section">
+                <div class="section-title">
+                    <span class="section-number">10</span>
+                    Encoding Patterns
+                </div>
+
+                <p>Transform strings using encoding techniques like Caesar cipher, ROT13, run-length encoding, and simple compression methods.</p>
+
+                <div class="subsection">
+                    <div class="subsection-title">Caesar Cipher</div>
+                    <p>Shift each character by a fixed number of positions in the alphabet.</p>
+
+                    <div class="code-block">
+                        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>caesar_cipher.py</span></div>
+                        <pre class="code-content"><span class="kw">def</span> <span class="fn-name">caesar_cipher</span>(<span class="var">text</span>, <span class="var">shift</span>=<span class="num">3</span>):
+    <span class="var">result</span> = <span class="str">""</span>
+    <span class="kw">for</span> <span class="var">char</span> <span class="kw">in</span> <span class="var">text</span>:
+        <span class="kw">if</span> <span class="var">char</span>.<span class="fn-name">isalpha</span>():
+            <span class="var">base</span> = <span class="fn-name">ord</span>(<span class="str">'A'</span>) <span class="kw">if</span> <span class="var">char</span>.<span class="fn-name">isupper</span>() <span class="kw">else</span> <span class="fn-name">ord</span>(<span class="str">'a'</span>)
+            <span class="var">shifted</span> = <span class="fn-name">chr</span>(<span class="var">base</span> + (<span class="fn-name">ord</span>(<span class="var">char</span>) - <span class="var">base</span> + <span class="var">shift</span>) % <span class="num">26</span>)
+            <span class="var">result</span> += <span class="var">shifted</span>
+        <span class="kw">else</span>:
+            <span class="var">result</span> += <span class="var">char</span>
+    <span class="kw">return</span> <span class="var">result</span>
+
+<span class="fn-name">print</span>(<span class="fn-name">caesar_cipher</span>(<span class="str">"Hello"</span>, <span class="num">3</span>))  <span class="comment"># Output: Khoor</span></pre>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <div class="subsection-title">ROT13</div>
+                    <p>A simple substitution cipher that rotates characters by 13 positions.</p>
+
+                    <div class="code-block">
+                        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>rot13.py</span></div>
+                        <pre class="code-content"><span class="kw">import</span> <span class="var">codecs</span>
+
+<span class="var">text</span> = <span class="str">"Hello World"</span>
+
+<span class="comment"># Using codecs module</span>
+<span class="var">encoded</span> = <span class="var">codecs</span>.<span class="fn-name">encode</span>(<span class="var">text</span>, <span class="str">'rot_13'</span>)
+<span class="fn-name">print</span>(<span class="var">encoded</span>)  <span class="comment"># Output: Uryyb Jbeyq</span>
+
+<span class="comment"># Decode (ROT13 applied twice returns original)</span>
+<span class="var">decoded</span> = <span class="var">codecs</span>.<span class="fn-name">encode</span>(<span class="var">encoded</span>, <span class="str">'rot_13'</span>)
+<span class="fn-name">print</span>(<span class="var">decoded</span>)  <span class="comment"># Output: Hello World</span></pre>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <div class="subsection-title">Run-Length Encoding</div>
+                    <p>Compress strings by encoding runs of identical characters.</p>
+
+                    <div class="code-block">
+                        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>run_length_encoding.py</span></div>
+                        <pre class="code-content"><span class="kw">def</span> <span class="fn-name">rle_encode</span>(<span class="var">text</span>):
+    <span class="kw">if</span> <span class="kw">not</span> <span class="var">text</span>:
+        <span class="kw">return</span> <span class="str">""</span>
+    <span class="var">result</span> = <span class="str">""</span>
+    <span class="var">count</span> = <span class="num">1</span>
+    <span class="kw">for</span> <span class="var">i</span> <span class="kw">in</span> <span class="fn-name">range</span>(<span class="fn-name">len</span>(<span class="var">text</span>) - <span class="num">1</span>):
+        <span class="kw">if</span> <span class="var">text</span>[<span class="var">i</span>] == <span class="var">text</span>[<span class="var">i</span> + <span class="num">1</span>]:
+            <span class="var">count</span> += <span class="num">1</span>
+        <span class="kw">else</span>:
+            <span class="var">result</span> += <span class="fn-name">str</span>(<span class="var">count</span>) + <span class="var">text</span>[<span class="var">i</span>]
+            <span class="var">count</span> = <span class="num">1</span>
+    <span class="var">result</span> += <span class="fn-name">str</span>(<span class="var">count</span>) + <span class="var">text</span>[<span class="op">-</span><span class="num">1</span>]
+    <span class="kw">return</span> <span class="var">result</span>
+
+<span class="fn-name">print</span>(<span class="fn-name">rle_encode</span>(<span class="str">"aabbcc"</span>))  <span class="comment"># Output: 2a2b2c</span></pre>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <div class="subsection-title">Base64 Encoding</div>
+                    <p>Encode strings in Base64 format for safe transmission.</p>
+
+                    <div class="code-block">
+                        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>base64_encoding.py</span></div>
+                        <pre class="code-content"><span class="kw">import</span> <span class="var">base64</span>
+
+<span class="var">text</span> = <span class="str">"Hello, World!"</span>
+
+<span class="comment"># Encode to Base64</span>
+<span class="var">encoded</span> = <span class="var">base64</span>.<span class="fn-name">b64encode</span>(<span class="var">text</span>.<span class="fn-name">encode</span>()).<span class="fn-name">decode</span>()
+<span class="fn-name">print</span>(<span class="var">encoded</span>)  <span class="comment"># Output: SGVsbG8sIFdvcmxkIQ==</span>
+
+<span class="comment"># Decode from Base64</span>
+<span class="var">decoded</span> = <span class="var">base64</span>.<span class="fn-name">b64decode</span>(<span class="var">encoded</span>).<span class="fn-name">decode</span>()
+<span class="fn-name">print</span>(<span class="var">decoded</span>)  <span class="comment"># Output: Hello, World!</span></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 11. String Algorithms -->
+            <section id="algorithms" class="section">
+                <div class="section-title">
+                    <span class="section-number">11</span>
+                    String Algorithms
+                </div>
+
+                <p>Classic algorithms that operate on strings: palindrome detection, anagram checking, bracket matching, and tokenization.</p>
+
+                <div class="subsection">
+                    <div class="subsection-title">Palindrome Check</div>
+                    <p>Determine if a string reads the same forward and backward.</p>
+
+                    <div class="code-block">
+                        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>palindrome.py</span></div>
+                        <pre class="code-content"><span class="kw">def</span> <span class="fn-name">is_palindrome</span>(<span class="var">text</span>):
+    <span class="comment"># Remove non-alphanumeric and convert to lowercase</span>
+    <span class="var">cleaned</span> = <span class="str">""</span>.<span class="fn-name">join</span>(<span class="var">char</span>.<span class="fn-name">lower</span>() <span class="kw">for</span> <span class="var">char</span> <span class="kw">in</span> <span class="var">text</span> <span class="kw">if</span> <span class="var">char</span>.<span class="fn-name">isalnum</span>())
+    <span class="kw">return</span> <span class="var">cleaned</span> == <span class="var">cleaned</span>[::<span class="op">-</span><span class="num">1</span>]
+
+<span class="fn-name">print</span>(<span class="fn-name">is_palindrome</span>(<span class="str">"A man, a plan, a canal: Panama"</span>))  <span class="comment"># Output: True</span>
+<span class="fn-name">print</span>(<span class="fn-name">is_palindrome</span>(<span class="str">"Hello"</span>))  <span class="comment"># Output: False</span></pre>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <div class="subsection-title">Anagram Detection</div>
+                    <p>Check if two strings are anagrams (contain the same characters in different order).</p>
+
+                    <div class="code-block">
+                        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>anagram.py</span></div>
+                        <pre class="code-content"><span class="kw">def</span> <span class="fn-name">is_anagram</span>(<span class="var">text1</span>, <span class="var">text2</span>):
+    <span class="comment"># Remove spaces and convert to lowercase</span>
+    <span class="var">clean1</span> = <span class="var">text1</span>.<span class="fn-name">replace</span>(<span class="str">" "</span>, <span class="str">""</span>).<span class="fn-name">lower</span>()
+    <span class="var">clean2</span> = <span class="var">text2</span>.<span class="fn-name">replace</span>(<span class="str">" "</span>, <span class="str">""</span>).<span class="fn-name">lower</span>()
+    <span class="kw">return</span> <span class="fn-name">sorted</span>(<span class="var">clean1</span>) == <span class="fn-name">sorted</span>(<span class="var">clean2</span>)
+
+<span class="fn-name">print</span>(<span class="fn-name">is_anagram</span>(<span class="str">"listen"</span>, <span class="str">"silent"</span>))  <span class="comment"># Output: True</span>
+<span class="fn-name">print</span>(<span class="fn-name">is_anagram</span>(<span class="str">"hello"</span>, <span class="str">"world"</span>))  <span class="comment"># Output: False</span></pre>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <div class="subsection-title">Bracket Matching</div>
+                    <p>Verify that brackets are properly balanced using a stack approach.</p>
+
+                    <div class="code-block">
+                        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>bracket_matching.py</span></div>
+                        <pre class="code-content"><span class="kw">def</span> <span class="fn-name">is_balanced</span>(<span class="var">text</span>):
+    <span class="var">stack</span> = []
+    <span class="var">pairs</span> = {<span class="str">')'</span>: <span class="str">'('</span>, <span class="str">']'</span>: <span class="str">'['</span>, <span class="str">'}'</span>: <span class="str">'{'</span>}
+    <span class="kw">for</span> <span class="var">char</span> <span class="kw">in</span> <span class="var">text</span>:
+        <span class="kw">if</span> <span class="var">char</span> <span class="kw">in</span> <span class="str">'([{'</span>:
+            <span class="var">stack</span>.<span class="fn-name">append</span>(<span class="var">char</span>)
+        <span class="kw">elif</span> <span class="var">char</span> <span class="kw">in</span> <span class="str">')]}'</span>:
+            <span class="kw">if</span> <span class="kw">not</span> <span class="var">stack</span> <span class="kw">or</span> <span class="var">stack</span>[<span class="op">-</span><span class="num">1</span>] != <span class="var">pairs</span>[<span class="var">char</span>]:
+                <span class="kw">return</span> <span class="kw">False</span>
+            <span class="var">stack</span>.<span class="fn-name">pop</span>()
+    <span class="kw">return</span> <span class="fn-name">len</span>(<span class="var">stack</span>) == <span class="num">0</span>
+
+<span class="fn-name">print</span>(<span class="fn-name">is_balanced</span>(<span class="str">"({[]})"</span>))  <span class="comment"># Output: True</span>
+<span class="fn-name">print</span>(<span class="fn-name">is_balanced</span>(<span class="str">"({[}])"</span>))  <span class="comment"># Output: False</span></pre>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <div class="subsection-title">Word Tokenization</div>
+                    <p>Split text into meaningful tokens.</p>
+
+                    <div class="code-block">
+                        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>tokenization.py</span></div>
+                        <pre class="code-content"><span class="kw">import</span> <span class="var">re</span>
+
+<span class="kw">def</span> <span class="fn-name">tokenize</span>(<span class="var">text</span>):
+    <span class="comment"># Split on non-word characters</span>
+    <span class="kw">return</span> <span class="var">re</span>.<span class="fn-name">findall</span>(<span class="str">r"\w+"</span>, <span class="var">text</span>.<span class="fn-name">lower</span>())
+
+<span class="var">text</span> = <span class="str">"Hello, World! How are you?"</span>
+<span class="var">tokens</span> = <span class="fn-name">tokenize</span>(<span class="var">text</span>)
+<span class="fn-name">print</span>(<span class="var">tokens</span>)  <span class="comment"># Output: ['hello', 'world', 'how', 'are', 'you']</span></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 12. Advanced String Operations -->
+            <section id="advanced" class="section">
+                <div class="section-title">
+                    <span class="section-number">12</span>
+                    Advanced String Operations
+                </div>
+
+                <p>Master sophisticated string manipulation: longest common substring, word frequency analysis, text wrapping, and slug generation.</p>
+
+                <div class="subsection">
+                    <div class="subsection-title">Longest Common Substring</div>
+                    <p>Find the longest substring present in multiple strings.</p>
+
+                    <div class="code-block">
+                        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>lcs.py</span></div>
+                        <pre class="code-content"><span class="kw">def</span> <span class="fn-name">longest_common_substring</span>(<span class="var">text1</span>, <span class="var">text2</span>):
+    <span class="var">longest</span> = <span class="str">""</span>
+    <span class="kw">for</span> <span class="var">i</span> <span class="kw">in</span> <span class="fn-name">range</span>(<span class="fn-name">len</span>(<span class="var">text1</span>)):
+        <span class="kw">for</span> <span class="var">j</span> <span class="kw">in</span> <span class="fn-name">range</span>(<span class="var">i</span> + <span class="num">1</span>, <span class="fn-name">len</span>(<span class="var">text1</span>) + <span class="num">1</span>):
+            <span class="var">substr</span> = <span class="var">text1</span>[<span class="var">i</span>:<span class="var">j</span>]
+            <span class="kw">if</span> <span class="var">substr</span> <span class="kw">in</span> <span class="var">text2</span> <span class="kw">and</span> <span class="fn-name">len</span>(<span class="var">substr</span>) > <span class="fn-name">len</span>(<span class="var">longest</span>):
+                <span class="var">longest</span> = <span class="var">substr</span>
+    <span class="kw">return</span> <span class="var">longest</span>
+
+<span class="var">result</span> = <span class="fn-name">longest_common_substring</span>(<span class="str">"algorithm"</span>, <span class="str">"altruism"</span>)
+<span class="fn-name">print</span>(<span class="var">result</span>)  <span class="comment"># Output: alg</span></pre>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <div class="subsection-title">Word Frequency Analysis</div>
+                    <p>Count occurrences of each word in a text.</p>
+
+                    <div class="code-block">
+                        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>word_frequency.py</span></div>
+                        <pre class="code-content"><span class="kw">from</span> <span class="var">collections</span> <span class="kw">import</span> <span class="var">Counter</span>
+<span class="kw">import</span> <span class="var">re</span>
+
+<span class="kw">def</span> <span class="fn-name">word_frequency</span>(<span class="var">text</span>):
+    <span class="var">words</span> = <span class="var">re</span>.<span class="fn-name">findall</span>(<span class="str">r"\w+"</span>, <span class="var">text</span>.<span class="fn-name">lower</span>())
+    <span class="kw">return</span> <span class="var">Counter</span>(<span class="var">words</span>)
+
+<span class="var">text</span> = <span class="str">"the quick brown fox jumps over the lazy dog"</span>
+<span class="var">freq</span> = <span class="fn-name">word_frequency</span>(<span class="var">text</span>)
+<span class="fn-name">print</span>(<span class="var">freq</span>.<span class="fn-name">most_common</span>(<span class="num">3</span>))
+<span class="comment"># Output: [('the', 2), ('quick', 1), ('brown', 1)]</span></pre>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <div class="subsection-title">Text Wrapping</div>
+                    <p>Wrap long text to fit within a specified width.</p>
+
+                    <div class="code-block">
+                        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>text_wrapping.py</span></div>
+                        <pre class="code-content"><span class="kw">import</span> <span class="var">textwrap</span>
+
+<span class="var">text</span> = <span class="str">"Python is a high-level, interpreted programming language known for its simplicity and readability."</span>
+
+<span class="comment"># Wrap text to 40 characters per line</span>
+<span class="var">wrapped</span> = <span class="var">textwrap</span>.<span class="fn-name">fill</span>(<span class="var">text</span>, <span class="var">width</span>=<span class="num">40</span>)
+<span class="fn-name">print</span>(<span class="var">wrapped</span>)
+<span class="comment"># Output:</span>
+<span class="comment"># Python is a high-level, interpreted</span>
+<span class="comment"># programming language known for its</span>
+<span class="comment"># simplicity and readability.</span></pre>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <div class="subsection-title">URL Slug Generation</div>
+                    <p>Convert text into URL-safe slugs.</p>
+
+                    <div class="code-block">
+                        <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>slug_generation.py</span></div>
+                        <pre class="code-content"><span class="kw">import</span> <span class="var">re</span>
+
+<span class="kw">def</span> <span class="fn-name">generate_slug</span>(<span class="var">text</span>):
+    <span class="comment"># Convert to lowercase</span>
+    <span class="var">slug</span> = <span class="var">text</span>.<span class="fn-name">lower</span>()
+    <span class="comment"># Replace spaces with hyphens</span>
+    <span class="var">slug</span> = <span class="var">re</span>.<span class="fn-name">sub</span>(<span class="str">r"\s+"</span>, <span class="str">"-"</span>, <span class="var">slug</span>)
+    <span class="comment"># Remove non-alphanumeric characters (except hyphens)</span>
+    <span class="var">slug</span> = <span class="var">re</span>.<span class="fn-name">sub</span>(<span class="str">r"[^\w-]"</span>, <span class="str">""</span>, <span class="var">slug</span>)
+    <span class="comment"># Remove consecutive hyphens</span>
+    <span class="var">slug</span> = <span class="var">re</span>.<span class="fn-name">sub</span>(<span class="str">r"-+"</span>, <span class="str">"-"</span>, <span class="var">slug</span>)
+    <span class="kw">return</span> <span class="var">slug</span>.<span class="fn-name">strip</span>(<span class="str">"-"</span>)
+
+<span class="fn-name">print</span>(<span class="fn-name">generate_slug</span>(<span class="str">"Hello, World! Welcome to Python"</span>))
+<span class="comment"># Output: hello-world-welcome-to-python</span></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Practice CTA -->
+            <div class="practice-cta">
+                <div class="cta-text">
+                    <div class="cta-title">Ready to Practice?</div>
+                    <div class="cta-sub">50 string challenges from easy to hard await.</div>
+                </div>
+                <a href="challenges_strings.html" class="cta-btn">Start Challenges →</a>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Sidebar navigation highlighting
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function() {
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Highlight nav links on scroll
+        const sections = document.querySelectorAll('.section');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 150) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').slice(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

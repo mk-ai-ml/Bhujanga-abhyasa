@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python Comprehensions - Bhujanga Abhyāsa</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Sora:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f5f4f0;
+      --bg2: #eeecea;
+      --surface: #ffffff;
+      --surface2: #fafaf8;
+      --border: #e2dfd9;
+      --border2: #cdc9c2;
+      --text: #1e1c18;
+      --text2: #6b6760;
+      --text3: #9e9b96;
+      --text-inv: #ffffff;
+      --blue: #3b6fd4;
+      --blue-bg: #eef2fb;
+      --green: #2e7d52;
+      --green-bg: #edf5f0;
+      --amber: #b45309;
+      --amber-bg: #fef6ec;
+      --red: #c0392b;
+      --red-bg: #fdf0ee;
+      --purple: #6d4fc2;
+      --purple-bg: #f2eefb;
+      --teal: #1a7a7a;
+      --loop-color: #2e7d52;
+      --code-bg: #1e1c18;
+      --code-text: #e8e4db;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Sora', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Top Navigation */
+    .top-nav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--loop-color);
+    }
+
+    .back-link {
+      color: var(--text2);
+      text-decoration: none;
+      font-size: 0.95rem;
+      padding: 0.5rem 1rem;
+      border-radius: 0.375rem;
+      transition: all 0.2s;
+    }
+
+    .back-link:hover {
+      background: var(--bg2);
+      color: var(--loop-color);
+    }
+
+    .container {
+      display: flex;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      position: sticky;
+      top: 64px;
+      width: 280px;
+      height: calc(100vh - 64px);
+      background: var(--surface2);
+      border-right: 1px solid var(--border);
+      overflow-y: auto;
+      padding: 1.5rem 0;
+    }
+
+    .sidebar-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--loop-color);
+      padding: 0 1.5rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .sidebar-nav {
+      list-style: none;
+    }
+
+    .sidebar-nav li {
+      border-left: 3px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .sidebar-nav a {
+      display: block;
+      padding: 0.75rem 1.5rem;
+      color: var(--text2);
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: all 0.2s;
+    }
+
+    .sidebar-nav li:hover {
+      border-left-color: var(--loop-color);
+      background: var(--bg);
+    }
+
+    .sidebar-nav a:hover {
+      color: var(--loop-color);
+      padding-left: 2rem;
+    }
+
+    .sidebar-nav li.active {
+      border-left-color: var(--loop-color);
+      background: var(--green-bg);
+    }
+
+    .sidebar-nav li.active a {
+      color: var(--loop-color);
+      font-weight: 600;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      padding: 3rem 4rem;
+      max-width: 900px;
+    }
+
+    /* Section Styling */
+    .section {
+      margin-bottom: 4rem;
+      scroll-margin-top: 80px;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--loop-color);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .section-icon {
+      font-size: 2.25rem;
+    }
+
+    .section-intro {
+      color: var(--text2);
+      font-size: 1.05rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.8;
+    }
+
+    /* Code Block Styling */
+    .code-block {
+      background: var(--code-bg);
+      border-radius: 0.5rem;
+      margin: 1.5rem 0;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .code-block-header {
+      background: #16140f;
+      padding: 0.75rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #2a2722;
+      font-size: 0.85rem;
+      color: var(--text3);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .code-dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+    }
+
+    .code-dot.d1 { background: #ff605c; }
+    .code-dot.d2 { background: #ffbd44; }
+    .code-dot.d3 { background: #00ca4e; }
+
+    .code-content {
+      padding: 1.5rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      color: var(--code-text);
+      overflow-x: auto;
+      line-height: 1.7;
+    }
+
+    /* Syntax Highlighting */
+    .kw { color: #ff6b6b; font-weight: 500; } /* keywords */
+    .fn-name { color: #51cf66; } /* functions */
+    .str { color: #ffa94d; } /* strings */
+    .num { color: #b197fc; } /* numbers */
+    .comment { color: #909090; font-style: italic; }
+    .var { color: var(--code-text); }
+    .op { color: #74c0fc; } /* operators */
+
+    /* Diagram Styling */
+    .diagram-box {
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: 0.5rem;
+      padding: 2rem;
+      margin: 1.5rem 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .diagram-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text2);
+      margin-bottom: 1rem;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Iteration Visualizer */
+    .iter-vis {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      width: 100%;
+    }
+
+    .iter-row {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .iter-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text2);
+      width: 60px;
+      text-align: right;
+    }
+
+    .iter-cells {
+      display: flex;
+      gap: 0.5rem;
+      flex: 1;
+    }
+
+    .iter-cell {
+      min-width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg2);
+      border: 2px solid var(--border);
+      border-radius: 0.375rem;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.3s;
+    }
+
+    .iter-cell.active {
+      background: var(--green-bg);
+      border-color: var(--loop-color);
+      color: var(--loop-color);
+      transform: scale(1.1);
+    }
+
+    .iter-cell.done {
+      background: var(--green);
+      color: var(--text-inv);
+      border-color: var(--loop-color);
+    }
+
+    /* Callouts */
+    .callout {
+      border-left: 4px solid var(--blue);
+      background: var(--blue-bg);
+      padding: 1rem 1.5rem;
+      border-radius: 0.375rem;
+      margin: 1.5rem 0;
+      color: var(--text);
+    }
+
+    .callout.info {
+      border-left-color: var(--blue);
+      background: var(--blue-bg);
+    }
+
+    .callout.warning {
+      border-left-color: var(--amber);
+      background: var(--amber-bg);
+    }
+
+    .callout.tip {
+      border-left-color: var(--loop-color);
+      background: var(--green-bg);
+    }
+
+    .callout-title {
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      font-size: 0.95rem;
+    }
+
+    /* Comparison Table */
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+      overflow: hidden;
+    }
+
+    .compare-table th {
+      background: var(--bg2);
+      padding: 1rem;
+      text-align: left;
+      font-weight: 700;
+      border-bottom: 2px solid var(--border);
+      color: var(--text);
+    }
+
+    .compare-table td {
+      padding: 1rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--text2);
+    }
+
+    .compare-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Practice CTA */
+    .practice-cta {
+      background: linear-gradient(135deg, var(--green-bg) 0%, var(--blue-bg) 100%);
+      border: 2px solid var(--loop-color);
+      border-radius: 0.75rem;
+      padding: 2rem;
+      margin-top: 4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .cta-text {
+      flex: 1;
+    }
+
+    .cta-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--loop-color);
+      margin-bottom: 0.5rem;
+    }
+
+    .cta-sub {
+      color: var(--text2);
+      font-size: 1rem;
+    }
+
+    .cta-btn {
+      background: var(--loop-color);
+      color: var(--text-inv);
+      padding: 0.875rem 1.75rem;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      transition: all 0.2s;
+      white-space: nowrap;
+      display: inline-block;
+      text-decoration: none;
+    }
+
+    .cta-btn:hover {
+      background: #245d42;
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg2);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border2);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--text2);
+    }
+
+    @media (max-width: 1024px) {
+      .sidebar {
+        width: 220px;
+      }
+      .main-content {
+        padding: 2rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+      .sidebar {
+        position: relative;
+        top: 0;
+        width: 100%;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        max-height: 200px;
+        overflow-x: auto;
+        padding: 1rem;
+      }
+      .sidebar-nav {
+        display: flex;
+        gap: 1rem;
+      }
+      .sidebar-nav li {
+        border-left: none;
+        border-bottom: 3px solid transparent;
+      }
+      .main-content {
+        padding: 1.5rem;
+      }
+      .practice-cta {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Top Navigation -->
+  <div class="top-nav">
+    <div class="nav-left">
+      <div class="logo">🧬 Comprehensions</div>
+      <a href="abhyasa_dwitiya.html" class="back-link">← Back to Dwitiya</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+      <div class="sidebar-title">🧬 Chapters</div>
+      <ul class="sidebar-nav">
+        <li><a href="#list-basics">List Comprehensions Basics</a></li>
+        <li><a href="#filtering">Filtering with Comprehensions</a></li>
+        <li><a href="#transforming">Transforming Data</a></li>
+        <li><a href="#nested">Nested Comprehensions</a></li>
+        <li><a href="#dict">Dict Comprehensions</a></li>
+        <li><a href="#set">Set Comprehensions</a></li>
+        <li><a href="#generators">Generator Expressions</a></li>
+        <li><a href="#conditionals">Conditional Expressions</a></li>
+        <li><a href="#walrus">Walrus Operator</a></li>
+        <li><a href="#flattening">Flattening</a></li>
+        <li><a href="#antipatterns">When NOT to Use</a></li>
+        <li><a href="#realworld">Real-World Patterns</a></li>
+      </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <!-- Section 1: List Comprehensions Basics -->
+      <section class="section" id="list-basics">
+        <h2 class="section-title"><span class="section-icon">📋</span> List Comprehensions Basics</h2>
+        <p class="section-intro">
+          List comprehensions provide a concise and powerful way to create new lists by applying an expression to each element in an iterable. They replace verbose loops with elegant, readable syntax while being faster than traditional iteration.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>list_comp_basics.py</span></div>
+          <pre class="code-content"><span class="comment"># Traditional way - verbose</span>
+<span class="var">squares</span> <span class="op">=</span> []
+<span class="kw">for</span> <span class="var">x</span> <span class="kw">in</span> <span class="fn-name">range</span>(<span class="num">5</span>):
+    <span class="var">squares</span>.<span class="fn-name">append</span>(<span class="var">x</span> <span class="op">**</span> <span class="num">2</span>)
+
+<span class="comment"># List comprehension - clean and fast</span>
+<span class="var">squares</span> <span class="op">=</span> [<span class="var">x</span> <span class="op">**</span> <span class="num">2</span> <span class="kw">for</span> <span class="var">x</span> <span class="kw">in</span> <span class="fn-name">range</span>(<span class="num">5</span>)]
+<span class="comment"># Result: [0, 1, 4, 9, 16]</span>
+
+<span class="comment"># Double each element</span>
+<span class="var">numbers</span> <span class="op">=</span> [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>]
+<span class="var">doubled</span> <span class="op">=</span> [<span class="var">x</span> <span class="op">*</span> <span class="num">2</span> <span class="kw">for</span> <span class="var">x</span> <span class="kw">in</span> <span class="var">numbers</span>]
+<span class="comment"># Result: [2, 4, 6, 8]</span>
+
+<span class="comment"># Convert strings to integers</span>
+<span class="var">strings</span> <span class="op">=</span> [<span class="str">'1'</span>, <span class="str">'2'</span>, <span class="str">'3'</span>]
+<span class="var">ints</span> <span class="op">=</span> [<span class="fn-name">int</span>(<span class="var">s</span>) <span class="kw">for</span> <span class="var">s</span> <span class="kw">in</span> <span class="var">strings</span>]
+<span class="comment"># Result: [1, 2, 3]</span></pre>
+        </div>
+
+        <p style="margin-top: 1.5rem; color: var(--text2);">The basic syntax is: <code>[expression for item in iterable]</code>. The expression is evaluated for each item, and the results are collected into a new list. This is much faster than appending to a list in a loop.</p>
+
+        <div class="callout tip">
+          <div class="callout-title">Speed Advantage</div>
+          <p>List comprehensions are typically 2-3x faster than equivalent for loops because they're optimized at the bytecode level and avoid repeated function calls.</p>
+        </div>
+      </section>
+
+      <!-- Section 2: Filtering -->
+      <section class="section" id="filtering">
+        <h2 class="section-title"><span class="section-icon">🔍</span> Filtering with Comprehensions</h2>
+        <p class="section-intro">
+          Add an optional <code>if</code> clause to filter items based on a condition. Only items that pass the test are included in the result.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>filter_examples.py</span></div>
+          <pre class="code-content"><span class="comment"># Keep only even numbers</span>
+<span class="var">numbers</span> <span class="op">=</span> [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>, <span class="num">6</span>]
+<span class="var">evens</span> <span class="op">=</span> [<span class="var">x</span> <span class="kw">for</span> <span class="var">x</span> <span class="kw">in</span> <span class="var">numbers</span> <span class="kw">if</span> <span class="var">x</span> <span class="op">%</span> <span class="num">2</span> <span class="op">==</span> <span class="num">0</span>]
+<span class="comment"># Result: [2, 4, 6]</span>
+
+<span class="comment"># Filter words by length</span>
+<span class="var">words</span> <span class="op">=</span> [<span class="str">'cat'</span>, <span class="str">'elephant'</span>, <span class="str">'dog'</span>, <span class="str">'butterfly'</span>]
+<span class="var">long_words</span> <span class="op">=</span> [<span class="var">w</span> <span class="kw">for</span> <span class="var">w</span> <span class="kw">in</span> <span class="var">words</span> <span class="kw">if</span> <span class="fn-name">len</span>(<span class="var">w</span>) <span class="op">></span> <span class="num">3</span>]
+<span class="comment"># Result: ['elephant', 'butterfly']</span>
+
+<span class="comment"># Filter and transform together</span>
+<span class="var">prices</span> <span class="op">=</span> [<span class="num">10</span>, <span class="num">25</span>, <span class="num">15</span>, <span class="num">30</span>, <span class="num">5</span>]
+<span class="var">discounted</span> <span class="op">=</span> [<span class="var">p</span> <span class="op">*</span> <span class="num">0.9</span> <span class="kw">for</span> <span class="var">p</span> <span class="kw">in</span> <span class="var">prices</span> <span class="kw">if</span> <span class="var">p</span> <span class="op">></span> <span class="num">10</span>]
+<span class="comment"># Result: [22.5, 27.0]</span></pre>
+        </div>
+
+        <p style="margin-top: 1.5rem; color: var(--text2);">The syntax with filtering is: <code>[expression for item in iterable if condition]</code>. The expression is only evaluated for items where the condition is <code>True</code>.</p>
+
+        <div class="callout info">
+          <div class="callout-title">Filter Logic</div>
+          <p>You can use complex conditions with <code>and</code>, <code>or</code>, and <code>not</code>. Only items matching the condition appear in the result list.</p>
+        </div>
+      </section>
+
+      <!-- Section 3: Transforming Data -->
+      <section class="section" id="transforming">
+        <h2 class="section-title"><span class="section-icon">🔄</span> Transforming Data</h2>
+        <p class="section-intro">
+          Comprehensions excel at transforming data—applying functions, changing types, or extracting parts of objects. You can chain multiple operations for powerful pipelines.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>transform_examples.py</span></div>
+          <pre class="code-content"><span class="comment"># Extract field from list of dicts</span>
+<span class="var">users</span> <span class="op">=</span> [
+    {<span class="str">'name'</span>: <span class="str">'Alice'</span>, <span class="str">'age'</span>: <span class="num">25</span>},
+    {<span class="str">'name'</span>: <span class="str">'Bob'</span>, <span class="str">'age'</span>: <span class="num">30</span>}
+]
+<span class="var">names</span> <span class="op">=</span> [<span class="var">u</span>[<span class="str">'name'</span>] <span class="kw">for</span> <span class="var">u</span> <span class="kw">in</span> <span class="var">users</span>]
+<span class="comment"># Result: ['Alice', 'Bob']</span>
+
+<span class="comment"># Chain multiple transforms</span>
+<span class="var">data</span> <span class="op">=</span> [<span class="str">'hello'</span>, <span class="str">'WORLD'</span>, <span class="str">'Python'</span>]
+<span class="var">processed</span> <span class="op">=</span> [<span class="var">s</span>.<span class="fn-name">lower</span>().<span class="fn-name">replace</span>(<span class="str">'o'</span>, <span class="str">'0'</span>) <span class="kw">for</span> <span class="var">s</span> <span class="kw">in</span> <span class="var">data</span>]
+<span class="comment"># Result: ['hell0', 'w0rld', 'pyth0n']</span>
+
+<span class="comment"># Apply built-in functions</span>
+<span class="var">string_nums</span> <span class="op">=</span> [<span class="str">'123'</span>, <span class="str">'456'</span>, <span class="str">'789'</span>]
+<span class="var">as_ints</span> <span class="op">=</span> [<span class="fn-name">int</span>(<span class="var">x</span>) <span class="kw">for</span> <span class="var">x</span> <span class="kw">in</span> <span class="var">string_nums</span>]
+<span class="comment"># Result: [123, 456, 789]</span>
+
+<span class="comment"># Custom function application</span>
+<span class="kw">def</span> <span class="fn-name">celsius_to_fahrenheit</span>(<span class="var">c</span>):
+    <span class="kw">return</span> <span class="var">c</span> <span class="op">*</span> <span class="num">9</span><span class="op">/</span><span class="num">5</span> <span class="op">+</span> <span class="num">32</span>
+
+<span class="var">celsius</span> <span class="op">=</span> [<span class="num">0</span>, <span class="num">10</span>, <span class="num">20</span>, <span class="num">30</span>]
+<span class="var">fahrenheit</span> <span class="op">=</span> [<span class="fn-name">celsius_to_fahrenheit</span>(<span class="var">c</span>) <span class="kw">for</span> <span class="var">c</span> <span class="kw">in</span> <span class="var">celsius</span>]
+<span class="comment"># Result: [32.0, 50.0, 68.0, 86.0]</span></pre>
+        </div>
+
+        <div class="callout tip">
+          <div class="callout-title">Chaining Operations</div>
+          <p>You can chain method calls (like <code>.lower().replace()</code>) inside comprehensions for powerful data transformations without intermediate variables.</p>
+        </div>
+      </section>
+
+      <!-- Section 4: Nested Comprehensions -->
+      <section class="section" id="nested">
+        <h2 class="section-title"><span class="section-icon">🔗</span> Nested Comprehensions</h2>
+        <p class="section-intro">
+          Nested comprehensions iterate over multiple sequences, creating multi-dimensional structures or flattening nested data. They replace nested for loops with elegant syntax.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>nested_examples.py</span></div>
+          <pre class="code-content"><span class="comment"># Create multiplication table</span>
+<span class="var">table</span> <span class="op">=</span> [<span class="var">x</span> <span class="op">*</span> <span class="var">y</span> <span class="kw">for</span> <span class="var">x</span> <span class="kw">in</span> <span class="fn-name">range</span>(<span class="num">1</span>, <span class="num">4</span>) <span class="kw">for</span> <span class="var">y</span> <span class="kw">in</span> <span class="fn-name">range</span>(<span class="num">1</span>, <span class="num">4</span>)]
+<span class="comment"># Result: [1, 2, 3, 2, 4, 6, 3, 6, 9]</span>
+
+<span class="comment"># Create coordinate pairs</span>
+<span class="var">pairs</span> <span class="op">=</span> [(<span class="var">x</span>, <span class="var">y</span>) <span class="kw">for</span> <span class="var">x</span> <span class="kw">in</span> [<span class="num">1</span>, <span class="num">2</span>] <span class="kw">for</span> <span class="var">y</span> <span class="kw">in</span> [<span class="str">'a'</span>, <span class="str">'b'</span>]]
+<span class="comment"># Result: [(1, 'a'), (1, 'b'), (2, 'a'), (2, 'b')]</span>
+
+<span class="comment"># Flatten a matrix</span>
+<span class="var">matrix</span> <span class="op">=</span> [[<span class="num">1</span>, <span class="num">2</span>], [<span class="num">3</span>, <span class="num">4</span>], [<span class="num">5</span>, <span class="num">6</span>]]
+<span class="var">flattened</span> <span class="op">=</span> [<span class="var">item</span> <span class="kw">for</span> <span class="var">row</span> <span class="kw">in</span> <span class="var">matrix</span> <span class="kw">for</span> <span class="var">item</span> <span class="kw">in</span> <span class="var">row</span>]
+<span class="comment"># Result: [1, 2, 3, 4, 5, 6]</span>
+
+<span class="comment"># Nested with filtering</span>
+<span class="var">data</span> <span class="op">=</span> [[<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>], [<span class="num">4</span>, <span class="num">5</span>], [<span class="num">6</span>, <span class="num">7</span>, <span class="num">8</span>]]
+<span class="var">evens</span> <span class="op">=</span> [<span class="var">x</span> <span class="kw">for</span> <span class="var">row</span> <span class="kw">in</span> <span class="var">data</span> <span class="kw">for</span> <span class="var">x</span> <span class="kw">in</span> <span class="var">row</span> <span class="kw">if</span> <span class="var">x</span> <span class="op">%</span> <span class="num">2</span> <span class="op">==</span> <span class="num">0</span>]
+<span class="comment"># Result: [2, 4, 6, 8]</span></pre>
+        </div>
+
+        <p style="margin-top: 1.5rem; color: var(--text2);">Nested comprehensions read left-to-right like nested loops: <code>[expr for outer in seq1 for inner in seq2]</code>. The leftmost <code>for</code> is the outermost loop.</p>
+
+        <div class="callout warning">
+          <div class="callout-title">Readability Limits</div>
+          <p>Nested comprehensions with more than 2 levels become hard to read. Consider using explicit loops for complex logic.</p>
+        </div>
+      </section>
+
+      <!-- Section 5: Dict Comprehensions -->
+      <section class="section" id="dict">
+        <h2 class="section-title"><span class="section-icon">🔑</span> Dict Comprehensions</h2>
+        <p class="section-intro">
+          Dictionary comprehensions use the same concise syntax to build dictionaries. You can create, transform, filter, or invert dictionaries elegantly.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>dict_comp_examples.py</span></div>
+          <pre class="code-content"><span class="comment"># Create a dict from a list</span>
+<span class="var">words</span> <span class="op">=</span> [<span class="str">'apple'</span>, <span class="str">'banana'</span>, <span class="str">'cherry'</span>]
+<span class="var">word_lengths</span> <span class="op">=</span> {<span class="var">w</span>: <span class="fn-name">len</span>(<span class="var">w</span>) <span class="kw">for</span> <span class="var">w</span> <span class="kw">in</span> <span class="var">words</span>}
+<span class="comment"># Result: {'apple': 5, 'banana': 6, 'cherry': 6}</span>
+
+<span class="comment"># Invert key-value pairs</span>
+<span class="var">original</span> <span class="op">=</span> {<span class="str">'a'</span>: <span class="num">1</span>, <span class="str">'b'</span>: <span class="num">2</span>, <span class="str">'c'</span>: <span class="num">3</span>}
+<span class="var">inverted</span> <span class="op">=</span> {<span class="var">v</span>: <span class="var">k</span> <span class="kw">for</span> <span class="var">k</span>, <span class="var">v</span> <span class="kw">in</span> <span class="var">original</span>.<span class="fn-name">items</span>()}
+<span class="comment"># Result: {1: 'a', 2: 'b', 3: 'c'}</span>
+
+<span class="comment"># Filter dict by values</span>
+<span class="var">scores</span> <span class="op">=</span> {<span class="str">'Alice'</span>: <span class="num">85</span>, <span class="str">'Bob'</span>: <span class="num">92</span>, <span class="str">'Charlie'</span>: <span class="num">78</span>}
+<span class="var">high_scores</span> <span class="op">=</span> {<span class="var">k</span>: <span class="var">v</span> <span class="kw">for</span> <span class="var">k</span>, <span class="var">v</span> <span class="kw">in</span> <span class="var">scores</span>.<span class="fn-name">items</span>() <span class="kw">if</span> <span class="var">v</span> <span class="op">>=</span> <span class="num">80</span>}
+<span class="comment"># Result: {'Alice': 85, 'Bob': 92}</span>
+
+<span class="comment"># Transform dict values</span>
+<span class="var">temps_c</span> <span class="op">=</span> {<span class="str">'NYC'</span>: <span class="num">20</span>, <span class="str">'LA'</span>: <span class="num">25</span>, <span class="str">'Boston'</span>: <span class="num">15</span>}
+<span class="var">temps_f</span> <span class="op">=</span> {<span class="var">city</span>: <span class="var">c</span> <span class="op">*</span> <span class="num">9</span><span class="op">/</span><span class="num">5</span> <span class="op">+</span> <span class="num">32</span> <span class="kw">for</span> <span class="var">city</span>, <span class="var">c</span> <span class="kw">in</span> <span class="var">temps_c</span>.<span class="fn-name">items</span>()}
+<span class="comment"># Result: {'NYC': 68.0, 'LA': 77.0, 'Boston': 59.0}</span></pre>
+        </div>
+
+        <p style="margin-top: 1.5rem; color: var(--text2);">Dict comprehension syntax: <code>{key: value for item in iterable}</code>. You must provide both key and value expressions, separated by a colon.</p>
+
+        <div class="callout tip">
+          <div class="callout-title">Common Pattern</div>
+          <p>Inverting dictionaries with <code>{v: k for k, v in dict.items()}</code> is so useful that many codebases rely on it for lookup tables.</p>
+        </div>
+      </section>
+
+      <!-- Section 6: Set Comprehensions -->
+      <section class="section" id="set">
+        <h2 class="section-title"><span class="section-icon">⚪</span> Set Comprehensions</h2>
+        <p class="section-intro">
+          Set comprehensions are like list comprehensions but produce sets instead of lists. They automatically deduplicate and unorder elements—perfect for uniqueness operations.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>set_comp_examples.py</span></div>
+          <pre class="code-content"><span class="comment"># Get unique squares</span>
+<span class="var">numbers</span> <span class="op">=</span> [<span class="num">1</span>, <span class="num">2</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">3</span>, <span class="num">3</span>]
+<span class="var">unique_squares</span> <span class="op">=</span> {<span class="var">x</span> <span class="op">**</span> <span class="num">2</span> <span class="kw">for</span> <span class="var">x</span> <span class="kw">in</span> <span class="var">numbers</span>}
+<span class="comment"># Result: {1, 4, 9} - duplicates automatically removed</span>
+
+<span class="comment"># Unique characters in strings</span>
+<span class="var">words</span> <span class="op">=</span> [<span class="str">'hello'</span>, <span class="str">'world'</span>, <span class="str">'python'</span>]
+<span class="var">unique_chars</span> <span class="op">=</span> {<span class="var">c</span> <span class="kw">for</span> <span class="var">word</span> <span class="kw">in</span> <span class="var">words</span> <span class="kw">for</span> <span class="var">c</span> <span class="kw">in</span> <span class="var">word</span>}
+<span class="comment"># Result: {'h', 'e', 'l', 'o', 'w', 'r', 'd', 'p', 'y', 't', 'n'}</span>
+
+<span class="comment"># Filter for unique values above threshold</span>
+<span class="var">scores</span> <span class="op">=</span> [<span class="num">95</span>, <span class="num">85</span>, <span class="num">95</span>, <span class="num">75</span>, <span class="num">85</span>, <span class="num">90</span>]
+<span class="var">high_grades</span> <span class="op">=</span> {<span class="var">s</span> <span class="kw">for</span> <span class="var">s</span> <span class="kw">in</span> <span class="var">scores</span> <span class="kw">if</span> <span class="var">s</span> <span class="op">>=</span> <span class="num">85</span>}
+<span class="comment"># Result: {85, 90, 95} - no duplicates, sorted doesn't apply to sets</span>
+
+<span class="comment"># Intersection of unique values</span>
+<span class="var">list1</span> <span class="op">=</span> [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">3</span>]
+<span class="var">list2</span> <span class="op">=</span> [<span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">4</span>]
+<span class="var">common</span> <span class="op">=</span> {<span class="var">x</span> <span class="kw">for</span> <span class="var">x</span> <span class="kw">in</span> <span class="var">list1</span> <span class="kw">if</span> <span class="var">x</span> <span class="kw">in</span> <span class="var">list2</span>}
+<span class="comment"># Result: {2, 3}</span></pre>
+        </div>
+
+        <div class="callout info">
+          <div class="callout-title">Automatic Deduplication</div>
+          <p>Set comprehensions are perfect when you want unique values. The set automatically removes duplicates during creation, making them faster than filtering lists manually.</p>
+        </div>
+      </section>
+
+      <!-- Section 7: Generator Expressions -->
+      <section class="section" id="generators">
+        <h2 class="section-title"><span class="section-icon">⚡</span> Generator Expressions</h2>
+        <p class="section-intro">
+          Generator expressions use parentheses instead of brackets. They don't create a list immediately—instead, they generate values on-demand, saving memory for large datasets.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>generator_examples.py</span></div>
+          <pre class="code-content"><span class="comment"># List comprehension - creates entire list in memory</span>
+<span class="var">squares_list</span> <span class="op">=</span> [<span class="var">x</span> <span class="op">**</span> <span class="num">2</span> <span class="kw">for</span> <span class="var">x</span> <span class="kw">in</span> <span class="fn-name">range</span>(<span class="num">1000000</span>)]
+
+<span class="comment"># Generator - computes values lazily</span>
+<span class="var">squares_gen</span> <span class="op">=</span> (<span class="var">x</span> <span class="op">**</span> <span class="num">2</span> <span class="kw">for</span> <span class="var">x</span> <span class="kw">in</span> <span class="fn-name">range</span>(<span class="num">1000000</span>))
+
+<span class="comment"># Consume generator values one at a time</span>
+<span class="kw">for</span> <span class="var">square</span> <span class="kw">in</span> <span class="var">squares_gen</span>:
+    <span class="kw">if</span> <span class="var">square</span> <span class="op">></span> <span class="num">1000</span>:
+        <span class="fn-name">print</span>(<span class="var">square</span>)
+        <span class="kw">break</span>  <span class="comment"># Stop early - rest are never computed!</span>
+
+<span class="comment"># Generator in sum() - memory efficient</span>
+<span class="var">total</span> <span class="op">=</span> <span class="fn-name">sum</span>(<span class="var">x</span> <span class="op">**</span> <span class="num">2</span> <span class="kw">for</span> <span class="var">x</span> <span class="kw">in</span> <span class="fn-name">range</span>(<span class="num">1000000</span>))
+
+<span class="comment"># Convert generator to list when needed</span>
+<span class="var">gen</span> <span class="op">=</span> (<span class="var">x</span> <span class="op">*</span> <span class="num">2</span> <span class="kw">for</span> <span class="var">x</span> <span class="kw">in</span> [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>])
+<span class="var">result</span> <span class="op">=</span> <span class="fn-name">list</span>(<span class="var">gen</span>)
+<span class="comment"># Result: [2, 4, 6]</span></pre>
+        </div>
+
+        <p style="margin-top: 1.5rem; color: var(--text2);">Generator expressions use parentheses: <code>(expr for item in iterable)</code>. Use them with functions like <code>sum()</code>, <code>max()</code>, or in loops where you don't need the entire list.</p>
+
+        <div class="callout tip">
+          <div class="callout-title">Memory Efficiency</div>
+          <p>Generators are perfect for processing large files or infinite sequences. They compute values on-the-fly, using constant memory regardless of dataset size.</p>
+        </div>
+      </section>
+
+      <!-- Section 8: Conditional Expressions -->
+      <section class="section" id="conditionals">
+        <h2 class="section-title"><span class="section-icon">❓</span> Conditional Expressions</h2>
+        <p class="section-intro">
+          Use ternary operators inside comprehensions to transform values conditionally. This produces different results based on conditions without filtering.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>conditional_examples.py</span></div>
+          <pre class="code-content"><span class="comment"># Transform with condition: positive=1, else 0</span>
+<span class="var">numbers</span> <span class="op">=</span> [<span class="op">-</span><span class="num">1</span>, <span class="num">0</span>, <span class="num">1</span>, <span class="num">2</span>, <span class="op">-</span><span class="num">3</span>]
+<span class="var">signs</span> <span class="op">=</span> [<span class="num">1</span> <span class="kw">if</span> <span class="var">x</span> <span class="op">></span> <span class="num">0</span> <span class="kw">else</span> <span class="num">0</span> <span class="kw">for</span> <span class="var">x</span> <span class="kw">in</span> <span class="var">numbers</span>]
+<span class="comment"># Result: [0, 0, 1, 1, 0]</span>
+
+<span class="comment"># Label items by value</span>
+<span class="var">scores</span> <span class="op">=</span> [<span class="num">45</span>, <span class="num">78</span>, <span class="num">92</span>, <span class="num">55</span>]
+<span class="var">grades</span> <span class="op">=</span> [<span class="str">'Pass'</span> <span class="kw">if</span> <span class="var">s</span> <span class="op">=</span> <span class="num">60</span> <span class="kw">else</span> <span class="str">'Fail'</span> <span class="kw">for</span> <span class="var">s</span> <span class="kw">in</span> <span class="var">scores</span>]
+<span class="comment"># Result: ['Fail', 'Pass', 'Pass', 'Fail']</span>
+
+<span class="comment"># Multiple conditions with elif</span>
+<span class="var">temps</span> <span class="op">=</span> [<span class="num">10</span>, <span class="num">20</span>, <span class="num">30</span>, <span class="num">40</span>]
+<span class="var">descriptions</span> <span class="op">=</span> [
+    <span class="str">'Cold'</span> <span class="kw">if</span> <span class="var">t</span> <span class="op"><</span> <span class="num">15</span>
+    <span class="kw">else</span> <span class="str">'Cool'</span> <span class="kw">if</span> <span class="var">t</span> <span class="op"><</span> <span class="num">25</span>
+    <span class="kw">else</span> <span class="str">'Warm'</span> <span class="kw">if</span> <span class="var">t</span> <span class="op"><</span> <span class="num">35</span>
+    <span class="kw">else</span> <span class="str">'Hot'</span>
+    <span class="kw">for</span> <span class="var">t</span> <span class="kw">in</span> <span class="var">temps</span>
+]
+<span class="comment"># Result: ['Cold', 'Cool', 'Warm', 'Hot']</span>
+
+<span class="comment"># Conditional transformation vs filtering</span>
+<span class="var">values</span> <span class="op">=</span> [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>]
+<span class="var">doubled_or_zero</span> <span class="op">=</span> [<span class="var">x</span> <span class="op">*</span> <span class="num">2</span> <span class="kw">if</span> <span class="var">x</span> <span class="op">%</span> <span class="num">2</span> <span class="op">==</span> <span class="num">0</span> <span class="kw">else</span> <span class="num">0</span> <span class="kw">for</span> <span class="var">x</span> <span class="kw">in</span> <span class="var">values</span>]
+<span class="comment"># Result: [0, 4, 0, 8] - same length, different values</span></pre>
+        </div>
+
+        <div class="callout info">
+          <div class="callout-title">if/else vs if filter</div>
+          <p>Use <code>if/else</code> when you want to transform (keep all items but change some). Use <code>if</code> without else to filter (reduce list length).</p>
+        </div>
+      </section>
+
+      <!-- Section 9: Walrus Operator -->
+      <section class="section" id="walrus">
+        <h2 class="section-title"><span class="section-icon">📌</span> Walrus Operator (:=)</h2>
+        <p class="section-intro">
+          Python 3.8+ introduced the walrus operator <code>:=</code> for assignment expressions. Inside comprehensions, it lets you assign and use values in a single expression, reducing duplication.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>walrus_examples.py</span></div>
+          <pre class="code-content"><span class="comment"># Avoid computing the same expression twice</span>
+<span class="var">words</span> <span class="op">=</span> [<span class="str">'hello'</span>, <span class="str">'world'</span>, <span class="str">'python'</span>]
+
+<span class="comment"># Without walrus - compute len() twice</span>
+<span class="var">long_words_verbose</span> <span class="op">=</span> [(w, <span class="fn-name">len</span>(<span class="var">w</span>)) <span class="kw">for</span> <span class="var">w</span> <span class="kw">in</span> <span class="var">words</span> <span class="kw">if</span> <span class="fn-name">len</span>(<span class="var">w</span>) <span class="op">></span> <span class="num">4</span>]
+
+<span class="comment"># With walrus - compute len() once</span>
+<span class="var">long_words</span> <span class="op">=</span> [(w, <span class="var">l</span>) <span class="kw">for</span> <span class="var">w</span> <span class="kw">in</span> <span class="var">words</span> <span class="kw">if</span> (<span class="var">l</span> <span class="op">:=</span> <span class="fn-name">len</span>(<span class="var">w</span>)) <span class="op">></span> <span class="num">4</span>]
+<span class="comment"># Result: [('hello', 5), ('world', 5), ('python', 6)]</span>
+
+<span class="comment"># Avoid repeated expensive function calls</span>
+<span class="var">data</span> <span class="op">=</span> [<span class="str">'  hello  '</span>, <span class="str">'world'</span>, <span class="str">'  python  '</span>]
+<span class="var">cleaned</span> <span class="op">=</span> [<span class="var">s</span> <span class="kw">for</span> <span class="var">item</span> <span class="kw">in</span> <span class="var">data</span> <span class="kw">if</span> (<span class="var">s</span> <span class="op">:=</span> <span class="var">item</span>.<span class="fn-name">strip</span>()).<span class="fn-name">lower</span>()] <span class="kw">for</span> <span class="var">x</span> <span class="kw">in</span> [<span class="num">1</span>]]
+<span class="comment"># Result: [stripped, lowercased strings]</span>
+
+<span class="comment"># Use in dict comprehension</span>
+<span class="var">numbers</span> <span class="op">=</span> [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>]
+<span class="var">squares_dict</span> <span class="op">=</span> {<span class="var">x</span>: <span class="var">sq</span> <span class="kw">for</span> <span class="var">x</span> <span class="kw">in</span> <span class="var">numbers</span> <span class="kw">if</span> (<span class="var">sq</span> <span class="op">:=</span> <span class="var">x</span> <span class="op">**</span> <span class="num">2</span>) <span class="op">></span> <span class="num">10</span>}
+<span class="comment"># Result: {4: 16, 5: 25}</span></pre>
+        </div>
+
+        <p style="margin-top: 1.5rem; color: var(--text2);">The walrus operator <code>:=</code> assigns a value and returns it, all in one expression. This is most useful when the same computation appears multiple times in a comprehension.</p>
+
+        <div class="callout warning">
+          <div class="callout-title">Readability Trade-off</div>
+          <p>While walrus operators reduce duplication, they can make code less clear. Use them when the computation is expensive or repeated multiple times.</p>
+        </div>
+      </section>
+
+      <!-- Section 10: Flattening -->
+      <section class="section" id="flattening">
+        <h2 class="section-title"><span class="section-icon">📦</span> Flattening Nested Structures</h2>
+        <p class="section-intro">
+          Comprehensions excel at flattening nested lists, dictionaries, and complex structures into simple, flat collections. This is a common data processing need.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>flatten_examples.py</span></div>
+          <pre class="code-content"><span class="comment"># Flatten 2D list</span>
+<span class="var">matrix</span> <span class="op">=</span> [[<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>], [<span class="num">4</span>, <span class="num">5</span>], [<span class="num">6</span>, <span class="num">7</span>, <span class="num">8</span>]]
+<span class="var">flat</span> <span class="op">=</span> [<span class="var">x</span> <span class="kw">for</span> <span class="var">row</span> <span class="kw">in</span> <span class="var">matrix</span> <span class="kw">for</span> <span class="var">x</span> <span class="kw">in</span> <span class="var">row</span>]
+<span class="comment"># Result: [1, 2, 3, 4, 5, 6, 7, 8]</span>
+
+<span class="comment"># Flatten 3D list</span>
+<span class="var">cube</span> <span class="op">=</span> [
+    [[<span class="num">1</span>, <span class="num">2</span>], [<span class="num">3</span>, <span class="num">4</span>]],
+    [[<span class="num">5</span>, <span class="num">6</span>], [<span class="num">7</span>, <span class="num">8</span>]]
+]
+<span class="var">flat_cube</span> <span class="op">=</span> [
+    <span class="var">x</span> <span class="kw">for</span> <span class="var">plane</span> <span class="kw">in</span> <span class="var">cube</span>
+    <span class="kw">for</span> <span class="var">row</span> <span class="kw">in</span> <span class="var">plane</span>
+    <span class="kw">for</span> <span class="var">x</span> <span class="kw">in</span> <span class="var">row</span>
+]
+<span class="comment"># Result: [1, 2, 3, 4, 5, 6, 7, 8]</span>
+
+<span class="comment"># Flatten dict values (lists)</span>
+<span class="var">groups</span> <span class="op">=</span> {
+    <span class="str">'A'</span>: [<span class="num">1</span>, <span class="num">2</span>],
+    <span class="str">'B'</span>: [<span class="num">3</span>, <span class="num">4</span>],
+    <span class="str">'C'</span>: [<span class="num">5</span>]
+}
+<span class="var">all_values</span> <span class="op">=</span> [<span class="var">v</span> <span class="kw">for</span> <span class="var">values</span> <span class="kw">in</span> <span class="var">groups</span>.<span class="fn-name">values</span>() <span class="kw">for</span> <span class="var">v</span> <span class="kw">in</span> <span class="var">values</span>]
+<span class="comment"># Result: [1, 2, 3, 4, 5]</span>
+
+<span class="comment"># Flatten with filtering</span>
+<span class="var">nested</span> <span class="op">=</span> [[<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>], [<span class="num">4</span>, <span class="num">5</span>], [<span class="num">6</span>, <span class="num">7</span>]]
+<span class="var">even_flat</span> <span class="op">=</span> [<span class="var">x</span> <span class="kw">for</span> <span class="var">sublist</span> <span class="kw">in</span> <span class="var">nested</span> <span class="kw">for</span> <span class="var">x</span> <span class="kw">in</span> <span class="var">sublist</span> <span class="kw">if</span> <span class="var">x</span> <span class="op">%</span> <span class="num">2</span> <span class="op">==</span> <span class="num">0</span>]
+<span class="comment"># Result: [2, 4, 6]</span></pre>
+        </div>
+
+        <div class="callout tip">
+          <div class="callout-title">Order Matters</div>
+          <p>In nested flattening, the order of <code>for</code> clauses determines the flattening direction. Read them left-to-right like nested loops.</p>
+        </div>
+      </section>
+
+      <!-- Section 11: When NOT to Use -->
+      <section class="section" id="antipatterns">
+        <h2 class="section-title"><span class="section-icon">⚠️</span> When NOT to Use Comprehensions</h2>
+        <p class="section-intro">
+          While comprehensions are powerful, they're not always the best choice. Readability matters more than cleverness. Know when to use explicit loops instead.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>antipatterns.py</span></div>
+          <pre class="code-content"><span class="comment"># AVOID: Too complex to read</span>
+<span class="var">result</span> <span class="op">=</span> [
+    <span class="var">f</span>(<span class="var">x</span>) <span class="kw">if</span> <span class="var">g</span>(<span class="var">x</span>) <span class="kw">else</span> <span class="var">h</span>(<span class="var">x</span>) <span class="kw">for</span> <span class="var">x</span> <span class="kw">in</span> <span class="var">data</span>
+    <span class="kw">if</span> <span class="var">p</span>(<span class="var">x</span>) <span class="op">and</span> <span class="var">q</span>(<span class="var">x</span>) <span class="op">or</span> <span class="var">r</span>(<span class="var">x</span>)
+]
+
+<span class="comment"># BETTER: Use explicit loop</span>
+<span class="var">result</span> <span class="op">=</span> []
+<span class="kw">for</span> <span class="var">x</span> <span class="kw">in</span> <span class="var">data</span>:
+    <span class="kw">if</span> (<span class="var">p</span>(<span class="var">x</span>) <span class="op">and</span> <span class="var">q</span>(<span class="var">x</span>)) <span class="op">or</span> <span class="var">r</span>(<span class="var">x</span>):
+        <span class="kw">if</span> <span class="var">g</span>(<span class="var">x</span>):
+            <span class="var">result</span>.<span class="fn-name">append</span>(<span class="fn-name">f</span>(<span class="var">x</span>))
+        <span class="kw">else</span>:
+            <span class="var">result</span>.<span class="fn-name">append</span>(<span class="fn-name">h</span>(<span class="var">x</span>))
+
+<span class="comment"># AVOID: Side effects in comprehension</span>
+<span class="var">squared</span> <span class="op">=</span> [<span class="fn-name">print</span>(<span class="var">x</span>) <span class="kw">or</span> <span class="var">x</span><span class="op">**</span><span class="num">2</span> <span class="kw">for</span> <span class="var">x</span> <span class="kw">in</span> <span class="var">numbers</span>]  <span class="comment"># Ugly!</span>
+
+<span class="comment"># BETTER: Separate concerns</span>
+<span class="kw">for</span> <span class="var">x</span> <span class="kw">in</span> <span class="var">numbers</span>:
+    <span class="fn-name">print</span>(<span class="var">x</span>)
+<span class="var">squared</span> <span class="op">=</span> [<span class="var">x</span><span class="op">**</span><span class="num">2</span> <span class="kw">for</span> <span class="var">x</span> <span class="kw">in</span> <span class="var">numbers</span>]
+
+<span class="comment"># AVOID: Deeply nested (3+ levels)</span>
+<span class="var">bad</span> <span class="op">=</span> [
+    <span class="var">x</span> <span class="kw">for</span> <span class="var">a</span> <span class="kw">in</span> <span class="var">l1</span> <span class="kw">for</span> <span class="var">b</span> <span class="kw">in</span> <span class="var">l2</span> <span class="kw">for</span> <span class="var">c</span> <span class="kw">in</span> <span class="var">l3</span>
+    <span class="kw">if</span> <span class="fn-name">check</span>(<span class="var">a</span>, <span class="var">b</span>, <span class="var">c</span>)
+    <span class="kw">for</span> <span class="var">x</span> <span class="kw">in</span> <span class="fn-name">process</span>(<span class="var">a</span>, <span class="var">b</span>, <span class="var">c</span>)
+]
+
+<span class="comment"># BETTER: Use explicit loops for clarity</span>
+<span class="var">good</span> <span class="op">=</span> []
+<span class="kw">for</span> <span class="var">a</span> <span class="kw">in</span> <span class="var">l1</span>:
+    <span class="kw">for</span> <span class="var">b</span> <span class="kw">in</span> <span class="var">l2</span>:
+        <span class="kw">for</span> <span class="var">c</span> <span class="kw">in</span> <span class="var">l3</span>:
+            <span class="kw">if</span> <span class="fn-name">check</span>(<span class="var">a</span>, <span class="var">b</span>, <span class="var">c</span>):
+                <span class="var">good</span>.<span class="fn-name">extend</span>(<span class="fn-name">process</span>(<span class="var">a</span>, <span class="var">b</span>, <span class="var">c</span>))</pre>
+        </div>
+
+        <div class="callout warning">
+          <div class="callout-title">Readability First</div>
+          <p>If a comprehension is hard to understand, use a loop instead. Code is read far more often than it's written. Prioritize clarity over cleverness.</p>
+        </div>
+      </section>
+
+      <!-- Section 12: Real-World Patterns -->
+      <section class="section" id="realworld">
+        <h2 class="section-title"><span class="section-icon">🌍</span> Real-World Patterns</h2>
+        <p class="section-intro">
+          Comprehensions shine in real-world data processing. Here are patterns you'll use constantly: transforming API responses, batch operations, and data pipelines.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>realworld_patterns.py</span></div>
+          <pre class="code-content"><span class="comment"># Pattern 1: Extract from API response</span>
+<span class="var">api_response</span> <span class="op">=</span> [
+    {<span class="str">'id'</span>: <span class="num">1</span>, <span class="str">'name'</span>: <span class="str">'Alice'</span>, <span class="str">'email'</span>: <span class="str">'alice@example.com'</span>},
+    {<span class="str">'id'</span>: <span class="num">2</span>, <span class="str">'name'</span>: <span class="str">'Bob'</span>, <span class="str">'email'</span>: <span class="str">'bob@example.com'</span>}
+]
+<span class="var">emails</span> <span class="op">=</span> [<span class="var">user</span>[<span class="str">'email'</span>] <span class="kw">for</span> <span class="var">user</span> <span class="kw">in</span> <span class="var">api_response</span>]
+
+<span class="comment"># Pattern 2: Filter by condition</span>
+<span class="var">products</span> <span class="op">=</span> [
+    {<span class="str">'name'</span>: <span class="str">'Laptop'</span>, <span class="str">'price'</span>: <span class="num">1200</span>},
+    {<span class="str">'name'</span>: <span class="str">'Mouse'</span>, <span class="str">'price'</span>: <span class="num">25</span>}
+]
+<span class="var">expensive</span> <span class="op">=</span> [<span class="var">p</span> <span class="kw">for</span> <span class="var">p</span> <span class="kw">in</span> <span class="var">products</span> <span class="kw">if</span> <span class="var">p</span>[<span class="str">'price'</span>] <span class="op">></span> <span class="num">100</span>]
+
+<span class="comment"># Pattern 3: Batch operation with retry</span>
+<span class="kw">def</span> <span class="fn-name">process_safely</span>(<span class="var">item</span>):
+    <span class="kw">try</span>:
+        <span class="kw">return</span> <span class="fn-name">process</span>(<span class="var">item</span>)
+    <span class="kw">except</span>:
+        <span class="kw">return</span> <span class="kw">None</span>
+
+<span class="var">items</span> <span class="op">=</span> [<span class="str">'item1'</span>, <span class="str">'item2'</span>, <span class="str">'item3'</span>]
+<span class="var">results</span> <span class="op">=</span> [<span class="fn-name">process_safely</span>(<span class="var">item</span>) <span class="kw">for</span> <span class="var">item</span> <span class="kw">in</span> <span class="var">items</span> <span class="kw">if</span> <span class="fn-name">process_safely</span>(<span class="var">item</span>) <span class="kw">is</span> <span class="kw">not</span> <span class="kw">None</span>]
+
+<span class="comment"># Pattern 4: Data validation and cleaning</span>
+<span class="var">raw_data</span> <span class="op">=</span> [<span class="str">'Alice'</span>, <span class="str">''</span>, <span class="str">'Bob'</span>, <span class="str">'   '</span>, <span class="str">'Charlie'</span>]
+<span class="var">cleaned</span> <span class="op">=</span> [<span class="var">name</span>.<span class="fn-name">strip</span>() <span class="kw">for</span> <span class="var">name</span> <span class="kw">in</span> <span class="var">raw_data</span> <span class="kw">if</span> <span class="var">name</span>.<span class="fn-name">strip</span>()]
+
+<span class="comment"># Pattern 5: Create lookup table</span>
+<span class="var">users</span> <span class="op">=</span> [{<span class="str">'id'</span>: <span class="num">1</span>, <span class="str">'name'</span>: <span class="str">'Alice'</span>}, {<span class="str">'id'</span>: <span class="num">2</span>, <span class="str">'name'</span>: <span class="str">'Bob'</span>}]
+<span class="var">id_to_name</span> <span class="op">=</span> {<span class="var">u</span>[<span class="str">'id'</span>]: <span class="var">u</span>[<span class="str">'name'</span>] <span class="kw">for</span> <span class="var">u</span> <span class="kw">in</span> <span class="var">users</span>}
+
+<span class="comment"># Pattern 6: Group and deduplicate</span>
+<span class="var">tags</span> <span class="op">=</span> [<span class="str">'python'</span>, <span class="str">'javascript'</span>, <span class="str">'python'</span>, <span class="str">'rust'</span>, <span class="str">'javascript'</span>]
+<span class="var">unique_tags</span> <span class="op">=</span> {<span class="var">t</span> <span class="kw">for</span> <span class="var">t</span> <span class="kw">in</span> <span class="var">tags</span>}</pre>
+        </div>
+
+        <p style="margin-top: 1.5rem; color: var(--text2);">These patterns appear in every Python project. Mastering them will make your data processing code clean, fast, and Pythonic.</p>
+
+        <div class="callout tip">
+          <div class="callout-title">Pro Tip</div>
+          <p>Combine comprehensions with built-in functions like <code>sorted()</code>, <code>map()</code>, and <code>filter()</code> for composable pipelines. Comprehensions are often clearer than function chaining.</p>
+        </div>
+      </section>
+
+      <!-- Practice CTA -->
+      <div class="practice-cta">
+        <div class="cta-text">
+          <div class="cta-title">Ready to Practice?</div>
+          <div class="cta-sub">50 comprehension challenges from easy to hard await.</div>
+        </div>
+        <a href="challenges_comprehensions.html" class="cta-btn">Start Challenges →</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Sidebar navigation active state
+    const links = document.querySelectorAll('.sidebar-nav a');
+    const sections = document.querySelectorAll('.section');
+
+    function updateActiveLink() {
+      let current = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        if (pageYOffset >= sectionTop - 100) {
+          current = section.getAttribute('id');
+        }
+      });
+
+      links.forEach(link => {
+        link.parentElement.classList.remove('active');
+        if (link.getAttribute('href').slice(1) === current) {
+          link.parentElement.classList.add('active');
+        }
+      });
+    }
+
+    window.addEventListener('scroll', updateActiveLink);
+    updateActiveLink();
+  </script>
+</body>
+</html>

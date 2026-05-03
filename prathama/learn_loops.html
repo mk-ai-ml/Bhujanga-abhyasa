@@ -1,0 +1,1486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python Loops - Bhujanga Abhyāsa</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Sora:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f5f4f0;
+      --bg2: #eeecea;
+      --surface: #ffffff;
+      --surface2: #fafaf8;
+      --border: #e2dfd9;
+      --border2: #cdc9c2;
+      --text: #1e1c18;
+      --text2: #6b6760;
+      --text3: #9e9b96;
+      --text-inv: #ffffff;
+      --blue: #3b6fd4;
+      --blue-bg: #eef2fb;
+      --green: #2e7d52;
+      --green-bg: #edf5f0;
+      --amber: #b45309;
+      --amber-bg: #fef6ec;
+      --red: #c0392b;
+      --red-bg: #fdf0ee;
+      --purple: #6d4fc2;
+      --purple-bg: #f2eefb;
+      --teal: #1a7a7a;
+      --loop-color: #2e7d52;
+      --code-bg: #1e1c18;
+      --code-text: #e8e4db;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Sora', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Top Navigation */
+    .top-nav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--loop-color);
+    }
+
+    .back-link {
+      color: var(--text2);
+      text-decoration: none;
+      font-size: 0.95rem;
+      padding: 0.5rem 1rem;
+      border-radius: 0.375rem;
+      transition: all 0.2s;
+    }
+
+    .back-link:hover {
+      background: var(--bg2);
+      color: var(--loop-color);
+    }
+
+    .container {
+      display: flex;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      position: sticky;
+      top: 64px;
+      width: 280px;
+      height: calc(100vh - 64px);
+      background: var(--surface2);
+      border-right: 1px solid var(--border);
+      overflow-y: auto;
+      padding: 1.5rem 0;
+    }
+
+    .sidebar-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--loop-color);
+      padding: 0 1.5rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .sidebar-nav {
+      list-style: none;
+    }
+
+    .sidebar-nav li {
+      border-left: 3px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .sidebar-nav a {
+      display: block;
+      padding: 0.75rem 1.5rem;
+      color: var(--text2);
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: all 0.2s;
+    }
+
+    .sidebar-nav li:hover {
+      border-left-color: var(--loop-color);
+      background: var(--bg);
+    }
+
+    .sidebar-nav a:hover {
+      color: var(--loop-color);
+      padding-left: 2rem;
+    }
+
+    .sidebar-nav li.active {
+      border-left-color: var(--loop-color);
+      background: var(--green-bg);
+    }
+
+    .sidebar-nav li.active a {
+      color: var(--loop-color);
+      font-weight: 600;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      padding: 3rem 4rem;
+      max-width: 900px;
+    }
+
+    /* Section Styling */
+    .section {
+      margin-bottom: 4rem;
+      scroll-margin-top: 80px;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--loop-color);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .section-icon {
+      font-size: 2.25rem;
+    }
+
+    .section-intro {
+      color: var(--text2);
+      font-size: 1.05rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.8;
+    }
+
+    /* Code Block Styling */
+    .code-block {
+      background: var(--code-bg);
+      border-radius: 0.5rem;
+      margin: 1.5rem 0;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .code-block-header {
+      background: #16140f;
+      padding: 0.75rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #2a2722;
+      font-size: 0.85rem;
+      color: var(--text3);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .code-dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+    }
+
+    .code-dot.d1 { background: #ff605c; }
+    .code-dot.d2 { background: #ffbd44; }
+    .code-dot.d3 { background: #00ca4e; }
+
+    .code-content {
+      padding: 1.5rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      color: var(--code-text);
+      overflow-x: auto;
+      line-height: 1.7;
+    }
+
+    /* Syntax Highlighting */
+    .kw { color: #ff6b6b; font-weight: 500; } /* keywords */
+    .fn-name { color: #51cf66; } /* functions */
+    .str { color: #ffa94d; } /* strings */
+    .num { color: #b197fc; } /* numbers */
+    .comment { color: #909090; font-style: italic; }
+    .var { color: var(--code-text); }
+    .op { color: #74c0fc; } /* operators */
+
+    /* Diagram Styling */
+    .diagram-box {
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: 0.5rem;
+      padding: 2rem;
+      margin: 1.5rem 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .diagram-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text2);
+      margin-bottom: 1rem;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Iteration Visualizer */
+    .iter-vis {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      width: 100%;
+    }
+
+    .iter-row {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .iter-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text2);
+      width: 60px;
+      text-align: right;
+    }
+
+    .iter-cells {
+      display: flex;
+      gap: 0.5rem;
+      flex: 1;
+    }
+
+    .iter-cell {
+      min-width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg2);
+      border: 2px solid var(--border);
+      border-radius: 0.375rem;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.3s;
+    }
+
+    .iter-cell.active {
+      background: var(--green-bg);
+      border-color: var(--loop-color);
+      color: var(--loop-color);
+      transform: scale(1.1);
+    }
+
+    .iter-cell.done {
+      background: var(--green);
+      color: var(--text-inv);
+      border-color: var(--loop-color);
+    }
+
+    /* Flow Diagram */
+    .flow-diagram {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      width: 100%;
+    }
+
+    .flow-node {
+      background: var(--blue-bg);
+      border: 2px solid var(--blue);
+      border-radius: 0.5rem;
+      padding: 1rem 1.5rem;
+      text-align: center;
+      font-weight: 600;
+      color: var(--blue);
+      min-width: 150px;
+    }
+
+    .flow-node.flow-start,
+    .flow-node.flow-end {
+      background: var(--green-bg);
+      border-color: var(--loop-color);
+      color: var(--loop-color);
+      border-radius: 2rem;
+    }
+
+    .flow-node.flow-cond {
+      background: var(--amber-bg);
+      border-color: var(--amber);
+      color: var(--amber);
+    }
+
+    .flow-arrow {
+      width: 3px;
+      height: 30px;
+      background: var(--border2);
+      position: relative;
+      margin: 0;
+    }
+
+    .flow-arrow::after {
+      content: '';
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: var(--border2);
+      bottom: -5px;
+      left: 50%;
+      transform: translateX(-50%);
+      clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    }
+
+    /* Callouts */
+    .callout {
+      border-left: 4px solid var(--blue);
+      background: var(--blue-bg);
+      padding: 1rem 1.5rem;
+      border-radius: 0.375rem;
+      margin: 1.5rem 0;
+      color: var(--text);
+    }
+
+    .callout.info {
+      border-left-color: var(--blue);
+      background: var(--blue-bg);
+    }
+
+    .callout.warning {
+      border-left-color: var(--amber);
+      background: var(--amber-bg);
+    }
+
+    .callout.tip {
+      border-left-color: var(--loop-color);
+      background: var(--green-bg);
+    }
+
+    .callout-title {
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      font-size: 0.95rem;
+    }
+
+    /* Comparison Table */
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+      overflow: hidden;
+    }
+
+    .compare-table th {
+      background: var(--bg2);
+      padding: 1rem;
+      text-align: left;
+      font-weight: 700;
+      border-bottom: 2px solid var(--border);
+      color: var(--text);
+    }
+
+    .compare-table td {
+      padding: 1rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--text2);
+    }
+
+    .compare-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Practice CTA */
+    .practice-cta {
+      background: linear-gradient(135deg, var(--green-bg) 0%, var(--blue-bg) 100%);
+      border: 2px solid var(--loop-color);
+      border-radius: 0.75rem;
+      padding: 2rem;
+      margin-top: 4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .cta-text {
+      flex: 1;
+    }
+
+    .cta-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--loop-color);
+      margin-bottom: 0.5rem;
+    }
+
+    .cta-sub {
+      color: var(--text2);
+      font-size: 1rem;
+    }
+
+    .cta-btn {
+      background: var(--loop-color);
+      color: var(--text-inv);
+      padding: 0.875rem 1.75rem;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      transition: all 0.2s;
+      white-space: nowrap;
+      display: inline-block;
+    }
+
+    .cta-btn:hover {
+      background: #245d42;
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg2);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border2);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--text2);
+    }
+
+    @media (max-width: 1024px) {
+      .sidebar {
+        width: 220px;
+      }
+      .main-content {
+        padding: 2rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+      .sidebar {
+        position: relative;
+        top: 0;
+        width: 100%;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        max-height: 200px;
+        overflow-x: auto;
+        padding: 1rem;
+      }
+      .sidebar-nav {
+        display: flex;
+        gap: 1rem;
+      }
+      .sidebar-nav li {
+        border-left: none;
+        border-bottom: 3px solid transparent;
+      }
+      .main-content {
+        padding: 1.5rem;
+      }
+      .practice-cta {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Top Navigation -->
+  <div class="top-nav">
+    <div class="nav-left">
+      <div class="logo">🔁 Loops</div>
+      <a href="abhyasa_prathama.html" class="back-link">← Back to Prathama</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+      <div class="sidebar-title">🔁 Chapters</div>
+      <ul class="sidebar-nav">
+        <li><a href="#for-loop">The for Loop</a></li>
+        <li><a href="#range-variants">range() Variants</a></li>
+        <li><a href="#while-loop">The while Loop</a></li>
+        <li><a href="#flow-control">break, continue, pass</a></li>
+        <li><a href="#for-else">for-else</a></li>
+        <li><a href="#enumerate">enumerate()</a></li>
+        <li><a href="#zip">zip()</a></li>
+        <li><a href="#nested">Nested Loops</a></li>
+        <li><a href="#patterns">Loop Patterns</a></li>
+        <li><a href="#sliding-window">Sliding Window</a></li>
+        <li><a href="#two-pointer">Two-Pointer Technique</a></li>
+        <li><a href="#algorithms">Common Algorithms</a></li>
+      </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <!-- Section 1: The for Loop -->
+      <section class="section" id="for-loop">
+        <h2 class="section-title"><span class="section-icon">🔁</span> The for Loop</h2>
+        <p class="section-intro">
+          The for loop is the foundation of iteration in Python. It allows you to execute a block of code multiple times, once for each item in a sequence. Unlike loops in some other languages, Python's for loop is specifically designed to iterate over iterable objects like lists, strings, and ranges.
+        </p>
+
+        <p>A for loop has a simple structure: you specify a variable name that will hold each item, followed by the keyword <code>in</code>, followed by the iterable you want to loop through. Here's the anatomy:</p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>for_loop_basics.py</span></div>
+          <pre class="code-content"><span class="kw">for</span> <span class="var">item</span> <span class="kw">in</span> <span class="var">sequence</span>:
+    <span class="comment"># This block executes for each item</span>
+    <span class="fn-name">print</span>(<span class="var">item</span>)
+
+<span class="comment"># Example with a list</span>
+<span class="var">fruits</span> <span class="op">=</span> [<span class="str">'apple'</span>, <span class="str">'banana'</span>, <span class="str">'cherry'</span>]
+<span class="kw">for</span> <span class="var">fruit</span> <span class="kw">in</span> <span class="var">fruits</span>:
+    <span class="fn-name">print</span>(<span class="str">f'I like {</span><span class="var">fruit</span><span class="str">}'</span>)
+
+<span class="comment"># Example with a string</span>
+<span class="kw">for</span> <span class="var">letter</span> <span class="kw">in</span> <span class="str">'Python'</span>:
+    <span class="fn-name">print</span>(<span class="var">letter</span>)</pre>
+        </div>
+
+        <p style="margin-top: 1.5rem; color: var(--text2);">When you iterate over a list, string, or other sequence, Python steps through each element in order, assigning it to the loop variable (in this case, <code>fruit</code> or <code>letter</code>). The indented block of code runs once per item.</p>
+
+        <div class="diagram-box">
+          <div style="width: 100%;">
+            <div class="diagram-title">List Iteration Visualization</div>
+            <div class="iter-vis">
+              <div class="iter-row">
+                <div class="iter-label">List:</div>
+                <div class="iter-cells">
+                  <div class="iter-cell">apple</div>
+                  <div class="iter-cell">banana</div>
+                  <div class="iter-cell">cherry</div>
+                </div>
+              </div>
+              <div class="iter-row">
+                <div class="iter-label">Step 1:</div>
+                <div class="iter-cells">
+                  <div class="iter-cell active">apple</div>
+                  <div class="iter-cell">banana</div>
+                  <div class="iter-cell">cherry</div>
+                </div>
+              </div>
+              <div class="iter-row">
+                <div class="iter-label">Step 2:</div>
+                <div class="iter-cells">
+                  <div class="iter-cell done">apple</div>
+                  <div class="iter-cell active">banana</div>
+                  <div class="iter-cell">cherry</div>
+                </div>
+              </div>
+              <div class="iter-row">
+                <div class="iter-label">Step 3:</div>
+                <div class="iter-cells">
+                  <div class="iter-cell done">apple</div>
+                  <div class="iter-cell done">banana</div>
+                  <div class="iter-cell active">cherry</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout tip">
+          <div class="callout-title">Pro Tip</div>
+          <p>Choose descriptive variable names for your loop variable. Use <code>for fruit in fruits:</code> instead of <code>for f in fruits:</code>. Your future self will thank you!</p>
+        </div>
+      </section>
+
+      <!-- Section 2: range() Variants -->
+      <section class="section" id="range-variants">
+        <h2 class="section-title"><span class="section-icon">📊</span> range() Variants</h2>
+        <p class="section-intro">
+          The <code>range()</code> function is one of the most useful tools for looping a specific number of times. It generates a sequence of numbers, and you can customize the start, stop, and step values.
+        </p>
+
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th>Syntax</th>
+              <th>Explanation</th>
+              <th>Example</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>range(n)</code></td>
+              <td>Generates 0 to n-1</td>
+              <td><code>range(5)</code> → 0,1,2,3,4</td>
+            </tr>
+            <tr>
+              <td><code>range(start, stop)</code></td>
+              <td>Generates start to stop-1</td>
+              <td><code>range(2, 5)</code> → 2,3,4</td>
+            </tr>
+            <tr>
+              <td><code>range(start, stop, step)</code></td>
+              <td>Generates with custom step</td>
+              <td><code>range(0, 10, 2)</code> → 0,2,4,6,8</td>
+            </tr>
+            <tr>
+              <td><code>range(start, stop, -step)</code></td>
+              <td>Generates backwards</td>
+              <td><code>range(5, 0, -1)</code> → 5,4,3,2,1</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>range_examples.py</span></div>
+          <pre class="code-content"><span class="comment"># range(n) - count from 0 to n-1</span>
+<span class="kw">for</span> <span class="var">i</span> <span class="kw">in</span> <span class="fn-name">range</span>(<span class="num">5</span>):
+    <span class="fn-name">print</span>(<span class="var">i</span>)  <span class="comment"># Output: 0, 1, 2, 3, 4</span>
+
+<span class="comment"># range(start, stop) - start at a different number</span>
+<span class="kw">for</span> <span class="var">i</span> <span class="kw">in</span> <span class="fn-name">range</span>(<span class="num">2</span>, <span class="num">8</span>):
+    <span class="fn-name">print</span>(<span class="var">i</span>)  <span class="comment"># Output: 2, 3, 4, 5, 6, 7</span>
+
+<span class="comment"># range(start, stop, step) - skip numbers</span>
+<span class="kw">for</span> <span class="var">i</span> <span class="kw">in</span> <span class="fn-name">range</span>(<span class="num">0</span>, <span class="num">10</span>, <span class="num">2</span>):
+    <span class="fn-name">print</span>(<span class="var">i</span>)  <span class="comment"># Output: 0, 2, 4, 6, 8</span>
+
+<span class="comment"># Negative step - count backwards</span>
+<span class="kw">for</span> <span class="var">i</span> <span class="kw">in</span> <span class="fn-name">range</span>(<span class="num">5</span>, <span class="num">0</span>, <span class="op">-</span><span class="num">1</span>):
+    <span class="fn-name">print</span>(<span class="var">i</span>)  <span class="comment"># Output: 5, 4, 3, 2, 1</span></pre>
+        </div>
+
+        <div class="diagram-box">
+          <div style="width: 100%;">
+            <div class="diagram-title">range() on a Number Line</div>
+            <svg viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg" style="max-width: 100%;">
+              <!-- Title -->
+              <text x="300" y="30" text-anchor="middle" font-size="14" font-weight="bold" fill="var(--text)">range(2, 8, 1)</text>
+              <!-- Number line -->
+              <line x1="50" y1="80" x2="550" y2="80" stroke="var(--border2)" stroke-width="2"/>
+              <!-- Tick marks and numbers -->
+              <g font-size="12" text-anchor="middle">
+                <line x1="50" y1="75" x2="50" y2="85" stroke="var(--text2)"/>
+                <text x="50" y="100" fill="var(--text2)">0</text>
+                <line x1="120" y1="75" x2="120" y2="85" stroke="var(--text2)"/>
+                <text x="120" y="100" fill="var(--text2)">1</text>
+                <line x1="190" y1="75" x2="190" y2="85" stroke="var(--text2)"/>
+                <text x="190" y="100" fill="var(--text2)">2</text>
+                <line x1="260" y1="75" x2="260" y2="85" stroke="var(--text2)"/>
+                <text x="260" y="100" fill="var(--text2)">3</text>
+                <line x1="330" y1="75" x2="330" y2="85" stroke="var(--text2)"/>
+                <text x="330" y="100" fill="var(--text2)">4</text>
+                <line x1="400" y1="75" x2="400" y2="85" stroke="var(--text2)"/>
+                <text x="400" y="100" fill="var(--text2)">5</text>
+                <line x1="470" y1="75" x2="470" y2="85" stroke="var(--text2)"/>
+                <text x="470" y="100" fill="var(--text2)">6</text>
+                <line x1="540" y1="75" x2="540" y2="85" stroke="var(--text2)"/>
+                <text x="540" y="100" fill="var(--text2)">7</text>
+              </g>
+              <!-- Highlight range(2, 8) -->
+              <rect x="190" y="130" width="280" height="40" fill="var(--green-bg)" stroke="var(--loop-color)" stroke-width="2"/>
+              <text x="330" y="160" text-anchor="middle" font-weight="bold" fill="var(--loop-color)" font-size="14">Included: 2, 3, 4, 5, 6, 7</text>
+            </svg>
+          </div>
+        </div>
+
+        <div class="callout warning">
+          <div class="callout-title">Remember: range() excludes the stop value</div>
+          <p><code>range(5)</code> generates 0, 1, 2, 3, 4 (not including 5). This is called "exclusive" of the stop value. Always keep this in mind!</p>
+        </div>
+      </section>
+
+      <!-- Section 3: The while Loop -->
+      <section class="section" id="while-loop">
+        <h2 class="section-title"><span class="section-icon">⚙️</span> The while Loop</h2>
+        <p class="section-intro">
+          While a for loop iterates a fixed number of times over a sequence, a <code>while</code> loop continues as long as a condition remains true. It's useful when you don't know in advance how many iterations you need.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>while_examples.py</span></div>
+          <pre class="code-content"><span class="comment"># Simple countdown</span>
+<span class="var">count</span> <span class="op">=</span> <span class="num">5</span>
+<span class="kw">while</span> <span class="var">count</span> <span class="op">></span> <span class="num">0</span>:
+    <span class="fn-name">print</span>(<span class="var">count</span>)
+    <span class="var">count</span> <span class="op">=</span> <span class="var">count</span> <span class="op">-</span> <span class="num">1</span>
+
+<span class="comment"># Read until user enters 'quit'</span>
+<span class="var">user_input</span> <span class="op">=</span> <span class="str">''</span>
+<span class="kw">while</span> <span class="var">user_input</span> <span class="op">!=</span> <span class="str">'quit'</span>:
+    <span class="var">user_input</span> <span class="op">=</span> <span class="fn-name">input</span>(<span class="str">'Enter command: '</span>)
+    <span class="fn-name">print</span>(<span class="str">f'You entered: {</span><span class="var">user_input</span><span class="str">}'</span>)
+
+<span class="comment"># Keep doubling until value exceeds 1000</span>
+<span class="var">value</span> <span class="op">=</span> <span class="num">1</span>
+<span class="kw">while</span> <span class="var">value</span> <span class="op"><</span> <span class="num">1000</span>:
+    <span class="fn-name">print</span>(<span class="var">value</span>)
+    <span class="var">value</span> <span class="op">=</span> <span class="var">value</span> <span class="op">*</span> <span class="num">2</span></pre>
+        </div>
+
+        <div class="diagram-box">
+          <div style="width: 100%;">
+            <div class="diagram-title">while Loop Flowchart</div>
+            <div class="flow-diagram">
+              <div class="flow-node flow-start">START</div>
+              <div class="flow-arrow"></div>
+              <div class="flow-node flow-cond">condition<br/>true?</div>
+              <div class="flow-arrow"></div>
+              <div class="flow-node">Execute loop<br/>body</div>
+              <div class="flow-arrow"></div>
+              <div class="flow-node">Update<br/>variables</div>
+              <div style="display: flex; gap: 2rem; margin: 1rem 0;">
+                <div style="text-align: center;">
+                  <div class="flow-arrow" style="height: 60px;"></div>
+                  <div style="font-size: 0.85rem; color: var(--text2);">Back to condition</div>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: center;">
+                  <div style="color: var(--text2); font-weight: 600; margin-bottom: 1rem;">condition false</div>
+                  <div class="flow-arrow" style="height: 60px;"></div>
+                  <div class="flow-node flow-end">EXIT</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout warning">
+          <div class="callout-title">Beware of Infinite Loops!</div>
+          <p>If your condition never becomes false, your loop will run forever. Always make sure your loop updates a variable that affects the condition. For example, in <code>while count > 0:</code>, you must decrement <code>count</code> inside the loop.</p>
+        </div>
+      </section>
+
+      <!-- Section 4: break, continue, pass -->
+      <section class="section" id="flow-control">
+        <h2 class="section-title"><span class="section-icon">🎛️</span> break, continue, pass</h2>
+        <p class="section-intro">
+          These three statements give you fine-grained control over loop execution. They let you exit early, skip iterations, or do nothing when needed.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>flow_control.py</span></div>
+          <pre class="code-content"><span class="comment"># break - exit the loop immediately</span>
+<span class="kw">for</span> <span class="var">i</span> <span class="kw">in</span> <span class="fn-name">range</span>(<span class="num">10</span>):
+    <span class="kw">if</span> <span class="var">i</span> <span class="op">==</span> <span class="num">5</span>:
+        <span class="kw">break</span>  <span class="comment"># Stop the loop when i reaches 5</span>
+    <span class="fn-name">print</span>(<span class="var">i</span>)  <span class="comment"># Prints 0, 1, 2, 3, 4</span>
+
+<span class="comment"># continue - skip to the next iteration</span>
+<span class="kw">for</span> <span class="var">i</span> <span class="kw">in</span> <span class="fn-name">range</span>(<span class="num">5</span>):
+    <span class="kw">if</span> <span class="var">i</span> <span class="op">==</span> <span class="num">2</span>:
+        <span class="kw">continue</span>  <span class="comment"># Skip i=2</span>
+    <span class="fn-name">print</span>(<span class="var">i</span>)  <span class="comment"># Prints 0, 1, 3, 4</span>
+
+<span class="comment"># pass - do nothing (placeholder)</span>
+<span class="kw">for</span> <span class="var">i</span> <span class="kw">in</span> <span class="fn-name">range</span>(<span class="num">3</span>):
+    <span class="kw">if</span> <span class="var">i</span> <span class="op">==</span> <span class="num">1</span>:
+        <span class="kw">pass</span>  <span class="comment"># Do nothing, just continue</span>
+    <span class="fn-name">print</span>(<span class="var">i</span>)  <span class="comment"># Prints 0, 1, 2</span>
+
+<span class="comment"># Practical: Search for an item</span>
+<span class="var">items</span> <span class="op">=</span> [<span class="num">10</span>, <span class="num">20</span>, <span class="num">30</span>, <span class="num">40</span>, <span class="num">50</span>]
+<span class="var">target</span> <span class="op">=</span> <span class="num">30</span>
+<span class="var">found</span> <span class="op">=</span> <span class="kw">False</span>
+<span class="kw">for</span> <span class="var">item</span> <span class="kw">in</span> <span class="var">items</span>:
+    <span class="kw">if</span> <span class="var">item</span> <span class="op">==</span> <span class="var">target</span>:
+        <span class="var">found</span> <span class="op">=</span> <span class="kw">True</span>
+        <span class="kw">break</span>
+<span class="fn-name">print</span>(<span class="var">found</span>)  <span class="comment"># True</span></pre>
+        </div>
+
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th>Statement</th>
+              <th>Effect</th>
+              <th>Use Case</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>break</code></td>
+              <td>Exit loop immediately</td>
+              <td>Stop searching when item found</td>
+            </tr>
+            <tr>
+              <td><code>continue</code></td>
+              <td>Skip to next iteration</td>
+              <td>Skip invalid or unwanted items</td>
+            </tr>
+            <tr>
+              <td><code>pass</code></td>
+              <td>Do nothing (placeholder)</td>
+              <td>Empty block in if/else/loop</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Section 5: for-else -->
+      <section class="section" id="for-else">
+        <h2 class="section-title"><span class="section-icon">🔀</span> for-else</h2>
+        <p class="section-intro">
+          Python has a unique feature: you can attach an <code>else</code> clause to a <code>for</code> loop. The else block runs if the loop completes normally without hitting a <code>break</code> statement.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>for_else_example.py</span></div>
+          <pre class="code-content"><span class="comment"># Example 1: Found - else doesn't run</span>
+<span class="var">numbers</span> <span class="op">=</span> [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>]
+<span class="kw">for</span> <span class="var">num</span> <span class="kw">in</span> <span class="var">numbers</span>:
+    <span class="kw">if</span> <span class="var">num</span> <span class="op">==</span> <span class="num">3</span>:
+        <span class="fn-name">print</span>(<span class="str">'Found!'</span>)
+        <span class="kw">break</span>
+<span class="kw">else</span>:
+    <span class="fn-name">print</span>(<span class="str">'Not found'</span>)  <span class="comment"># This doesn't print</span>
+
+<span class="comment"># Example 2: Not found - else runs</span>
+<span class="kw">for</span> <span class="var">num</span> <span class="kw">in</span> <span class="var">numbers</span>:
+    <span class="kw">if</span> <span class="var">num</span> <span class="op">==</span> <span class="num">10</span>:
+        <span class="fn-name">print</span>(<span class="str">'Found!'</span>)
+        <span class="kw">break</span>
+<span class="kw">else</span>:
+    <span class="fn-name">print</span>(<span class="str">'Not found'</span>)  <span class="comment"># This prints!</span>
+
+<span class="comment"># Practical: Check if all items pass a test</span>
+<span class="var">scores</span> <span class="op">=</span> [<span class="num">85</span>, <span class="num">90</span>, <span class="num">88</span>, <span class="num">92</span>]
+<span class="kw">for</span> <span class="var">score</span> <span class="kw">in</span> <span class="var">scores</span>:
+    <span class="kw">if</span> <span class="var">score</span> <span class="op"><</span> <span class="num">80</span>:
+        <span class="fn-name">print</span>(<span class="str">'Someone failed!'</span>)
+        <span class="kw">break</span>
+<span class="kw">else</span>:
+    <span class="fn-name">print</span>(<span class="str">'Everyone passed!'</span>)  <span class="comment"># Prints this</span></pre>
+        </div>
+
+        <div class="callout info">
+          <div class="callout-title">How for-else Works</div>
+          <ul style="margin-top: 0.5rem; margin-left: 1.5rem;">
+            <li>If <code>break</code> is executed: <code>else</code> block is <strong>skipped</strong></li>
+            <li>If loop completes naturally: <code>else</code> block <strong>runs</strong></li>
+            <li>If the loop never runs (empty sequence): <code>else</code> block <strong>still runs</strong></li>
+          </ul>
+        </div>
+
+        <div class="callout tip">
+          <div class="callout-title">When to Use for-else</div>
+          <p>Use for-else when you want to do something after searching through a collection but only if the search was unsuccessful. It's a clean way to say "if we got through all items without breaking, do this."</p>
+        </div>
+      </section>
+
+      <!-- Continue with remaining sections -->
+      <!-- Section 6: enumerate() -->
+      <section class="section" id="enumerate">
+        <h2 class="section-title"><span class="section-icon">🔢</span> enumerate()</h2>
+        <p class="section-intro">
+          Often you need both the index (position) and the value of items in a list. The <code>enumerate()</code> function gives you both at the same time, without having to manually track indices.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>enumerate_example.py</span></div>
+          <pre class="code-content"><span class="comment"># Without enumerate - manual index tracking</span>
+<span class="var">fruits</span> <span class="op">=</span> [<span class="str">'apple'</span>, <span class="str">'banana'</span>, <span class="str">'cherry'</span>]
+<span class="var">i</span> <span class="op">=</span> <span class="num">0</span>
+<span class="kw">for</span> <span class="var">fruit</span> <span class="kw">in</span> <span class="var">fruits</span>:
+    <span class="fn-name">print</span>(<span class="str">f'{</span><span class="var">i</span><span class="str">}: {</span><span class="var">fruit</span><span class="str">}'</span>)
+    <span class="var">i</span> <span class="op">+=</span> <span class="num">1</span>
+
+<span class="comment"># With enumerate - cleaner!</span>
+<span class="kw">for</span> <span class="var">i</span>, <span class="var">fruit</span> <span class="kw">in</span> <span class="fn-name">enumerate</span>(<span class="var">fruits</span>):
+    <span class="fn-name">print</span>(<span class="str">f'{</span><span class="var">i</span><span class="str">}: {</span><span class="var">fruit</span><span class="str">}'</span>)
+
+<span class="comment"># enumerate with custom start index</span>
+<span class="kw">for</span> <span class="var">i</span>, <span class="var">fruit</span> <span class="kw">in</span> <span class="fn-name">enumerate</span>(<span class="var">fruits</span>, <span class="num">1</span>):
+    <span class="fn-name">print</span>(<span class="str">f'{</span><span class="var">i</span><span class="str">}: {</span><span class="var">fruit</span><span class="str">}'</span>)  <span class="comment"># 1-indexed: 1, 2, 3</span>
+
+<span class="comment"># Practical: Mark duplicates</span>
+<span class="var">items</span> <span class="op">=</span> [<span class="str">'a'</span>, <span class="str">'b'</span>, <span class="str">'a'</span>, <span class="str">'c'</span>, <span class="str">'a'</span>]
+<span class="kw">for</span> <span class="var">idx</span>, <span class="var">item</span> <span class="kw">in</span> <span class="fn-name">enumerate</span>(<span class="var">items</span>):
+    <span class="kw">if</span> <span class="var">item</span> <span class="op">==</span> <span class="str">'a'</span>:
+        <span class="fn-name">print</span>(<span class="str">f'Found "a" at index {</span><span class="var">idx</span><span class="str">}'</span>)</pre>
+        </div>
+
+        <div class="diagram-box">
+          <div style="width: 100%;">
+            <div class="diagram-title">enumerate() Unpacking</div>
+            <div class="iter-vis">
+              <div class="iter-row">
+                <div class="iter-label">Original:</div>
+                <div class="iter-cells">
+                  <div class="iter-cell">apple</div>
+                  <div class="iter-cell">banana</div>
+                  <div class="iter-cell">cherry</div>
+                </div>
+              </div>
+              <div class="iter-row">
+                <div class="iter-label">With enumerate():</div>
+                <div class="iter-cells">
+                  <div style="min-width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: var(--purple-bg); border: 2px solid var(--purple); border-radius: 0.375rem; font-weight: 600; font-size: 0.9rem;">(0, apple)</div>
+                  <div style="min-width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: var(--purple-bg); border: 2px solid var(--purple); border-radius: 0.375rem; font-weight: 600; font-size: 0.9rem;">(1, banana)</div>
+                  <div style="min-width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: var(--purple-bg); border: 2px solid var(--purple); border-radius: 0.375rem; font-weight: 600; font-size: 0.9rem;">(2, cherry)</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 7: zip() -->
+      <section class="section" id="zip">
+        <h2 class="section-title"><span class="section-icon">🔗</span> zip()</h2>
+        <p class="section-intro">
+          The <code>zip()</code> function lets you iterate over multiple sequences in parallel, pairing up elements from each sequence. It's perfect for processing related data from multiple lists.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>zip_example.py</span></div>
+          <pre class="code-content"><span class="comment"># Pair elements from two lists</span>
+<span class="var">names</span> <span class="op">=</span> [<span class="str">'Alice'</span>, <span class="str">'Bob'</span>, <span class="str">'Charlie'</span>]
+<span class="var">ages</span> <span class="op">=</span> [<span class="num">25</span>, <span class="num">30</span>, <span class="num">35</span>]
+<span class="kw">for</span> <span class="var">name</span>, <span class="var">age</span> <span class="kw">in</span> <span class="fn-name">zip</span>(<span class="var">names</span>, <span class="var">ages</span>):
+    <span class="fn-name">print</span>(<span class="str">f'{</span><span class="var">name</span><span class="str">} is {</span><span class="var">age</span><span class="str">} years old'</span>)
+
+<span class="comment"># Zip three lists</span>
+<span class="var">colors</span> <span class="op">=</span> [<span class="str">'red'</span>, <span class="str">'green'</span>, <span class="str">'blue'</span>]
+<span class="var">hexes</span> <span class="op">=</span> [<span class="str">'#FF0000'</span>, <span class="str">'#00FF00'</span>, <span class="str">'#0000FF'</span>]
+<span class="kw">for</span> <span class="var">color</span>, <span class="var">name</span>, <span class="var">hex_code</span> <span class="kw">in</span> <span class="fn-name">zip</span>(<span class="var">colors</span>, <span class="var">names</span>, <span class="var">hexes</span>):
+    <span class="fn-name">print</span>(<span class="str">f'{</span><span class="var">color</span><span class="str">}: {</span><span class="var">hex_code</span><span class="str">}'</span>)
+
+<span class="comment"># Zip stops at shortest list</span>
+<span class="var">a</span> <span class="op">=</span> [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>]
+<span class="var">b</span> <span class="op">=</span> [<span class="str">'a'</span>, <span class="str">'b'</span>]
+<span class="kw">for</span> <span class="var">x</span>, <span class="var">y</span> <span class="kw">in</span> <span class="fn-name">zip</span>(<span class="var">a</span>, <span class="var">b</span>):
+    <span class="fn-name">print</span>(<span class="var">x</span>, <span class="var">y</span>)  <span class="comment"># Only 2 iterations: (1,a), (2,b)</span>
+
+<span class="comment"># Practical: Create a dictionary</span>
+<span class="var">keys</span> <span class="op">=</span> [<span class="str">'name'</span>, <span class="str">'age'</span>, <span class="str">'city'</span>]
+<span class="var">values</span> <span class="op">=</span> [<span class="str">'John'</span>, <span class="num">28</span>, <span class="str">'NYC'</span>]
+<span class="var">person</span> <span class="op">=</span> <span class="fn-name">dict</span>(<span class="fn-name">zip</span>(<span class="var">keys</span>, <span class="var">values</span>))
+<span class="fn-name">print</span>(<span class="var">person</span>)</pre>
+        </div>
+
+        <div class="callout warning">
+          <div class="callout-title">zip() Stops at Shortest List</div>
+          <p>When you zip lists of different lengths, iteration stops when the shortest list runs out. The remaining elements from longer lists are ignored.</p>
+        </div>
+      </section>
+
+      <!-- Section 8: Nested Loops -->
+      <section class="section" id="nested">
+        <h2 class="section-title"><span class="section-icon">📐</span> Nested Loops</h2>
+        <p class="section-intro">
+          A nested loop is a loop inside another loop. The inner loop runs completely for each iteration of the outer loop. Nested loops are essential for working with 2D data like matrices, grids, and multi-dimensional patterns.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>nested_loops.py</span></div>
+          <pre class="code-content"><span class="comment"># Simple nested loop - print a grid</span>
+<span class="kw">for</span> <span class="var">row</span> <span class="kw">in</span> <span class="fn-name">range</span>(<span class="num">3</span>):
+    <span class="kw">for</span> <span class="var">col</span> <span class="kw">in</span> <span class="fn-name">range</span>(<span class="num">3</span>):
+        <span class="fn-name">print</span>(<span class="str">f'({</span><span class="var">row</span><span class="str">},{</span><span class="var">col</span><span class="str">})'</span>, <span class="var">end</span><span class="op">=</span><span class="str">' '</span>)
+    <span class="fn-name">print</span>()  <span class="comment"># Newline after each row</span>
+
+<span class="comment"># Multiplication table</span>
+<span class="kw">for</span> <span class="var">i</span> <span class="kw">in</span> <span class="fn-name">range</span>(<span class="num">1</span>, <span class="num">4</span>):
+    <span class="kw">for</span> <span class="var">j</span> <span class="kw">in</span> <span class="fn-name">range</span>(<span class="num">1</span>, <span class="num">4</span>):
+        <span class="fn-name">print</span>(<span class="var">i</span> <span class="op">*</span> <span class="var">j</span>, <span class="var">end</span><span class="op">=</span><span class="str">' '</span>)
+    <span class="fn-name">print</span>()
+
+<span class="comment"># List of lists iteration</span>
+<span class="var">matrix</span> <span class="op">=</span> [[<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>],
+           [<span class="num">4</span>, <span class="num">5</span>, <span class="num">6</span>],
+           [<span class="num">7</span>, <span class="num">8</span>, <span class="num">9</span>]]
+<span class="kw">for</span> <span class="var">row</span> <span class="kw">in</span> <span class="var">matrix</span>:
+    <span class="kw">for</span> <span class="var">element</span> <span class="kw">in</span> <span class="var">row</span>:
+        <span class="fn-name">print</span>(<span class="var">element</span>, <span class="var">end</span><span class="op">=</span><span class="str">' '</span>)
+    <span class="fn-name">print</span>()
+
+<span class="comment"># Pattern: Print a triangle</span>
+<span class="kw">for</span> <span class="var">i</span> <span class="kw">in</span> <span class="fn-name">range</span>(<span class="num">1</span>, <span class="num">4</span>):
+    <span class="kw">for</span> <span class="var">j</span> <span class="kw">in</span> <span class="fn-name">range</span>(<span class="var">i</span>):
+        <span class="fn-name">print</span>(<span class="str">'*'</span>, <span class="var">end</span><span class="op">=</span><span class="str">' '</span>)
+    <span class="fn-name">print</span>()</pre>
+        </div>
+
+        <div class="diagram-box">
+          <div style="width: 100%;">
+            <div class="diagram-title">3x3 Grid Traversal (Nested Loop)</div>
+            <svg viewBox="0 0 400 350" xmlns="http://www.w3.org/2000/svg" style="max-width: 100%;">
+              <!-- Grid cells -->
+              <g>
+                <rect x="50" y="50" width="60" height="60" fill="var(--green-bg)" stroke="var(--loop-color)" stroke-width="2"/>
+                <text x="80" y="85" text-anchor="middle" font-weight="bold" fill="var(--loop-color)">(0,0)</text>
+
+                <rect x="120" y="50" width="60" height="60" fill="var(--bg2)" stroke="var(--border)" stroke-width="2"/>
+                <text x="150" y="85" text-anchor="middle" font-weight="bold" fill="var(--text2)">(0,1)</text>
+
+                <rect x="190" y="50" width="60" height="60" fill="var(--bg2)" stroke="var(--border)" stroke-width="2"/>
+                <text x="220" y="85" text-anchor="middle" font-weight="bold" fill="var(--text2)">(0,2)</text>
+
+                <rect x="50" y="120" width="60" height="60" fill="var(--bg2)" stroke="var(--border)" stroke-width="2"/>
+                <text x="80" y="155" text-anchor="middle" font-weight="bold" fill="var(--text2)">(1,0)</text>
+
+                <rect x="120" y="120" width="60" height="60" fill="var(--bg2)" stroke="var(--border)" stroke-width="2"/>
+                <text x="150" y="155" text-anchor="middle" font-weight="bold" fill="var(--text2)">(1,1)</text>
+
+                <rect x="190" y="120" width="60" height="60" fill="var(--bg2)" stroke="var(--border)" stroke-width="2"/>
+                <text x="220" y="155" text-anchor="middle" font-weight="bold" fill="var(--text2)">(1,2)</text>
+
+                <rect x="50" y="190" width="60" height="60" fill="var(--bg2)" stroke="var(--border)" stroke-width="2"/>
+                <text x="80" y="225" text-anchor="middle" font-weight="bold" fill="var(--text2)">(2,0)</text>
+
+                <rect x="120" y="190" width="60" height="60" fill="var(--bg2)" stroke="var(--border)" stroke-width="2"/>
+                <text x="150" y="225" text-anchor="middle" font-weight="bold" fill="var(--text2)">(2,1)</text>
+
+                <rect x="190" y="190" width="60" height="60" fill="var(--bg2)" stroke="var(--border)" stroke-width="2"/>
+                <text x="220" y="225" text-anchor="middle" font-weight="bold" fill="var(--text2)">(2,2)</text>
+              </g>
+              <text x="50" y="330" font-size="12" fill="var(--text2)">Green cell visits first, then spreads across row, then down</text>
+            </svg>
+          </div>
+        </div>
+
+        <div class="callout info">
+          <div class="callout-title">Execution Order</div>
+          <p>In a nested loop, the inner loop completes fully for each iteration of the outer loop. Think of it as: "For each row, go through all columns."</p>
+        </div>
+      </section>
+
+      <!-- Section 9: Loop Patterns -->
+      <section class="section" id="patterns">
+        <h2 class="section-title"><span class="section-icon">🎨</span> Loop Patterns</h2>
+        <p class="section-intro">
+          Certain patterns appear constantly when looping. Learning to recognize and use them makes your code more efficient and readable. These patterns solve common problems elegantly.
+        </p>
+
+        <h3 style="font-size: 1.3rem; color: var(--text); margin-top: 2rem; margin-bottom: 1rem;">1. Accumulator Pattern</h3>
+        <p style="color: var(--text2); margin-bottom: 1rem;">Start with a variable and add values to it on each iteration.</p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>accumulator.py</span></div>
+          <pre class="code-content"><span class="comment"># Sum all numbers</span>
+<span class="var">total</span> <span class="op">=</span> <span class="num">0</span>
+<span class="kw">for</span> <span class="var">num</span> <span class="kw">in</span> [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>]:
+    <span class="var">total</span> <span class="op">+=</span> <span class="var">num</span>
+<span class="fn-name">print</span>(<span class="var">total</span>)  <span class="comment"># 15</span>
+
+<span class="comment"># Multiply all numbers</span>
+<span class="var">product</span> <span class="op">=</span> <span class="num">1</span>
+<span class="kw">for</span> <span class="var">num</span> <span class="kw">in</span> [<span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>]:
+    <span class="var">product</span> <span class="op">*=</span> <span class="var">num</span>
+<span class="fn-name">print</span>(<span class="var">product</span>)  <span class="comment"># 24</span></pre>
+        </div>
+
+        <h3 style="font-size: 1.3rem; color: var(--text); margin-top: 2rem; margin-bottom: 1rem;">2. Counter Pattern</h3>
+        <p style="color: var(--text2); margin-bottom: 1rem;">Count how many items meet a condition.</p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>counter.py</span></div>
+          <pre class="code-content"><span class="comment"># Count even numbers</span>
+<span class="var">count</span> <span class="op">=</span> <span class="num">0</span>
+<span class="kw">for</span> <span class="var">num</span> <span class="kw">in</span> [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>, <span class="num">6</span>]:
+    <span class="kw">if</span> <span class="var">num</span> <span class="op">%</span> <span class="num">2</span> <span class="op">==</span> <span class="num">0</span>:
+        <span class="var">count</span> <span class="op">+=</span> <span class="num">1</span>
+<span class="fn-name">print</span>(<span class="var">count</span>)  <span class="comment"># 3</span></pre>
+        </div>
+
+        <h3 style="font-size: 1.3rem; color: var(--text); margin-top: 2rem; margin-bottom: 1rem;">3. Filter/Collect Pattern</h3>
+        <p style="color: var(--text2); margin-bottom: 1rem;">Build a new list with only items that meet a condition.</p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>filter.py</span></div>
+          <pre class="code-content"><span class="comment"># Collect only even numbers</span>
+<span class="var">evens</span> <span class="op">=</span> []
+<span class="kw">for</span> <span class="var">num</span> <span class="kw">in</span> [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>, <span class="num">6</span>]:
+    <span class="kw">if</span> <span class="var">num</span> <span class="op">%</span> <span class="num">2</span> <span class="op">==</span> <span class="num">0</span>:
+        <span class="var">evens</span>.<span class="fn-name">append</span>(<span class="var">num</span>)
+<span class="fn-name">print</span>(<span class="var">evens</span>)  <span class="comment"># [2, 4, 6]</span></pre>
+        </div>
+
+        <h3 style="font-size: 1.3rem; color: var(--text); margin-top: 2rem; margin-bottom: 1rem;">4. Search/Find Pattern</h3>
+        <p style="color: var(--text2); margin-bottom: 1rem;">Find an item and break as soon as you find it.</p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>search.py</span></div>
+          <pre class="code-content"><span class="comment"># Find first even number</span>
+<span class="var">target</span> <span class="op">=</span> <span class="kw">None</span>
+<span class="kw">for</span> <span class="var">num</span> <span class="kw">in</span> [<span class="num">1</span>, <span class="num">3</span>, <span class="num">5</span>, <span class="num">2</span>, <span class="num">4</span>]:
+    <span class="kw">if</span> <span class="var">num</span> <span class="op">%</span> <span class="num">2</span> <span class="op">==</span> <span class="num">0</span>:
+        <span class="var">target</span> <span class="op">=</span> <span class="var">num</span>
+        <span class="kw">break</span>
+<span class="fn-name">print</span>(<span class="var">target</span>)  <span class="comment"># 2</span></pre>
+        </div>
+      </section>
+
+      <!-- Section 10: Sliding Window -->
+      <section class="section" id="sliding-window">
+        <h2 class="section-title"><span class="section-icon">🪟</span> Sliding Window</h2>
+        <p class="section-intro">
+          The sliding window pattern processes a fixed-size window of elements at a time, moving the window through a sequence. It's useful for finding max/min in subarrays, computing rolling averages, or finding patterns.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>sliding_window.py</span></div>
+          <pre class="code-content"><span class="comment"># Find maximum sum in any subarray of size 3</span>
+<span class="var">arr</span> <span class="op">=</span> [<span class="num">1</span>, <span class="num">4</span>, <span class="num">2</span>, <span class="num">10</span>, <span class="num">2</span>, <span class="num">5</span>]
+<span class="var">window_size</span> <span class="op">=</span> <span class="num">3</span>
+<span class="var">max_sum</span> <span class="op">=</span> <span class="fn-name">sum</span>(<span class="var">arr</span>[:<span class="var">window_size</span>])
+<span class="var">current_sum</span> <span class="op">=</span> <span class="var">max_sum</span>
+
+<span class="kw">for</span> <span class="var">i</span> <span class="kw">in</span> <span class="fn-name">range</span>(<span class="var">window_size</span>, <span class="fn-name">len</span>(<span class="var">arr</span>)):
+    <span class="comment"># Remove leftmost element, add new rightmost</span>
+    <span class="var">current_sum</span> <span class="op">=</span> <span class="var">current_sum</span> <span class="op">-</span> <span class="var">arr</span>[<span class="var">i</span> <span class="op">-</span> <span class="var">window_size</span>] <span class="op">+</span> <span class="var">arr</span>[<span class="var">i</span>]
+    <span class="var">max_sum</span> <span class="op">=</span> <span class="fn-name">max</span>(<span class="var">max_sum</span>, <span class="var">current_sum</span>)
+
+<span class="fn-name">print</span>(<span class="var">max_sum</span>)  <span class="comment"># 17 (from [10, 2, 5])</span>
+
+<span class="comment"># Simple window: Get all consecutive pairs</span>
+<span class="kw">for</span> <span class="var">i</span> <span class="kw">in</span> <span class="fn-name">range</span>(<span class="fn-name">len</span>(<span class="var">arr</span>) <span class="op">-</span> <span class="num">1</span>):
+    <span class="var">window</span> <span class="op">=</span> <span class="var">arr</span>[<span class="var">i</span>:<span class="var">i</span><span class="op">+</span><span class="num">2</span>]
+    <span class="fn-name">print</span>(<span class="var">window</span>)</pre>
+        </div>
+
+        <div class="diagram-box">
+          <div style="width: 100%;">
+            <div class="diagram-title">Sliding Window of Size 3</div>
+            <div class="iter-vis">
+              <div class="iter-row">
+                <div class="iter-label">Array:</div>
+                <div class="iter-cells">
+                  <div class="iter-cell">1</div>
+                  <div class="iter-cell">4</div>
+                  <div class="iter-cell">2</div>
+                  <div class="iter-cell">10</div>
+                  <div class="iter-cell">2</div>
+                  <div class="iter-cell">5</div>
+                </div>
+              </div>
+              <div class="iter-row">
+                <div class="iter-label">Step 1:</div>
+                <div class="iter-cells">
+                  <div class="iter-cell active">1</div>
+                  <div class="iter-cell active">4</div>
+                  <div class="iter-cell active">2</div>
+                  <div class="iter-cell">10</div>
+                  <div class="iter-cell">2</div>
+                  <div class="iter-cell">5</div>
+                </div>
+              </div>
+              <div class="iter-row">
+                <div class="iter-label">Step 2:</div>
+                <div class="iter-cells">
+                  <div class="iter-cell">1</div>
+                  <div class="iter-cell active">4</div>
+                  <div class="iter-cell active">2</div>
+                  <div class="iter-cell active">10</div>
+                  <div class="iter-cell">2</div>
+                  <div class="iter-cell">5</div>
+                </div>
+              </div>
+              <div class="iter-row">
+                <div class="iter-label">Step 3:</div>
+                <div class="iter-cells">
+                  <div class="iter-cell">1</div>
+                  <div class="iter-cell">4</div>
+                  <div class="iter-cell active">2</div>
+                  <div class="iter-cell active">10</div>
+                  <div class="iter-cell active">2</div>
+                  <div class="iter-cell">5</div>
+                </div>
+              </div>
+              <div class="iter-row">
+                <div class="iter-label">Step 4:</div>
+                <div class="iter-cells">
+                  <div class="iter-cell">1</div>
+                  <div class="iter-cell">4</div>
+                  <div class="iter-cell">2</div>
+                  <div class="iter-cell active">10</div>
+                  <div class="iter-cell active">2</div>
+                  <div class="iter-cell active">5</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 11: Two-Pointer Technique -->
+      <section class="section" id="two-pointer">
+        <h2 class="section-title"><span class="section-icon">👉👈</span> Two-Pointer Technique</h2>
+        <p class="section-intro">
+          In this technique, two pointers move through an array, often starting from opposite ends and converging. It's efficient for searching, finding pairs, and processing sorted arrays.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>two_pointer.py</span></div>
+          <pre class="code-content"><span class="comment"># Check if array is a palindrome</span>
+<span class="var">arr</span> <span class="op">=</span> [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">2</span>, <span class="num">1</span>]
+<span class="var">left</span> <span class="op">=</span> <span class="num">0</span>
+<span class="var">right</span> <span class="op">=</span> <span class="fn-name">len</span>(<span class="var">arr</span>) <span class="op">-</span> <span class="num">1</span>
+<span class="var">is_palindrome</span> <span class="op">=</span> <span class="kw">True</span>
+
+<span class="kw">while</span> <span class="var">left</span> <span class="op"><</span> <span class="var">right</span>:
+    <span class="kw">if</span> <span class="var">arr</span>[<span class="var">left</span>] <span class="op">!=</span> <span class="var">arr</span>[<span class="var">right</span>]:
+        <span class="var">is_palindrome</span> <span class="op">=</span> <span class="kw">False</span>
+        <span class="kw">break</span>
+    <span class="var">left</span> <span class="op">+=</span> <span class="num">1</span>
+    <span class="var">right</span> <span class="op">-=</span> <span class="num">1</span>
+
+<span class="fn-name">print</span>(<span class="var">is_palindrome</span>)  <span class="comment"># True</span>
+
+<span class="comment"># Find two numbers that sum to target</span>
+<span class="var">arr</span> <span class="op">=</span> [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">7</span>, <span class="num">11</span>]
+<span class="var">target</span> <span class="op">=</span> <span class="num">9</span>
+<span class="var">left</span>, <span class="var">right</span> <span class="op">=</span> <span class="num">0</span>, <span class="fn-name">len</span>(<span class="var">arr</span>) <span class="op">-</span> <span class="num">1</span>
+
+<span class="kw">while</span> <span class="var">left</span> <span class="op"><</span> <span class="var">right</span>:
+    <span class="var">current_sum</span> <span class="op">=</span> <span class="var">arr</span>[<span class="var">left</span>] <span class="op">+</span> <span class="var">arr</span>[<span class="var">right</span>]
+    <span class="kw">if</span> <span class="var">current_sum</span> <span class="op">==</span> <span class="var">target</span>:
+        <span class="fn-name">print</span>(<span class="str">f'Found pair: {</span><span class="var">arr</span>[<span class="var">left</span>]<span class="str">}, {</span><span class="var">arr</span>[<span class="var">right</span>]<span class="str">}'</span>)
+        <span class="kw">break</span>
+    <span class="kw">elif</span> <span class="var">current_sum</span> <span class="op"><</span> <span class="var">target</span>:
+        <span class="var">left</span> <span class="op">+=</span> <span class="num">1</span>
+    <span class="kw">else</span>:
+        <span class="var">right</span> <span class="op">-=</span> <span class="num">1</span></pre>
+        </div>
+
+        <div class="diagram-box">
+          <div style="width: 100%;">
+            <div class="diagram-title">Two-Pointer Convergence</div>
+            <svg viewBox="0 0 500 300" xmlns="http://www.w3.org/2000/svg" style="max-width: 100%;">
+              <!-- Array -->
+              <text x="30" y="40" font-size="12" font-weight="bold" fill="var(--text2)">Array:</text>
+              <g>
+                <rect x="80" y="20" width="40" height="40" fill="var(--bg2)" stroke="var(--border)" stroke-width="2"/>
+                <text x="100" y="48" text-anchor="middle" font-weight="bold">1</text>
+                <rect x="130" y="20" width="40" height="40" fill="var(--bg2)" stroke="var(--border)" stroke-width="2"/>
+                <text x="150" y="48" text-anchor="middle" font-weight="bold">2</text>
+                <rect x="180" y="20" width="40" height="40" fill="var(--bg2)" stroke="var(--border)" stroke-width="2"/>
+                <text x="200" y="48" text-anchor="middle" font-weight="bold">3</text>
+                <rect x="230" y="20" width="40" height="40" fill="var(--bg2)" stroke="var(--border)" stroke-width="2"/>
+                <text x="250" y="48" text-anchor="middle" font-weight="bold">7</text>
+                <rect x="280" y="20" width="40" height="40" fill="var(--bg2)" stroke="var(--border)" stroke-width="2"/>
+                <text x="300" y="48" text-anchor="middle" font-weight="bold">11</text>
+              </g>
+
+              <!-- Step 1 -->
+              <text x="30" y="100" font-size="12" font-weight="bold" fill="var(--text2)">Step 1:</text>
+              <path d="M 100 70 L 100 85" stroke="var(--loop-color)" stroke-width="3" marker-end="url(#arrowgreen)"/>
+              <text x="100" y="110" text-anchor="middle" font-size="11" fill="var(--loop-color)">left</text>
+              <path d="M 300 70 L 300 85" stroke="var(--amber)" stroke-width="3" marker-end="url(#arrowyellow)"/>
+              <text x="300" y="110" text-anchor="middle" font-size="11" fill="var(--amber)">right</text>
+
+              <!-- Step 2 -->
+              <text x="30" y="160" font-size="12" font-weight="bold" fill="var(--text2)">Step 2:</text>
+              <path d="M 150 130 L 150 145" stroke="var(--loop-color)" stroke-width="3" marker-end="url(#arrowgreen)"/>
+              <text x="150" y="170" text-anchor="middle" font-size="11" fill="var(--loop-color)">left</text>
+              <path d="M 250 130 L 250 145" stroke="var(--amber)" stroke-width="3" marker-end="url(#arrowyellow)"/>
+              <text x="250" y="170" text-anchor="middle" font-size="11" fill="var(--amber)">right</text>
+
+              <!-- Step 3 -->
+              <text x="30" y="220" font-size="12" font-weight="bold" fill="var(--text2)">Step 3:</text>
+              <circle cx="200" cy="240" r="30" fill="var(--green-bg)" stroke="var(--loop-color)" stroke-width="2"/>
+              <text x="200" y="250" text-anchor="middle" font-size="12" font-weight="bold" fill="var(--loop-color)">Match!</text>
+
+              <defs>
+                <marker id="arrowgreen" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                  <path d="M0,0 L0,6 L9,3 z" fill="var(--loop-color)"/>
+                </marker>
+                <marker id="arrowyellow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                  <path d="M0,0 L0,6 L9,3 z" fill="var(--amber)"/>
+                </marker>
+              </defs>
+            </svg>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 12: Common Algorithms -->
+      <section class="section" id="algorithms">
+        <h2 class="section-title"><span class="section-icon">⚡</span> Common Algorithms in Loops</h2>
+        <p class="section-intro">
+          Many classic algorithms are built on loop fundamentals. Understanding these algorithms deepens your loop mastery and teaches you efficient problem-solving.
+        </p>
+
+        <h3 style="font-size: 1.3rem; color: var(--text); margin-top: 2rem; margin-bottom: 1rem;">Euclidean GCD</h3>
+        <p style="color: var(--text2); margin-bottom: 1rem;">Finds the greatest common divisor by repeatedly replacing two numbers with their remainder.</p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>gcd.py</span></div>
+          <pre class="code-content"><span class="kw">def</span> <span class="fn-name">gcd</span>(<span class="var">a</span>, <span class="var">b</span>):
+    <span class="kw">while</span> <span class="var">b</span> <span class="op">!=</span> <span class="num">0</span>:
+        <span class="var">temp</span> <span class="op">=</span> <span class="var">b</span>
+        <span class="var">b</span> <span class="op">=</span> <span class="var">a</span> <span class="op">%</span> <span class="var">b</span>
+        <span class="var">a</span> <span class="op">=</span> <span class="var">temp</span>
+    <span class="kw">return</span> <span class="var">a</span>
+
+<span class="fn-name">print</span>(<span class="fn-name">gcd</span>(<span class="num">48</span>, <span class="num">18</span>))  <span class="comment"># 6</span></pre>
+        </div>
+
+        <h3 style="font-size: 1.3rem; color: var(--text); margin-top: 2rem; margin-bottom: 1rem;">Sieve of Eratosthenes</h3>
+        <p style="color: var(--text2); margin-bottom: 1rem;">Efficiently finds all prime numbers up to a limit using nested loops.</p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>sieve.py</span></div>
+          <pre class="code-content"><span class="kw">def</span> <span class="fn-name">sieve</span>(<span class="var">n</span>):
+    <span class="var">is_prime</span> <span class="op">=</span> [<span class="kw">True</span>] <span class="op">*</span> (<span class="var">n</span> <span class="op">+</span> <span class="num">1</span>)
+    <span class="var">is_prime</span>[<span class="num">0</span>] <span class="op">=</span> <span class="var">is_prime</span>[<span class="num">1</span>] <span class="op">=</span> <span class="kw">False</span>
+
+    <span class="kw">for</span> <span class="var">i</span> <span class="kw">in</span> <span class="fn-name">range</span>(<span class="num">2</span>, <span class="fn-name">int</span>(<span class="var">n</span><span class="op">**</span><span class="num">0.5</span>) <span class="op">+</span> <span class="num">1</span>):
+        <span class="kw">if</span> <span class="var">is_prime</span>[<span class="var">i</span>]:
+            <span class="kw">for</span> <span class="var">j</span> <span class="kw">in</span> <span class="fn-name">range</span>(<span class="var">i</span><span class="op">*</span><span class="var">i</span>, <span class="var">n</span><span class="op">+</span><span class="num">1</span>, <span class="var">i</span>):
+                <span class="var">is_prime</span>[<span class="var">j</span>] <span class="op">=</span> <span class="kw">False</span>
+
+    <span class="kw">return</span> [<span class="var">i</span> <span class="kw">for</span> <span class="var">i</span> <span class="kw">in</span> <span class="fn-name">range</span>(<span class="var">n</span><span class="op">+</span><span class="num">1</span>) <span class="kw">if</span> <span class="var">is_prime</span>[<span class="var">i</span>]]
+
+<span class="fn-name">print</span>(<span class="fn-name">sieve</span>(<span class="num">20</span>))  <span class="comment"># [2, 3, 5, 7, 11, 13, 17, 19]</span></pre>
+        </div>
+
+        <h3 style="font-size: 1.3rem; color: var(--text); margin-top: 2rem; margin-bottom: 1rem;">Bubble Sort</h3>
+        <p style="color: var(--text2); margin-bottom: 1rem;">Simple sorting algorithm using nested loops to compare adjacent elements.</p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>bubble_sort.py</span></div>
+          <pre class="code-content"><span class="kw">def</span> <span class="fn-name">bubble_sort</span>(<span class="var">arr</span>):
+    <span class="var">n</span> <span class="op">=</span> <span class="fn-name">len</span>(<span class="var">arr</span>)
+    <span class="kw">for</span> <span class="var">i</span> <span class="kw">in</span> <span class="fn-name">range</span>(<span class="var">n</span>):
+        <span class="kw">for</span> <span class="var">j</span> <span class="kw">in</span> <span class="fn-name">range</span>(<span class="var">n</span> <span class="op">-</span> <span class="var">i</span> <span class="op">-</span> <span class="num">1</span>):
+            <span class="kw">if</span> <span class="var">arr</span>[<span class="var">j</span>] <span class="op">></span> <span class="var">arr</span>[<span class="var">j</span><span class="op">+</span><span class="num">1</span>]:
+                <span class="var">arr</span>[<span class="var">j</span>], <span class="var">arr</span>[<span class="var">j</span><span class="op">+</span><span class="num">1</span>] <span class="op">=</span> <span class="var">arr</span>[<span class="var">j</span><span class="op">+</span><span class="num">1</span>], <span class="var">arr</span>[<span class="var">j</span>]
+    <span class="kw">return</span> <span class="var">arr</span>
+
+<span class="fn-name">print</span>(<span class="fn-name">bubble_sort</span>([<span class="num">64</span>, <span class="num">34</span>, <span class="num">25</span>, <span class="num">12</span>, <span class="num">22</span>]))
+<span class="comment"># [12, 22, 25, 34, 64]</span></pre>
+        </div>
+
+        <h3 style="font-size: 1.3rem; color: var(--text); margin-top: 2rem; margin-bottom: 1rem;">Kadane's Algorithm</h3>
+        <p style="color: var(--text2); margin-bottom: 1rem;">Finds the maximum sum of a contiguous subarray in linear time.</p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>kadane.py</span></div>
+          <pre class="code-content"><span class="kw">def</span> <span class="fn-name">max_subarray_sum</span>(<span class="var">arr</span>):
+    <span class="var">max_sum</span> <span class="op">=</span> <span class="var">current_sum</span> <span class="op">=</span> <span class="var">arr</span>[<span class="num">0</span>]
+
+    <span class="kw">for</span> <span class="var">num</span> <span class="kw">in</span> <span class="var">arr</span>[<span class="num">1</span>:]:
+        <span class="var">current_sum</span> <span class="op">=</span> <span class="fn-name">max</span>(<span class="var">num</span>, <span class="var">current_sum</span> <span class="op">+</span> <span class="var">num</span>)
+        <span class="var">max_sum</span> <span class="op">=</span> <span class="fn-name">max</span>(<span class="var">max_sum</span>, <span class="var">current_sum</span>)
+
+    <span class="kw">return</span> <span class="var">max_sum</span>
+
+<span class="fn-name">print</span>(<span class="fn-name">max_subarray_sum</span>([-<span class="num">2</span>, <span class="num">1</span>, -<span class="num">3</span>, <span class="num">4</span>, -<span class="num">1</span>, <span class="num">2</span>, <span class="num">1</span>, -<span class="num">5</span>]))
+<span class="comment"># 6 (from subarray [4, -1, 2, 1])</span></pre>
+        </div>
+
+        <h3 style="font-size: 1.3rem; color: var(--text); margin-top: 2rem; margin-bottom: 1rem;">Collatz Sequence</h3>
+        <p style="color: var(--text2); margin-bottom: 1rem;">Generate the Collatz sequence: if n is even, divide by 2; if odd, multiply by 3 and add 1. Repeat until reaching 1.</p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>collatz.py</span></div>
+          <pre class="code-content"><span class="kw">def</span> <span class="fn-name">collatz_sequence</span>(<span class="var">n</span>):
+    <span class="var">sequence</span> <span class="op">=</span> []
+
+    <span class="kw">while</span> <span class="var">n</span> <span class="op">!=</span> <span class="num">1</span>:
+        <span class="var">sequence</span>.<span class="fn-name">append</span>(<span class="var">n</span>)
+        <span class="kw">if</span> <span class="var">n</span> <span class="op">%</span> <span class="num">2</span> <span class="op">==</span> <span class="num">0</span>:
+            <span class="var">n</span> <span class="op">=</span> <span class="var">n</span> <span class="op">//</span> <span class="num">2</span>
+        <span class="kw">else</span>:
+            <span class="var">n</span> <span class="op">=</span> <span class="num">3</span> <span class="op">*</span> <span class="var">n</span> <span class="op">+</span> <span class="num">1</span>
+
+    <span class="var">sequence</span>.<span class="fn-name">append</span>(<span class="num">1</span>)
+    <span class="kw">return</span> <span class="var">sequence</span>
+
+<span class="fn-name">print</span>(<span class="fn-name">collatz_sequence</span>(<span class="num">10</span>))
+<span class="comment"># [10, 5, 16, 8, 4, 2, 1]</span></pre>
+        </div>
+      </section>
+
+      <!-- Practice CTA -->
+      <div class="practice-cta">
+        <div class="cta-text">
+          <div class="cta-title">Ready to Practice?</div>
+          <div class="cta-sub">50 loop challenges from easy to hard await.</div>
+        </div>
+        <a href="challenges_loops.html" class="cta-btn">Start Challenges →</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Sidebar navigation active state
+    const links = document.querySelectorAll('.sidebar-nav a');
+    const sections = document.querySelectorAll('.section');
+
+    function updateActiveLink() {
+      let current = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        if (pageYOffset >= sectionTop - 100) {
+          current = section.getAttribute('id');
+        }
+      });
+
+      links.forEach(link => {
+        link.parentElement.classList.remove('active');
+        if (link.getAttribute('href').slice(1) === current) {
+          link.parentElement.classList.add('active');
+        }
+      });
+    }
+
+    window.addEventListener('scroll', updateActiveLink);
+    updateActiveLink();
+  </script>
+</body>
+</html>

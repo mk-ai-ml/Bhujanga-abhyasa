@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python NumPy - Bhujanga Abhyāsa</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Sora:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f5f4f0;
+      --bg2: #eeecea;
+      --surface: #ffffff;
+      --surface2: #fafaf8;
+      --border: #e2dfd9;
+      --border2: #cdc9c2;
+      --text: #1e1c18;
+      --text2: #6b6760;
+      --text3: #9e9b96;
+      --text-inv: #ffffff;
+      --blue: #3b6fd4;
+      --blue-bg: #eef2fb;
+      --green: #2e7d52;
+      --green-bg: #edf5f0;
+      --amber: #b45309;
+      --amber-bg: #fef6ec;
+      --red: #c0392b;
+      --red-bg: #fdf0ee;
+      --purple: #6d4fc2;
+      --purple-bg: #f2eefb;
+      --teal: #1a7a7a;
+      --numpy-color: #1f77b4;
+      --code-bg: #1e1c18;
+      --code-text: #e8e4db;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Sora', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Top Navigation */
+    .top-nav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--numpy-color);
+    }
+
+    .back-link {
+      color: var(--text2);
+      text-decoration: none;
+      font-size: 0.95rem;
+      padding: 0.5rem 1rem;
+      border-radius: 0.375rem;
+      transition: all 0.2s;
+    }
+
+    .back-link:hover {
+      background: var(--bg2);
+      color: var(--numpy-color);
+    }
+
+    .container {
+      display: flex;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      position: sticky;
+      top: 64px;
+      width: 280px;
+      height: calc(100vh - 64px);
+      background: var(--surface2);
+      border-right: 1px solid var(--border);
+      overflow-y: auto;
+      padding: 1.5rem 0;
+    }
+
+    .sidebar-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--numpy-color);
+      padding: 0 1.5rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .sidebar-nav {
+      list-style: none;
+    }
+
+    .sidebar-nav li {
+      border-left: 3px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .sidebar-nav a {
+      display: block;
+      padding: 0.75rem 1.5rem;
+      color: var(--text2);
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: all 0.2s;
+    }
+
+    .sidebar-nav li:hover {
+      border-left-color: var(--numpy-color);
+      background: var(--bg);
+    }
+
+    .sidebar-nav a:hover {
+      color: var(--numpy-color);
+      padding-left: 2rem;
+    }
+
+    .sidebar-nav li.active {
+      border-left-color: var(--numpy-color);
+      background: var(--blue-bg);
+    }
+
+    .sidebar-nav li.active a {
+      color: var(--numpy-color);
+      font-weight: 600;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      padding: 3rem 4rem;
+      max-width: 900px;
+    }
+
+    /* Section Styling */
+    .section {
+      margin-bottom: 4rem;
+      scroll-margin-top: 80px;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--numpy-color);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .section-icon {
+      font-size: 2.25rem;
+    }
+
+    .section-intro {
+      color: var(--text2);
+      font-size: 1.05rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.8;
+    }
+
+    /* Code Block Styling */
+    .code-block {
+      background: var(--code-bg);
+      border-radius: 0.5rem;
+      margin: 1.5rem 0;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .code-block-header {
+      background: #16140f;
+      padding: 0.75rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #2a2722;
+      font-size: 0.85rem;
+      color: var(--text3);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .code-dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+    }
+
+    .code-dot.d1 { background: #ff605c; }
+    .code-dot.d2 { background: #ffbd44; }
+    .code-dot.d3 { background: #00ca4e; }
+
+    .code-content {
+      padding: 1.5rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      color: var(--code-text);
+      overflow-x: auto;
+      line-height: 1.7;
+    }
+
+    /* Syntax Highlighting */
+    .kw { color: #ff6b6b; font-weight: 500; } /* keywords */
+    .fn-name { color: #51cf66; } /* functions */
+    .str { color: #ffa94d; } /* strings */
+    .num { color: #b197fc; } /* numbers */
+    .comment { color: #909090; font-style: italic; }
+    .var { color: var(--code-text); }
+    .op { color: #74c0fc; } /* operators */
+
+    /* Diagram Styling */
+    .diagram-box {
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: 0.5rem;
+      padding: 2rem;
+      margin: 1.5rem 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .diagram-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text2);
+      margin-bottom: 1rem;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Callouts */
+    .callout {
+      border-left: 4px solid var(--blue);
+      background: var(--blue-bg);
+      padding: 1rem 1.5rem;
+      border-radius: 0.375rem;
+      margin: 1.5rem 0;
+      color: var(--text);
+    }
+
+    .callout.info {
+      border-left-color: var(--blue);
+      background: var(--blue-bg);
+    }
+
+    .callout.warning {
+      border-left-color: var(--amber);
+      background: var(--amber-bg);
+    }
+
+    .callout.tip {
+      border-left-color: var(--numpy-color);
+      background: var(--blue-bg);
+    }
+
+    .callout-title {
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      font-size: 0.95rem;
+    }
+
+    /* Comparison Table */
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+      overflow: hidden;
+    }
+
+    .compare-table th {
+      background: var(--bg2);
+      padding: 1rem;
+      text-align: left;
+      font-weight: 700;
+      border-bottom: 2px solid var(--border);
+      color: var(--text);
+    }
+
+    .compare-table td {
+      padding: 1rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--text2);
+    }
+
+    .compare-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Practice CTA */
+    .practice-cta {
+      background: linear-gradient(135deg, var(--blue-bg) 0%, var(--purple-bg) 100%);
+      border: 2px solid var(--numpy-color);
+      border-radius: 0.75rem;
+      padding: 2rem;
+      margin-top: 4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .cta-text {
+      flex: 1;
+    }
+
+    .cta-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--numpy-color);
+      margin-bottom: 0.5rem;
+    }
+
+    .cta-sub {
+      color: var(--text2);
+      font-size: 1rem;
+    }
+
+    .cta-btn {
+      background: var(--numpy-color);
+      color: var(--text-inv);
+      padding: 0.875rem 1.75rem;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      transition: all 0.2s;
+      white-space: nowrap;
+      display: inline-block;
+      text-decoration: none;
+    }
+
+    .cta-btn:hover {
+      background: #1557a0;
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg2);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border2);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--text2);
+    }
+
+    @media (max-width: 1024px) {
+      .sidebar {
+        width: 220px;
+      }
+      .main-content {
+        padding: 2rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+      .sidebar {
+        position: relative;
+        top: 0;
+        width: 100%;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        max-height: 200px;
+        overflow-x: auto;
+        padding: 1rem;
+      }
+      .sidebar-nav {
+        display: flex;
+        gap: 1rem;
+      }
+      .sidebar-nav li {
+        border-left: none;
+        border-bottom: 3px solid transparent;
+      }
+      .main-content {
+        padding: 1.5rem;
+      }
+      .practice-cta {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Top Navigation -->
+  <div class="top-nav">
+    <div class="nav-left">
+      <div class="logo">🔢 NumPy</div>
+      <a href="abhyasa_tritiya.html" class="back-link">← Back to Tritiya</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+      <div class="sidebar-title">🔢 Chapters</div>
+      <ul class="sidebar-nav">
+        <li><a href="#ndarray-basics">ndarray Basics</a></li>
+        <li><a href="#array-creation">Array Creation</a></li>
+        <li><a href="#indexing-slicing">Indexing & Slicing</a></li>
+        <li><a href="#boolean-masking">Boolean Masking</a></li>
+        <li><a href="#broadcasting">Broadcasting</a></li>
+        <li><a href="#math-ufuncs">Math & Universal Functions</a></li>
+        <li><a href="#aggregation">Aggregation & Axes</a></li>
+        <li><a href="#reshaping">Reshaping & Stacking</a></li>
+        <li><a href="#linear-algebra">Linear Algebra</a></li>
+        <li><a href="#cumulative-stats">Cumulative & Statistical</a></li>
+        <li><a href="#advanced-patterns">Advanced Patterns</a></li>
+        <li><a href="#performance">Performance Tips</a></li>
+      </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <!-- Section 1: ndarray Basics -->
+      <section class="section" id="ndarray-basics">
+        <h2 class="section-title"><span class="section-icon">📦</span> ndarray Basics</h2>
+        <p class="section-intro">
+          NumPy's core object is the ndarray (n-dimensional array), a homogeneous collection of elements with a fixed size. Unlike Python lists, ndarrays are typed, efficient, and optimized for numerical computations.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>ndarray_basics.py</span></div>
+          <pre class="code-content"><span class="kw">import</span> <span class="var">numpy</span> <span class="kw">as</span> <span class="var">np</span>
+
+<span class="comment"># Create array from Python list</span>
+<span class="var">arr</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">array</span>([<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>])
+<span class="fn-name">print</span>(<span class="var">arr</span>)  <span class="comment"># [1 2 3 4 5]</span>
+
+<span class="comment"># Check dtype (data type)</span>
+<span class="fn-name">print</span>(<span class="var">arr</span>.<span class="var">dtype</span>)  <span class="comment"># int64</span>
+
+<span class="comment"># Check shape (dimensions)</span>
+<span class="fn-name">print</span>(<span class="var">arr</span>.<span class="var">shape</span>)  <span class="comment"># (5,)</span>
+
+<span class="comment"># Check ndim (number of dimensions)</span>
+<span class="fn-name">print</span>(<span class="var">arr</span>.<span class="var">ndim</span>)  <span class="comment"># 1</span>
+
+<span class="comment"># Check size (total number of elements)</span>
+<span class="fn-name">print</span>(<span class="var">arr</span>.<span class="var">size</span>)  <span class="comment"># 5</span>
+
+<span class="comment"># 2D array</span>
+<span class="var">arr2d</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">array</span>([[<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>], [<span class="num">4</span>, <span class="num">5</span>, <span class="num">6</span>]])
+<span class="fn-name">print</span>(<span class="var">arr2d</span>.<span class="var">shape</span>)  <span class="comment"># (2, 3)</span>
+<span class="fn-name">print</span>(<span class="var">arr2d</span>.<span class="var">ndim</span>)  <span class="comment"># 2</span>
+
+<span class="comment"># Specify dtype explicitly</span>
+<span class="var">float_arr</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">array</span>([<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>], <span class="var">dtype</span><span class="op">=</span><span class="var">np</span>.<span class="fn-name">float32</span>)
+<span class="fn-name">print</span>(<span class="var">float_arr</span>.<span class="var">dtype</span>)  <span class="comment"># float32</span></pre>
+        </div>
+
+        <div class="callout tip">
+          <div class="callout-title">Key Array Properties</div>
+          <ul style="margin-top: 0.5rem; margin-left: 1.5rem;">
+            <li><code>dtype</code> — Data type of elements (int64, float32, bool, etc.)</li>
+            <li><code>shape</code> — Tuple of array dimensions</li>
+            <li><code>ndim</code> — Number of dimensions</li>
+            <li><code>size</code> — Total number of elements</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Section 2: Array Creation -->
+      <section class="section" id="array-creation">
+        <h2 class="section-title"><span class="section-icon">✨</span> Array Creation</h2>
+        <p class="section-intro">
+          NumPy provides numerous functions to create arrays with specific patterns and values, eliminating the need to manually construct large arrays.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>array_creation.py</span></div>
+          <pre class="code-content"><span class="comment"># zeros - array of zeros</span>
+<span class="var">zeros</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">zeros</span>((<span class="num">3</span>, <span class="num">4</span>))
+<span class="comment"># [[0. 0. 0. 0.]</span>
+<span class="comment">#  [0. 0. 0. 0.]</span>
+<span class="comment">#  [0. 0. 0. 0.]]</span>
+
+<span class="comment"># ones - array of ones</span>
+<span class="var">ones</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">ones</span>((<span class="num">2</span>, <span class="num">3</span>))
+
+<span class="comment"># arange - like range() but returns numpy array</span>
+<span class="var">arange_arr</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">arange</span>(<span class="num">0</span>, <span class="num">10</span>, <span class="num">2</span>)  <span class="comment"># [0 2 4 6 8]</span>
+
+<span class="comment"># linspace - evenly spaced values in an interval</span>
+<span class="var">linspace_arr</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">linspace</span>(<span class="num">0</span>, <span class="num">1</span>, <span class="num">5</span>)
+<span class="comment"># [0.   0.25 0.5  0.75 1.  ]</span>
+
+<span class="comment"># random - random values between 0 and 1</span>
+<span class="var">random_arr</span> <span class="op">=</span> <span class="var">np</span>.<span class="var">random</span>.<span class="fn-name">random</span>((<span class="num">2</span>, <span class="num">3</span>))
+
+<span class="comment"># random normal distribution</span>
+<span class="var">normal_arr</span> <span class="op">=</span> <span class="var">np</span>.<span class="var">random</span>.<span class="fn-name">randn</span>(<span class="num">3</span>, <span class="num">4</span>)
+
+<span class="comment"># full - array filled with a constant value</span>
+<span class="var">full</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">full</span>((<span class="num">2</span>, <span class="num">2</span>), <span class="num">7</span>)  <span class="comment"># [[7 7] [7 7]]</span>
+
+<span class="comment"># eye - identity matrix</span>
+<span class="var">identity</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">eye</span>(<span class="num">3</span>)  <span class="comment"># 3x3 identity matrix</span>
+
+<span class="comment"># empty - uninitialized array (fast allocation)</span>
+<span class="var">empty</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">empty</span>((<span class="num">2</span>, <span class="num">3</span>))</span>
+        </div>
+
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th>Function</th>
+              <th>Purpose</th>
+              <th>Example</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>zeros(shape)</code></td>
+              <td>Array of zeros</td>
+              <td><code>zeros((2, 3))</code></td>
+            </tr>
+            <tr>
+              <td><code>ones(shape)</code></td>
+              <td>Array of ones</td>
+              <td><code>ones((3, 3))</code></td>
+            </tr>
+            <tr>
+              <td><code>arange(start, stop, step)</code></td>
+              <td>Evenly spaced integers</td>
+              <td><code>arange(0, 10, 2)</code></td>
+            </tr>
+            <tr>
+              <td><code>linspace(start, stop, num)</code></td>
+              <td>Evenly spaced floats in interval</td>
+              <td><code>linspace(0, 1, 5)</code></td>
+            </tr>
+            <tr>
+              <td><code>random.random(shape)</code></td>
+              <td>Random values [0, 1)</td>
+              <td><code>random((2, 3))</code></td>
+            </tr>
+            <tr>
+              <td><code>full(shape, fill_value)</code></td>
+              <td>Array filled with constant</td>
+              <td><code>full((2, 2), 5)</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Section 3: Indexing & Slicing -->
+      <section class="section" id="indexing-slicing">
+        <h2 class="section-title"><span class="section-icon">📍</span> Indexing & Slicing</h2>
+        <p class="section-intro">
+          Access and extract elements from arrays using intuitive indexing and slicing notation. NumPy's slicing is more powerful than Python lists.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>indexing_slicing.py</span></div>
+          <pre class="code-content"><span class="var">arr</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">arange</span>(<span class="num">10</span>)  <span class="comment"># [0 1 2 3 4 5 6 7 8 9]</span>
+
+<span class="comment"># 1D indexing - same as Python lists</span>
+<span class="fn-name">print</span>(<span class="var">arr</span>[<span class="num">0</span>])  <span class="comment"># 0</span>
+<span class="fn-name">print</span>(<span class="var">arr</span>[<span class="num">-1</span>])  <span class="comment"># 9 (last element)</span>
+
+<span class="comment"># 1D slicing</span>
+<span class="fn-name">print</span>(<span class="var">arr</span>[<span class="num">2</span>:<span class="num">5</span>])  <span class="comment"># [2 3 4]</span>
+<span class="fn-name">print</span>(<span class="var">arr</span>[::2])  <span class="comment"># [0 2 4 6 8] (every 2nd element)</span>
+<span class="fn-name">print</span>(<span class="var">arr</span>[::<span class="op">-</span><span class="num">1</span>])  <span class="comment"># [9 8 7 6 5 4 3 2 1 0] (reverse)</span>
+
+<span class="comment"># 2D array indexing</span>
+<span class="var">arr2d</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">arange</span>(<span class="num">12</span>).<span class="fn-name">reshape</span>(<span class="num">3</span>, <span class="num">4</span>)
+
+<span class="comment"># Access element at row 1, column 2</span>
+<span class="fn-name">print</span>(<span class="var">arr2d</span>[<span class="num">1</span>, <span class="num">2</span>])  <span class="comment"># 6</span>
+
+<span class="comment"># Get entire row</span>
+<span class="fn-name">print</span>(<span class="var">arr2d</span>[<span class="num">0</span>, :])  <span class="comment"># [0 1 2 3]</span>
+
+<span class="comment"># Get entire column</span>
+<span class="fn-name">print</span>(<span class="var">arr2d</span>[:, <span class="num">2</span>])  <span class="comment"># [2 6 10]</span>
+
+<span class="comment"># 2D slicing</span>
+<span class="fn-name">print</span>(<span class="var">arr2d</span>[<span class="num">1</span>:, :<span class="num">2</span>])  <span class="comment"># Last 2 rows, first 2 cols</span>
+
+<span class="comment"># Negative indexing</span>
+<span class="fn-name">print</span>(<span class="var">arr2d</span>[<span class="op">-</span><span class="num">1</span>, <span class="op">-</span><span class="num">1</span>])  <span class="comment"># Last element (11)</span></span>
+        </div>
+
+        <div class="callout info">
+          <div class="callout-title">Slicing Returns a View</div>
+          <p>Unlike Python lists, slicing a NumPy array returns a <strong>view</strong> (reference), not a copy. Modifying the view modifies the original array!</p>
+        </div>
+      </section>
+
+      <!-- Section 4: Boolean Masking -->
+      <section class="section" id="boolean-masking">
+        <h2 class="section-title"><span class="section-icon">🎭</span> Boolean Masking</h2>
+        <p class="section-intro">
+          Use boolean conditions to create masks for selecting elements. This is one of NumPy's most powerful features for data filtering and conditional selection.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>boolean_masking.py</span></div>
+          <pre class="code-content"><span class="var">arr</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">array</span>([<span class="num">1</span>, <span class="num">5</span>, <span class="num">3</span>, <span class="num">8</span>, <span class="num">2</span>, <span class="num">7</span>])
+
+<span class="comment"># Create boolean mask</span>
+<span class="var">mask</span> <span class="op">=</span> <span class="var">arr</span> <span class="op">></span> <span class="num">4</span>
+<span class="fn-name">print</span>(<span class="var">mask</span>)  <span class="comment"># [False  True False  True False  True]</span>
+
+<span class="comment"># Use mask for selection</span>
+<span class="fn-name">print</span>(<span class="var">arr</span>[<span class="var">mask</span>])  <span class="comment"># [5 8 7]</span>
+
+<span class="comment"># Combine conditions with & (and) and | (or)</span>
+<span class="var">mask2</span> <span class="op">=</span> (<span class="var">arr</span> <span class="op">></span> <span class="num">2</span>) <span class="op">&</span> (<span class="var">arr</span> <span class="op"><</span> <span class="num">7</span>)
+<span class="fn-name">print</span>(<span class="var">arr</span>[<span class="var">mask2</span>])  <span class="comment"># [5 3]</span>
+
+<span class="comment"># np.where - conditional selection with replacement</span>
+<span class="var">result</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">where</span>(<span class="var">arr</span> <span class="op">></span> <span class="num">4</span>, <span class="num">0</span>, <span class="var">arr</span>)
+<span class="fn-name">print</span>(<span class="var">result</span>)  <span class="comment"># [1 0 3 0 2 0]</span>
+
+<span class="comment"># Fancy indexing with integer arrays</span>
+<span class="var">indices</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">array</span>([<span class="num">0</span>, <span class="num">2</span>, <span class="num">5</span>])
+<span class="fn-name">print</span>(<span class="var">arr</span>[<span class="var">indices</span>])  <span class="comment"># [1 3 7]</span></span>
+        </div>
+
+        <div class="callout warning">
+          <div class="callout-title">Use & and | with Parentheses</div>
+          <p>Always wrap boolean conditions in parentheses and use <code>&</code> (and) / <code>|</code> (or) instead of <code>and</code> / <code>or</code>.</p>
+        </div>
+      </section>
+
+      <!-- Section 5: Broadcasting -->
+      <section class="section" id="broadcasting">
+        <h2 class="section-title"><span class="section-icon">📡</span> Broadcasting</h2>
+        <p class="section-intro">
+          Broadcasting allows NumPy to perform operations on arrays of different shapes by automatically expanding smaller arrays. It's a fundamental mechanism that makes NumPy code concise and efficient.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>broadcasting.py</span></div>
+          <pre class="code-content"><span class="comment"># Scalar broadcasts to array</span>
+<span class="var">arr</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">array</span>([<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>])
+<span class="fn-name">print</span>(<span class="var">arr</span> <span class="op">+</span> <span class="num">5</span>)  <span class="comment"># [6 7 8]</span>
+
+<span class="comment"># 1D array broadcasts with 2D array</span>
+<span class="var">arr2d</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">array</span>([[<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>], [<span class="num">4</span>, <span class="num">5</span>, <span class="num">6</span>]])
+<span class="var">row</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">array</span>([<span class="num">10</span>, <span class="num">20</span>, <span class="num">30</span>])
+<span class="fn-name">print</span>(<span class="var">arr2d</span> <span class="op">+</span> <span class="var">row</span>)
+<span class="comment"># [[11 22 33]</span>
+<span class="comment">#  [14 25 36]]</span>
+
+<span class="comment"># Column broadcasts with 2D array</span>
+<span class="var">col</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">array</span>([[<span class="num">1</span>], [<span class="num">2</span>]])
+<span class="fn-name">print</span>(<span class="var">arr2d</span> <span class="op">*</span> <span class="var">col</span>)
+<span class="comment"># [[1 2 3]</span>
+<span class="comment">#  [8 10 12]]</span>
+
+<span class="comment"># Reshape for broadcasting</span>
+<span class="var">a</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">arange</span>(<span class="num">3</span>)  <span class="comment"># shape (3,)</span>
+<span class="var">b</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">arange</span>(<span class="num">3</span>).<span class="fn-name">reshape</span>(<span class="num">3</span>, <span class="num">1</span>)  <span class="comment"># shape (3, 1)</span>
+<span class="fn-name">print</span>(<span class="var">a</span> <span class="op">+</span> <span class="var">b</span>)  <span class="comment"># Creates (3, 3) result</span></span>
+        </div>
+
+        <div class="callout info">
+          <div class="callout-title">Broadcasting Rules</div>
+          <ul style="margin-top: 0.5rem; margin-left: 1.5rem;">
+            <li>If arrays have different dimensions, pad smaller array with 1s on the left</li>
+            <li>Arrays are compatible if dimensions are equal or one is 1</li>
+            <li>Size 1 dimension stretches to match the other array</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Section 6: Math & Universal Functions -->
+      <section class="section" id="math-ufuncs">
+        <h2 class="section-title"><span class="section-icon">🧮</span> Math & Universal Functions</h2>
+        <p class="section-intro">
+          Universal functions (ufuncs) perform element-wise operations on arrays. They're implemented in C and are extremely fast compared to Python loops.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>math_ufuncs.py</span></div>
+          <pre class="code-content"><span class="var">arr</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">array</span>([<span class="num">1</span>, <span class="num">4</span>, <span class="num">9</span>, <span class="num">16</span>])
+
+<span class="comment"># Arithmetic operations (broadcast automatically)</span>
+<span class="fn-name">print</span>(<span class="var">np</span>.<span class="fn-name">sqrt</span>(<span class="var">arr</span>))  <span class="comment"># [1. 2. 3. 4.]</span>
+<span class="fn-name">print</span>(<span class="var">np</span>.<span class="fn-name">exp</span>(<span class="var">arr</span>))  <span class="comment"># Exponential: e^x</span>
+<span class="fn-name">print</span>(<span class="var">np</span>.<span class="fn-name">log</span>(<span class="var">arr</span>))  <span class="comment"># Natural logarithm</span>
+
+<span class="comment"># Trigonometric functions</span>
+<span class="var">angles</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">array</span>([<span class="num">0</span>, <span class="var">np</span>.<span class="var">pi</span><span class="op">/</span><span class="num">2</span>, <span class="var">np</span>.<span class="var">pi</span>])
+<span class="fn-name">print</span>(<span class="var">np</span>.<span class="fn-name">sin</span>(<span class="var">angles</span>))  <span class="comment"># [0. 1. 0.]</span>
+<span class="fn-name">print</span>(<span class="var">np</span>.<span class="fn-name">cos</span>(<span class="var">angles</span>))  <span class="comment"># [1. 0. -1.]</span>
+
+<span class="comment"># Rounding and absolute value</span>
+<span class="var">floats</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">array</span>([<span class="num">1.2</span>, <span class="num">-3.7</span>, <span class="num">2.5</span>])
+<span class="fn-name">print</span>(<span class="var">np</span>.<span class="fn-name">abs</span>(<span class="var">floats</span>))  <span class="comment"># [1.2 3.7 2.5]</span>
+<span class="fn-name">print</span>(<span class="var">np</span>.<span class="fn-name">round</span>(<span class="var">floats</span>))  <span class="comment"># [ 1. -4.  2.]</span>
+
+<span class="comment"># Logical operations</span>
+<span class="var">a</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">array</span>([<span class="kw">True</span>, <span class="kw">False</span>, <span class="kw">True</span>])
+<span class="var">b</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">array</span>([<span class="kw">True</span>, <span class="kw">True</span>, <span class="kw">False</span>])
+<span class="fn-name">print</span>(<span class="var">np</span>.<span class="fn-name">logical_and</span>(<span class="var">a</span>, <span class="var">b</span>))  <span class="comment"># [T F F]</span>
+<span class="fn-name">print</span>(<span class="var">np</span>.<span class="fn-name">logical_or</span>(<span class="var">a</span>, <span class="var">b</span>))  <span class="comment"># [T T T]</span></span>
+        </div>
+      </section>
+
+      <!-- Section 7: Aggregation & Axes -->
+      <section class="section" id="aggregation">
+        <h2 class="section-title"><span class="section-icon">📊</span> Aggregation & Axes</h2>
+        <p class="section-intro">
+          Reduce arrays along one or more axes using aggregation functions. The <code>axis</code> parameter controls which dimension to aggregate along.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>aggregation.py</span></div>
+          <pre class="code-content"><span class="var">arr2d</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">array</span>([[<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>], [<span class="num">4</span>, <span class="num">5</span>, <span class="num">6</span>]])
+
+<span class="comment"># Aggregate over entire array</span>
+<span class="fn-name">print</span>(<span class="var">np</span>.<span class="fn-name">sum</span>(<span class="var">arr2d</span>))  <span class="comment"># 21</span>
+<span class="fn-name">print</span>(<span class="var">np</span>.<span class="fn-name">mean</span>(<span class="var">arr2d</span>))  <span class="comment"># 3.5</span>
+<span class="fn-name">print</span>(<span class="var">np</span>.<span class="fn-name">std</span>(<span class="var">arr2d</span>))  <span class="comment"># Standard deviation</span>
+
+<span class="comment"># Aggregate along axis 0 (rows)</span>
+<span class="fn-name">print</span>(<span class="var">np</span>.<span class="fn-name">sum</span>(<span class="var">arr2d</span>, <span class="var">axis</span><span class="op">=</span><span class="num">0</span>))  <span class="comment"># [5 7 9]</span>
+
+<span class="comment"># Aggregate along axis 1 (columns)</span>
+<span class="fn-name">print</span>(<span class="var">np</span>.<span class="fn-name">sum</span>(<span class="var">arr2d</span>, <span class="var">axis</span><span class="op">=</span><span class="num">1</span>))  <span class="comment"># [6 15]</span>
+
+<span class="comment"># Keep dimensions with keepdims</span>
+<span class="fn-name">print</span>(<span class="var">np</span>.<span class="fn-name">sum</span>(<span class="var">arr2d</span>, <span class="var">axis</span><span class="op">=</span><span class="num">1</span>, <span class="var">keepdims</span><span class="op">=</span><span class="kw">True</span>))
+<span class="comment"># [[ 6]</span>
+<span class="comment">#  [15]]</span>
+
+<span class="comment"># Min and max</span>
+<span class="fn-name">print</span>(<span class="var">np</span>.<span class="fn-name">min</span>(<span class="var">arr2d</span>, <span class="var">axis</span><span class="op">=</span><span class="num">0</span>))  <span class="comment"># [1 2 3]</span>
+<span class="fn-name">print</span>(<span class="var">np</span>.<span class="fn-name">max</span>(<span class="var">arr2d</span>))  <span class="comment"># 6</span>
+
+<span class="comment"># Percentile</span>
+<span class="var">arr</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">arange</span>(<span class="num">100</span>)
+<span class="fn-name">print</span>(<span class="var">np</span>.<span class="fn-name">percentile</span>(<span class="var">arr</span>, <span class="num">25</span>))  <span class="comment"># 25th percentile</span></span>
+        </div>
+
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th>Function</th>
+              <th>Description</th>
+              <th>With axis=1</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>sum()</code></td>
+              <td>Sum of elements</td>
+              <td>Sum each row</td>
+            </tr>
+            <tr>
+              <td><code>mean()</code></td>
+              <td>Mean (average)</td>
+              <td>Mean of each row</td>
+            </tr>
+            <tr>
+              <td><code>std()</code></td>
+              <td>Standard deviation</td>
+              <td>Std of each row</td>
+            </tr>
+            <tr>
+              <td><code>min() / max()</code></td>
+              <td>Minimum / Maximum</td>
+              <td>Min/Max of each row</td>
+            </tr>
+            <tr>
+              <td><code>percentile()</code></td>
+              <td>Percentile value</td>
+              <td>Percentile per row</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Section 8: Reshaping & Stacking -->
+      <section class="section" id="reshaping">
+        <h2 class="section-title"><span class="section-icon">🔧</span> Reshaping & Stacking</h2>
+        <p class="section-intro">
+          Change array shapes and combine arrays along different axes without copying data (when possible).
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>reshaping_stacking.py</span></div>
+          <pre class="code-content"><span class="var">arr</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">arange</span>(<span class="num">12</span>)
+
+<span class="comment"># reshape - change dimensions (returns view)</span>
+<span class="var">reshaped</span> <span class="op">=</span> <span class="var">arr</span>.<span class="fn-name">reshape</span>(<span class="num">3</span>, <span class="num">4</span>)
+<span class="fn-name">print</span>(<span class="var">reshaped</span>.<span class="var">shape</span>)  <span class="comment"># (3, 4)</span>
+
+<span class="comment"># reshape to 3D</span>
+<span class="var">arr3d</span> <span class="op">=</span> <span class="var">arr</span>.<span class="fn-name">reshape</span>(<span class="num">2</span>, <span class="num">3</span>, <span class="num">2</span>)
+
+<span class="comment"># ravel - flatten to 1D (returns view if possible)</span>
+<span class="var">flattened</span> <span class="op">=</span> <span class="var">reshaped</span>.<span class="fn-name">ravel</span>()
+<span class="fn-name">print</span>(<span class="var">flattened</span>)  <span class="comment"># [0 1 2 3 4 5 6 7 8 9 10 11]</span>
+
+<span class="comment"># flatten - same as ravel but always returns copy</span>
+<span class="var">copy_flat</span> <span class="op">=</span> <span class="var">reshaped</span>.<span class="fn-name">flatten</span>()
+
+<span class="comment"># hstack - stack arrays horizontally (column-wise)</span>
+<span class="var">a</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">array</span>([[<span class="num">1</span>, <span class="num">2</span>], [<span class="num">3</span>, <span class="num">4</span>]])
+<span class="var">b</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">array</span>([[<span class="num">5</span>, <span class="num">6</span>], [<span class="num">7</span>, <span class="num">8</span>]])
+<span class="fn-name">print</span>(<span class="var">np</span>.<span class="fn-name">hstack</span>((<span class="var">a</span>, <span class="var">b</span>)))
+<span class="comment"># [[1 2 5 6]</span>
+<span class="comment">#  [3 4 7 8]]</span>
+
+<span class="comment"># vstack - stack arrays vertically (row-wise)</span>
+<span class="fn-name">print</span>(<span class="var">np</span>.<span class="fn-name">vstack</span>((<span class="var">a</span>, <span class="var">b</span>)))
+<span class="comment"># [[1 2]</span>
+<span class="comment">#  [3 4]</span>
+<span class="comment">#  [5 6]</span>
+<span class="comment">#  [7 8]]</span>
+
+<span class="comment"># concatenate - join arrays along existing axis</span>
+<span class="var">result</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">concatenate</span>((<span class="var">a</span>, <span class="var">b</span>), <span class="var">axis</span><span class="op">=</span><span class="num">0</span>)</span>
+        </div>
+
+        <div class="callout info">
+          <div class="callout-title">View vs Copy</div>
+          <ul style="margin-top: 0.5rem; margin-left: 1.5rem;">
+            <li><code>reshape()</code> returns a view when possible (contiguous data)</li>
+            <li><code>ravel()</code> returns a view when possible</li>
+            <li><code>flatten()</code> always returns a copy</li>
+            <li>Modifying a view modifies the original!</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Section 9: Linear Algebra -->
+      <section class="section" id="linear-algebra">
+        <h2 class="section-title"><span class="section-icon">🔢</span> Linear Algebra</h2>
+        <p class="section-intro">
+          NumPy's linear algebra functions are optimized for matrix operations, decompositions, and solving systems of equations.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>linear_algebra.py</span></div>
+          <pre class="code-content"><span class="var">A</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">array</span>([[<span class="num">1</span>, <span class="num">2</span>], [<span class="num">3</span>, <span class="num">4</span>]])
+<span class="var">B</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">array</span>([[<span class="num">5</span>, <span class="num">6</span>], [<span class="num">7</span>, <span class="num">8</span>]])
+<span class="var">v</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">array</span>([<span class="num">1</span>, <span class="num">2</span>])
+
+<span class="comment"># Dot product</span>
+<span class="fn-name">print</span>(<span class="var">np</span>.<span class="fn-name">dot</span>(<span class="var">A</span>, <span class="var">B</span>))  <span class="comment"># Matrix multiplication</span>
+
+<span class="comment"># Matrix-vector multiplication</span>
+<span class="fn-name">print</span>(<span class="var">A</span> <span class="op">@</span> <span class="var">v</span>)  <span class="comment"># [5 11] (@ operator is matrix mult)</span>
+
+<span class="comment"># Element-wise multiplication</span>
+<span class="fn-name">print</span>(<span class="var">A</span> <span class="op">*</span> <span class="var">B</span>)  <span class="comment"># Not the same as dot product!</span>
+
+<span class="comment"># Transpose</span>
+<span class="fn-name">print</span>(<span class="var">A</span>.<span class="var">T</span>)  <span class="comment"># [[1 3] [2 4]]</span>
+
+<span class="comment"># Determinant</span>
+<span class="fn-name">print</span>(<span class="var">np</span>.<span class="var">linalg</span>.<span class="fn-name">det</span>(<span class="var">A</span>))  <span class="comment"># -2.0</span>
+
+<span class="comment"># Inverse</span>
+<span class="fn-name">print</span>(<span class="var">np</span>.<span class="var">linalg</span>.<span class="fn-name">inv</span>(<span class="var">A</span>))
+
+<span class="comment"># Rank</span>
+<span class="fn-name">print</span>(<span class="var">np</span>.<span class="var">linalg</span>.<span class="fn-name">matrix_rank</span>(<span class="var">A</span>))  <span class="comment"># 2</span>
+
+<span class="comment"># Eigenvalues and eigenvectors</span>
+<span class="var">eigenvalues</span>, <span class="var">eigenvectors</span> <span class="op">=</span> <span class="var">np</span>.<span class="var">linalg</span>.<span class="fn-name">eig</span>(<span class="var">A</span>)
+
+<span class="comment"># Solve Ax = b</span>
+<span class="var">b</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">array</span>([<span class="num">5</span>, <span class="num">11</span>])
+<span class="var">x</span> <span class="op">=</span> <span class="var">np</span>.<span class="var">linalg</span>.<span class="fn-name">solve</span>(<span class="var">A</span>, <span class="var">b</span>)  <span class="comment"># x = [1, 2]</span>
+
+<span class="comment"># Norm (magnitude)</span>
+<span class="fn-name">print</span>(<span class="var">np</span>.<span class="var">linalg</span>.<span class="fn-name">norm</span>(<span class="var">v</span>))  <span class="comment"># sqrt(5)</span></span>
+        </div>
+      </section>
+
+      <!-- Section 10: Cumulative & Statistical -->
+      <section class="section" id="cumulative-stats">
+        <h2 class="section-title"><span class="section-icon">📈</span> Cumulative & Statistical</h2>
+        <p class="section-intro">
+          Compute cumulative operations, histograms, and advanced statistical functions for data analysis.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>cumulative_stats.py</span></div>
+          <pre class="code-content"><span class="var">arr</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">array</span>([<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>])
+
+<span class="comment"># Cumulative sum</span>
+<span class="fn-name">print</span>(<span class="var">np</span>.<span class="fn-name">cumsum</span>(<span class="var">arr</span>))  <span class="comment"># [1 3 6 10 15]</span>
+
+<span class="comment"># Cumulative product</span>
+<span class="fn-name">print</span>(<span class="var">np</span>.<span class="fn-name">cumprod</span>(<span class="var">arr</span>))  <span class="comment"># [1 2 6 24 120]</span>
+
+<span class="comment"># Differences between consecutive elements</span>
+<span class="fn-name">print</span>(<span class="var">np</span>.<span class="fn-name">diff</span>(<span class="var">arr</span>))  <span class="comment"># [1 1 1 1]</span>
+
+<span class="comment"># Histogram</span>
+<span class="var">data</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">array</span>([<span class="num">1</span>, <span class="num">2</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">3</span>, <span class="num">3</span>, <span class="num">4</span>])
+<span class="var">counts</span>, <span class="var">bins</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">histogram</span>(<span class="var">data</span>, <span class="var">bins</span><span class="op">=</span><span class="num">4</span>)
+<span class="fn-name">print</span>(<span class="var">counts</span>)  <span class="comment"># [1 2 3 1]</span>
+
+<span class="comment"># Unique values with counts</span>
+<span class="var">unique</span>, <span class="var">counts</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">unique</span>(<span class="var">data</span>, <span class="var">return_counts</span><span class="op">=</span><span class="kw">True</span>)
+<span class="fn-name">print</span>(<span class="var">unique</span>)  <span class="comment"># [1 2 3 4]</span>
+<span class="fn-name">print</span>(<span class="var">counts</span>)  <span class="comment"># [1 2 3 1]</span>
+
+<span class="comment"># Correlation coefficient</span>
+<span class="var">x</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">array</span>([<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>])
+<span class="var">y</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">array</span>([<span class="num">2</span>, <span class="num">4</span>, <span class="num">5</span>, <span class="num">6</span>])
+<span class="fn-name">print</span>(<span class="var">np</span>.<span class="fn-name">corrcoef</span>(<span class="var">x</span>, <span class="var">y</span>))  <span class="comment"># Correlation matrix</span></span>
+        </div>
+      </section>
+
+      <!-- Section 11: Advanced Patterns -->
+      <section class="section" id="advanced-patterns">
+        <h2 class="section-title"><span class="section-icon">⚡</span> Advanced Patterns</h2>
+        <p class="section-intro">
+          Master advanced techniques like einsum, vectorization, meshgrid, and other powerful NumPy patterns for complex operations.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>advanced_patterns.py</span></div>
+          <pre class="code-content"><span class="comment"># einsum - Einstein summation (powerful for tensor ops)</span>
+<span class="var">A</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">array</span>([[<span class="num">1</span>, <span class="num">2</span>], [<span class="num">3</span>, <span class="num">4</span>]])
+<span class="var">B</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">array</span>([[<span class="num">5</span>, <span class="num">6</span>], [<span class="num">7</span>, <span class="num">8</span>]])
+<span class="fn-name">print</span>(<span class="var">np</span>.<span class="fn-name">einsum</span>(<span class="str">'ij,jk->ik'</span>, <span class="var">A</span>, <span class="var">B</span>))  <span class="comment"># Matrix mult</span>
+
+<span class="comment"># meshgrid - create coordinate grids</span>
+<span class="var">x</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">array</span>([<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>])
+<span class="var">y</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">array</span>([<span class="num">4</span>, <span class="num">5</span>])
+<span class="var">X</span>, <span class="var">Y</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">meshgrid</span>(<span class="var">x</span>, <span class="var">y</span>)
+<span class="comment"># X = [[1 2 3], [1 2 3]]</span>
+<span class="comment"># Y = [[4 4 4], [5 5 5]]</span>
+
+<span class="comment"># vectorize - apply Python function to arrays</span>
+<span class="kw">def</span> <span class="fn-name">is_even</span>(<span class="var">x</span>):
+    <span class="kw">return</span> <span class="var">x</span> <span class="op">%</span> <span class="num">2</span> <span class="op">==</span> <span class="num">0</span>
+
+<span class="var">vec_is_even</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">vectorize</span>(<span class="fn-name">is_even</span>)
+<span class="fn-name">print</span>(<span class="var">vec_is_even</span>([<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>]))  <span class="comment"># [F T F T]</span>
+
+<span class="comment"># pad - add padding to arrays</span>
+<span class="var">arr</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">array</span>([<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>])
+<span class="fn-name">print</span>(<span class="var">np</span>.<span class="fn-name">pad</span>(<span class="var">arr</span>, (<span class="num">1</span>, <span class="num">2</span>), <span class="var">mode</span><span class="op">=</span><span class="str">'constant'</span>))
+<span class="comment"># [0 1 2 3 0 0]</span>
+
+<span class="comment"># repeat and tile</span>
+<span class="fn-name">print</span>(<span class="var">np</span>.<span class="fn-name">repeat</span>(<span class="var">arr</span>, <span class="num">2</span>))  <span class="comment"># [1 1 2 2 3 3]</span>
+<span class="fn-name">print</span>(<span class="var">np</span>.<span class="fn-name">tile</span>(<span class="var">arr</span>, <span class="num">2</span>))  <span class="comment"># [1 2 3 1 2 3]</span>
+
+<span class="comment"># roll - shift elements circularly</span>
+<span class="fn-name">print</span>(<span class="var">np</span>.<span class="fn-name">roll</span>(<span class="var">arr</span>, <span class="num">1</span>))  <span class="comment"># [3 1 2]</span></span>
+        </div>
+      </section>
+
+      <!-- Section 12: Performance Tips -->
+      <section class="section" id="performance">
+        <h2 class="section-title"><span class="section-icon">🚀</span> Performance Tips</h2>
+        <p class="section-intro">
+          Write fast NumPy code by understanding vectorization, memory layout, and how to leverage NumPy's optimized operations.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>performance_tips.py</span></div>
+          <pre class="code-content"><span class="comment"># SLOW: Python loop</span>
+<span class="var">arr</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">arange</span>(<span class="num">1000000</span>)
+<span class="var">result</span> <span class="op">=</span> []
+<span class="kw">for</span> <span class="var">x</span> <span class="kw">in</span> <span class="var">arr</span>:
+    <span class="var">result</span>.<span class="fn-name">append</span>(<span class="var">x</span> <span class="op">*</span> <span class="num">2</span>)
+
+<span class="comment"># FAST: Vectorized NumPy</span>
+<span class="var">result</span> <span class="op">=</span> <span class="var">arr</span> <span class="op">*</span> <span class="num">2</span>
+
+<span class="comment"># Prefer in-place operations when safe</span>
+<span class="var">arr</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">arange</span>(<span class="num">10</span>, <span class="var">dtype</span><span class="op">=</span><span class="var">np</span>.<span class="fn-name">float32</span>)
+<span class="var">arr</span> <span class="op">*=</span> <span class="num">2</span>  <span class="comment"># Modifies in-place, no copy</span>
+
+<span class="comment"># Use views instead of copies</span>
+<span class="var">arr2d</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">arange</span>(<span class="num">12</span>).<span class="fn-name">reshape</span>(<span class="num">3</span>, <span class="num">4</span>)
+<span class="var">view</span> <span class="op">=</span> <span class="var">arr2d</span>[<span class="num">1</span>:<span class="num">3</span>, <span class="num">2</span>:<span class="num">4</span>]  <span class="comment"># View, not copy</span>
+
+<span class="comment"># Broadcasting avoids memory overhead</span>
+<span class="var">large_array</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">random</span>.<span class="fn-name">random</span>((<span class="num">1000</span>, <span class="num">1000</span>))
+<span class="var">scalar</span> <span class="op">=</span> <span class="num">5</span>
+<span class="var">result</span> <span class="op">=</span> <span class="var">large_array</span> <span class="op">+</span> <span class="var">scalar</span>  <span class="comment"># No copy of scalar!</span>
+
+<span class="comment"># Use appropriate dtypes to save memory</span>
+<span class="var">small_ints</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">array</span>([<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>], <span class="var">dtype</span><span class="op">=</span><span class="var">np</span>.<span class="fn-name">int8</span>)  <span class="comment"># 1 byte</span>
+
+<span class="comment"># Avoid chained operations</span>
+<span class="comment"># Slower: creates intermediate arrays</span>
+<span class="var">result</span> <span class="op">=</span> (<span class="var">arr</span> <span class="op">+</span> <span class="num">1</span>) <span class="op">*</span> <span class="num">2</span> <span class="op">-</span> <span class="num">3</span>
+
+<span class="comment"># Use numexpr for complex expressions</span>
+<span class="kw">import</span> <span class="var">numexpr</span>
+<span class="var">a</span>, <span class="var">b</span>, <span class="var">c</span> <span class="op">=</span> <span class="var">np</span>.<span class="fn-name">arange</span>(<span class="num">10</span>), <span class="var">np</span>.<span class="fn-name">arange</span>(<span class="num">10</span>), <span class="var">np</span>.<span class="fn-name">arange</span>(<span class="num">10</span>)
+<span class="var">result</span> <span class="op">=</span> <span class="var">numexpr</span>.<span class="fn-name">evaluate</span>(<span class="str">'a + b * c'</span>)</span>
+        </div>
+
+        <div class="callout tip">
+          <div class="callout-title">Golden Rules for NumPy Speed</div>
+          <ul style="margin-top: 0.5rem; margin-left: 1.5rem;">
+            <li><strong>Vectorize:</strong> Replace Python loops with NumPy operations</li>
+            <li><strong>Use broadcasting:</strong> Avoids explicit array expansion</li>
+            <li><strong>Minimize copies:</strong> Use views and in-place operations</li>
+            <li><strong>Choose correct dtype:</strong> int8 instead of int64 when possible</li>
+            <li><strong>Avoid chaining:</strong> Combine operations in single expression when possible</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Practice CTA -->
+      <div class="practice-cta">
+        <div class="cta-text">
+          <div class="cta-title">Ready to Practice?</div>
+          <div class="cta-sub">50 NumPy challenges from easy to hard await.</div>
+        </div>
+        <a href="challenges_numpy.html" class="cta-btn">Start Challenges</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Scroll spy - highlight active section in sidebar
+    document.addEventListener('DOMContentLoaded', function() {
+      const sections = document.querySelectorAll('.section');
+      const navLinks = document.querySelectorAll('.sidebar-nav a');
+
+      window.addEventListener('scroll', function() {
+        let current = '';
+        sections.forEach(section => {
+          const sectionTop = section.offsetTop;
+          const sectionHeight = section.clientHeight;
+          if (pageYOffset >= sectionTop - 200) {
+            current = section.getAttribute('id');
+          }
+        });
+
+        navLinks.forEach(link => {
+          link.parentElement.classList.remove('active');
+          if (link.getAttribute('href').slice(1) === current) {
+            link.parentElement.classList.add('active');
+          }
+        });
+      });
+
+      // Smooth scroll for anchor links
+      navLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          const targetId = this.getAttribute('href').slice(1);
+          const targetSection = document.getElementById(targetId);
+          if (targetSection) {
+            targetSection.scrollIntoView({ behavior: 'smooth' });
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

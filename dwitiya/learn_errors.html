@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python Error Handling - Bhujanga Abhyāsa</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Sora:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f5f4f0;
+      --bg2: #eeecea;
+      --surface: #ffffff;
+      --surface2: #fafaf8;
+      --border: #e2dfd9;
+      --border2: #cdc9c2;
+      --text: #1e1c18;
+      --text2: #6b6760;
+      --text3: #9e9b96;
+      --text-inv: #ffffff;
+      --blue: #3b6fd4;
+      --blue-bg: #eef2fb;
+      --green: #2e7d52;
+      --green-bg: #edf5f0;
+      --amber: #b45309;
+      --amber-bg: #fef6ec;
+      --red: #c0392b;
+      --red-bg: #fdf0ee;
+      --purple: #6d4fc2;
+      --purple-bg: #f2eefb;
+      --teal: #1a7a7a;
+      --error-color: #c0392b;
+      --code-bg: #1e1c18;
+      --code-text: #e8e4db;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Sora', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Top Navigation */
+    .top-nav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--error-color);
+    }
+
+    .back-link {
+      color: var(--text2);
+      text-decoration: none;
+      font-size: 0.95rem;
+      padding: 0.5rem 1rem;
+      border-radius: 0.375rem;
+      transition: all 0.2s;
+    }
+
+    .back-link:hover {
+      background: var(--bg2);
+      color: var(--error-color);
+    }
+
+    .container {
+      display: flex;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      position: sticky;
+      top: 64px;
+      width: 280px;
+      height: calc(100vh - 64px);
+      background: var(--surface2);
+      border-right: 1px solid var(--border);
+      overflow-y: auto;
+      padding: 1.5rem 0;
+    }
+
+    .sidebar-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--error-color);
+      padding: 0 1.5rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .sidebar-nav {
+      list-style: none;
+    }
+
+    .sidebar-nav li {
+      border-left: 3px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .sidebar-nav a {
+      display: block;
+      padding: 0.75rem 1.5rem;
+      color: var(--text2);
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: all 0.2s;
+    }
+
+    .sidebar-nav li:hover {
+      border-left-color: var(--error-color);
+      background: var(--bg);
+    }
+
+    .sidebar-nav a:hover {
+      color: var(--error-color);
+      padding-left: 2rem;
+    }
+
+    .sidebar-nav li.active {
+      border-left-color: var(--error-color);
+      background: var(--red-bg);
+    }
+
+    .sidebar-nav li.active a {
+      color: var(--error-color);
+      font-weight: 600;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      padding: 3rem 4rem;
+      max-width: 900px;
+    }
+
+    /* Section Styling */
+    .section {
+      margin-bottom: 4rem;
+      scroll-margin-top: 80px;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--error-color);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .section-icon {
+      font-size: 2.25rem;
+    }
+
+    .section-intro {
+      color: var(--text2);
+      font-size: 1.05rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.8;
+    }
+
+    /* Code Block Styling */
+    .code-block {
+      background: var(--code-bg);
+      border-radius: 0.5rem;
+      margin: 1.5rem 0;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .code-block-header {
+      background: #16140f;
+      padding: 0.75rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #2a2722;
+      font-size: 0.85rem;
+      color: var(--text3);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .code-dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+    }
+
+    .code-dot.d1 { background: #ff605c; }
+    .code-dot.d2 { background: #ffbd44; }
+    .code-dot.d3 { background: #00ca4e; }
+
+    .code-content {
+      padding: 1.5rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      color: var(--code-text);
+      overflow-x: auto;
+      line-height: 1.7;
+    }
+
+    /* Syntax Highlighting */
+    .kw { color: #ff6b6b; font-weight: 500; } /* keywords */
+    .fn-name { color: #51cf66; } /* functions */
+    .str { color: #ffa94d; } /* strings */
+    .num { color: #b197fc; } /* numbers */
+    .comment { color: #909090; font-style: italic; }
+    .var { color: var(--code-text); }
+    .op { color: #74c0fc; } /* operators */
+
+    /* Diagram Styling */
+    .diagram-box {
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: 0.5rem;
+      padding: 2rem;
+      margin: 1.5rem 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .diagram-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text2);
+      margin-bottom: 1rem;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Flow Diagram */
+    .flow-diagram {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      width: 100%;
+    }
+
+    .flow-node {
+      background: var(--blue-bg);
+      border: 2px solid var(--blue);
+      border-radius: 0.5rem;
+      padding: 1rem 1.5rem;
+      text-align: center;
+      font-weight: 600;
+      color: var(--blue);
+      min-width: 150px;
+    }
+
+    .flow-node.flow-start,
+    .flow-node.flow-end {
+      background: var(--red-bg);
+      border-color: var(--error-color);
+      color: var(--error-color);
+      border-radius: 2rem;
+    }
+
+    .flow-node.flow-cond {
+      background: var(--amber-bg);
+      border-color: var(--amber);
+      color: var(--amber);
+    }
+
+    .flow-arrow {
+      width: 3px;
+      height: 30px;
+      background: var(--border2);
+      position: relative;
+      margin: 0;
+    }
+
+    .flow-arrow::after {
+      content: '';
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: var(--border2);
+      bottom: -5px;
+      left: 50%;
+      transform: translateX(-50%);
+      clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    }
+
+    /* Callouts */
+    .callout {
+      border-left: 4px solid var(--blue);
+      background: var(--blue-bg);
+      padding: 1rem 1.5rem;
+      border-radius: 0.375rem;
+      margin: 1.5rem 0;
+      color: var(--text);
+    }
+
+    .callout.info {
+      border-left-color: var(--blue);
+      background: var(--blue-bg);
+    }
+
+    .callout.warning {
+      border-left-color: var(--amber);
+      background: var(--amber-bg);
+    }
+
+    .callout.tip {
+      border-left-color: var(--error-color);
+      background: var(--red-bg);
+    }
+
+    .callout-title {
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      font-size: 0.95rem;
+    }
+
+    /* Comparison Table */
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+      overflow: hidden;
+    }
+
+    .compare-table th {
+      background: var(--bg2);
+      padding: 1rem;
+      text-align: left;
+      font-weight: 700;
+      border-bottom: 2px solid var(--border);
+      color: var(--text);
+    }
+
+    .compare-table td {
+      padding: 1rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--text2);
+    }
+
+    .compare-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Exception Hierarchy */
+    .hierarchy-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      color: var(--text2);
+      line-height: 1.8;
+    }
+
+    /* Practice CTA */
+    .practice-cta {
+      background: linear-gradient(135deg, var(--red-bg) 0%, var(--blue-bg) 100%);
+      border: 2px solid var(--error-color);
+      border-radius: 0.75rem;
+      padding: 2rem;
+      margin-top: 4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .cta-text {
+      flex: 1;
+    }
+
+    .cta-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--error-color);
+      margin-bottom: 0.5rem;
+    }
+
+    .cta-sub {
+      color: var(--text2);
+      font-size: 1rem;
+    }
+
+    .cta-btn {
+      background: var(--error-color);
+      color: var(--text-inv);
+      padding: 0.875rem 1.75rem;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      transition: all 0.2s;
+      white-space: nowrap;
+      display: inline-block;
+      text-decoration: none;
+    }
+
+    .cta-btn:hover {
+      background: #a02e24;
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg2);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border2);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--text2);
+    }
+
+    @media (max-width: 1024px) {
+      .sidebar {
+        width: 220px;
+      }
+      .main-content {
+        padding: 2rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+      .sidebar {
+        position: relative;
+        top: 0;
+        width: 100%;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        max-height: 200px;
+        overflow-x: auto;
+        padding: 1rem;
+      }
+      .sidebar-nav {
+        display: flex;
+        gap: 1rem;
+      }
+      .sidebar-nav li {
+        border-left: none;
+        border-bottom: 3px solid transparent;
+      }
+      .main-content {
+        padding: 1.5rem;
+      }
+      .practice-cta {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Top Navigation -->
+  <div class="top-nav">
+    <div class="nav-left">
+      <div class="logo">🛡️ Error Handling</div>
+      <a href="abhyasa_dwitiya.html" class="back-link">← Back to Dwitiya</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+      <div class="sidebar-title">🛡️ Chapters</div>
+      <ul class="sidebar-nav">
+        <li><a href="#types-of-errors">Types of Errors</a></li>
+        <li><a href="#try-except">try/except Basics</a></li>
+        <li><a href="#else-clause">The else Clause</a></li>
+        <li><a href="#finally">finally</a></li>
+        <li><a href="#specific-exceptions">Catching Specific Exceptions</a></li>
+        <li><a href="#exception-as-variable">Exception as Variable</a></li>
+        <li><a href="#raising-exceptions">Raising Exceptions</a></li>
+        <li><a href="#custom-exceptions">Custom Exceptions</a></li>
+        <li><a href="#exception-chaining">Exception Chaining</a></li>
+        <li><a href="#context-managers">Context Managers</a></li>
+        <li><a href="#validation-patterns">Validation Patterns</a></li>
+        <li><a href="#real-world-patterns">Real-World Patterns</a></li>
+      </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <!-- Section 1: Types of Errors -->
+      <section class="section" id="types-of-errors">
+        <h2 class="section-title"><span class="section-icon">📋</span> Types of Errors</h2>
+        <p class="section-intro">
+          Python distinguishes between two main categories of errors: syntax errors that prevent code from running at all, and runtime errors (exceptions) that occur while the program is executing. Understanding the exception hierarchy is crucial for robust error handling.
+        </p>
+
+        <h3 style="font-size: 1.3rem; color: var(--text); margin-top: 2rem; margin-bottom: 1rem;">Syntax vs. Runtime Errors</h3>
+        <p style="color: var(--text2); margin-bottom: 1rem;">Syntax errors are caught by Python before execution. Runtime errors (exceptions) occur during program execution.</p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>error_types.py</span></div>
+          <pre class="code-content"><span class="comment"># Syntax Error - Code won't run at all</span>
+<span class="comment"># Missing colon would cause SyntaxError</span>
+<span class="comment"># if x > 5  # <-- SyntaxError!</span>
+
+<span class="comment"># Runtime Errors - Exceptions that occur during execution</span>
+<span class="var">x</span> <span class="op">=</span> <span class="str">'hello'</span>
+<span class="var">result</span> <span class="op">=</span> <span class="var">x</span> <span class="op">+</span> <span class="num">5</span>  <span class="comment"># TypeError: can't add string and int</span>
+
+<span class="var">items</span> <span class="op">=</span> [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>]
+<span class="var">value</span> <span class="op">=</span> <span class="var">items</span>[<span class="num">10</span>]  <span class="comment"># IndexError: list index out of range</span>
+
+<span class="var">data</span> <span class="op">=</span> {<span class="str">'name'</span>: <span class="str">'Alice'</span>}
+<span class="var">age</span> <span class="op">=</span> <span class="var">data</span>[<span class="str">'age'</span>]  <span class="comment"># KeyError: 'age'</span>
+
+<span class="var">number</span> <span class="op">=</span> <span class="fn-name">int</span>(<span class="str">'not a number'</span>)  <span class="comment"># ValueError: invalid literal</span></pre>
+        </div>
+
+        <h3 style="font-size: 1.3rem; color: var(--text); margin-top: 2rem; margin-bottom: 1rem;">Exception Hierarchy</h3>
+        <p style="color: var(--text2); margin-bottom: 1rem;">Python organizes exceptions in a hierarchy. At the top is <code>BaseException</code>, with most errors inheriting from <code>Exception</code>.</p>
+
+        <div class="hierarchy-box">
+          BaseException
+          <br/>├── SystemExit
+          <br/>├── KeyboardInterrupt
+          <br/>└── Exception (all typical errors inherit from this)
+          <br/>&nbsp;&nbsp;&nbsp;&nbsp;├── TypeError
+          <br/>&nbsp;&nbsp;&nbsp;&nbsp;├── ValueError
+          <br/>&nbsp;&nbsp;&nbsp;&nbsp;├── KeyError
+          <br/>&nbsp;&nbsp;&nbsp;&nbsp;├── IndexError
+          <br/>&nbsp;&nbsp;&nbsp;&nbsp;├── RuntimeError
+          <br/>&nbsp;&nbsp;&nbsp;&nbsp;├── ZeroDivisionError
+          <br/>&nbsp;&nbsp;&nbsp;&nbsp;└── ... (200+ standard exceptions)
+        </div>
+
+        <div class="callout tip">
+          <div class="callout-title">Pro Tip</div>
+          <p>Always catch the most specific exception first. Catch <code>ValueError</code> before <code>Exception</code>. This lets you handle different errors appropriately.</p>
+        </div>
+      </section>
+
+      <!-- Section 2: try/except Basics -->
+      <section class="section" id="try-except">
+        <h2 class="section-title"><span class="section-icon">🔄</span> try/except Basics</h2>
+        <p class="section-intro">
+          The <code>try/except</code> block is the foundation of error handling. The code in the <code>try</code> block is executed, and if an exception occurs, it's caught and handled by the <code>except</code> block.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>try_except_basic.py</span></div>
+          <pre class="code-content"><span class="comment"># Simple try/except</span>
+<span class="kw">try</span>:
+    <span class="var">age</span> <span class="op">=</span> <span class="fn-name">int</span>(<span class="fn-name">input</span>(<span class="str">'Enter your age: '</span>))
+    <span class="fn-name">print</span>(<span class="str">f'You are {</span><span class="var">age</span><span class="str">} years old'</span>)
+<span class="kw">except</span>:
+    <span class="fn-name">print</span>(<span class="str">'Please enter a valid number'</span>)
+
+<span class="comment"># Multiple except clauses</span>
+<span class="kw">try</span>:
+    <span class="var">result</span> <span class="op">=</span> <span class="num">10</span> <span class="op">/</span> <span class="fn-name">int</span>(<span class="fn-name">input</span>(<span class="str">'Divisor: '</span>))
+    <span class="fn-name">print</span>(<span class="var">result</span>)
+<span class="kw">except</span> <span class="fn-name">ValueError</span>:
+    <span class="fn-name">print</span>(<span class="str">'Invalid input: not a number'</span>)
+<span class="kw">except</span> <span class="fn-name">ZeroDivisionError</span>:
+    <span class="fn-name">print</span>(<span class="str">'Cannot divide by zero'</span>)</pre>
+        </div>
+
+        <div class="diagram-box">
+          <div style="width: 100%;">
+            <div class="diagram-title">try/except Flow</div>
+            <div class="flow-diagram">
+              <div class="flow-node flow-start">Enter try block</div>
+              <div class="flow-arrow"></div>
+              <div class="flow-node flow-cond">Exception<br/>occurs?</div>
+              <div style="display: flex; gap: 2rem; margin: 1rem 0;">
+                <div style="display: flex; flex-direction: column; align-items: center;">
+                  <div style="color: var(--text2); font-weight: 600; margin-bottom: 1rem;">Yes</div>
+                  <div class="flow-arrow" style="height: 60px;"></div>
+                  <div class="flow-node">Execute except<br/>block</div>
+                </div>
+                <div style="display: flex; flex-direction: column; align-items: center;">
+                  <div style="color: var(--text2); font-weight: 600; margin-bottom: 1rem;">No</div>
+                  <div class="flow-arrow" style="height: 60px;"></div>
+                  <div class="flow-node">Continue<br/>normally</div>
+                </div>
+              </div>
+              <div style="text-align: center; margin-top: 2rem;">
+                <div class="flow-arrow" style="height: 30px;"></div>
+                <div class="flow-node flow-end">Program continues</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout warning">
+          <div class="callout-title">Avoid Bare except</div>
+          <p>Never use a bare <code>except:</code> clause without specifying an exception type. It catches everything, including system exits and keyboard interrupts, making debugging harder.</p>
+        </div>
+      </section>
+
+      <!-- Section 3: The else Clause -->
+      <section class="section" id="else-clause">
+        <h2 class="section-title"><span class="section-icon">✅</span> The else Clause</h2>
+        <p class="section-intro">
+          The <code>else</code> clause in a try block executes only if no exception occurs. Use it for code that should only run when the try block succeeds.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>try_else_example.py</span></div>
+          <pre class="code-content"><span class="comment"># Using else with try/except</span>
+<span class="kw">try</span>:
+    <span class="var">num</span> <span class="op">=</span> <span class="fn-name">int</span>(<span class="fn-name">input</span>(<span class="str">'Enter a number: '</span>))
+<span class="kw">except</span> <span class="fn-name">ValueError</span>:
+    <span class="fn-name">print</span>(<span class="str">'That was not a valid number'</span>)
+<span class="kw">else</span>:
+    <span class="comment"># This runs only if no exception occurred</span>
+    <span class="var">squared</span> <span class="op">=</span> <span class="var">num</span> <span class="op">*</span> <span class="var">num</span>
+    <span class="fn-name">print</span>(<span class="str">f'{</span><span class="var">num</span><span class="str">} squared is {</span><span class="var">squared</span><span class="str">}'</span>)
+
+<span class="comment"># Practical: Process file only if it opens successfully</span>
+<span class="kw">try</span>:
+    <span class="var">file</span> <span class="op">=</span> <span class="fn-name">open</span>(<span class="str">'data.txt'</span>, <span class="str">'r'</span>)
+<span class="kw">except</span> <span class="fn-name">FileNotFoundError</span>:
+    <span class="fn-name">print</span>(<span class="str">'File not found'</span>)
+<span class="kw">else</span>:
+    <span class="var">content</span> <span class="op">=</span> <span class="var">file</span>.<span class="fn-name">read</span>()
+    <span class="fn-name">print</span>(<span class="var">content</span>)</pre>
+        </div>
+
+        <div class="callout info">
+          <div class="callout-title">When to Use else</div>
+          <ul style="margin-top: 0.5rem; margin-left: 1.5rem;">
+            <li>Code that depends on the try block succeeding</li>
+            <li>Operations that should only happen if no error occurred</li>
+            <li>Keeps exception handling separate from success logic</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Section 4: finally -->
+      <section class="section" id="finally">
+        <h2 class="section-title"><span class="section-icon">🔒</span> finally</h2>
+        <p class="section-intro">
+          The <code>finally</code> block executes unconditionally, whether an exception occurred or not. It's essential for cleanup tasks like closing files, releasing resources, or completing transactions.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>finally_example.py</span></div>
+          <pre class="code-content"><span class="comment"># finally always runs</span>
+<span class="kw">try</span>:
+    <span class="var">file</span> <span class="op">=</span> <span class="fn-name">open</span>(<span class="str">'data.txt'</span>, <span class="str">'r'</span>)
+    <span class="var">data</span> <span class="op">=</span> <span class="var">file</span>.<span class="fn-name">read</span>()
+    <span class="fn-name">print</span>(<span class="var">data</span>)
+<span class="kw">except</span> <span class="fn-name">FileNotFoundError</span>:
+    <span class="fn-name">print</span>(<span class="str">'File not found'</span>)
+<span class="kw">finally</span>:
+    <span class="fn-name">print</span>(<span class="str">'Closing file...'</span>)  <span class="comment"># Runs regardless</span>
+    <span class="var">file</span>.<span class="fn-name">close</span>()
+
+<span class="comment"># Database connection cleanup</span>
+<span class="kw">try</span>:
+    <span class="var">db</span> <span class="op">=</span> <span class="fn-name">connect_database</span>()
+    <span class="var">db</span>.<span class="fn-name">execute</span>(<span class="str">'INSERT INTO users VALUES (...)'</span>)
+<span class="kw">except</span> <span class="fn-name">DatabaseError</span>:
+    <span class="fn-name">print</span>(<span class="str">'Database error occurred'</span>)
+<span class="kw">finally</span>:
+    <span class="var">db</span>.<span class="fn-name">close</span>()  <span class="comment"># Always close connection</span></pre>
+        </div>
+
+        <div class="diagram-box">
+          <div style="width: 100%;">
+            <div class="diagram-title">try/except/else/finally Flow</div>
+            <div class="flow-diagram">
+              <div class="flow-node flow-start">try block</div>
+              <div class="flow-arrow"></div>
+              <div class="flow-node flow-cond">Exception<br/>raised?</div>
+              <div style="display: flex; gap: 3rem; margin: 1rem 0; width: 100%;">
+                <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
+                  <div style="color: var(--text2); font-weight: 600; margin-bottom: 0.5rem;">Yes</div>
+                  <div class="flow-arrow" style="height: 40px;"></div>
+                  <div class="flow-node">except block</div>
+                </div>
+                <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
+                  <div style="color: var(--text2); font-weight: 600; margin-bottom: 0.5rem;">No</div>
+                  <div class="flow-arrow" style="height: 40px;"></div>
+                  <div class="flow-node">else block</div>
+                </div>
+              </div>
+              <div class="flow-arrow" style="height: 40px;"></div>
+              <div class="flow-node" style="background: var(--purple-bg); border-color: var(--purple); color: var(--purple);">finally block<br/>(always runs)</div>
+              <div class="flow-arrow" style="height: 40px;"></div>
+              <div class="flow-node flow-end">Done</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout tip">
+          <div class="callout-title">Resource Management</div>
+          <p>Use <code>finally</code> for cleanup: closing files, releasing locks, committing/rolling back transactions. Even if an exception occurs mid-operation, the cleanup code will run.</p>
+        </div>
+      </section>
+
+      <!-- Section 5: Catching Specific Exceptions -->
+      <section class="section" id="specific-exceptions">
+        <h2 class="section-title"><span class="section-icon">🎯</span> Catching Specific Exceptions</h2>
+        <p class="section-intro">
+          Catch specific exception types to handle different errors appropriately. This makes your code more predictable and easier to debug.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>specific_exceptions.py</span></div>
+          <pre class="code-content"><span class="comment"># Catch multiple specific exceptions</span>
+<span class="kw">try</span>:
+    <span class="var">value</span> <span class="op">=</span> <span class="var">items</span>[<span class="num">0</span>]
+    <span class="var">result</span> <span class="op">=</span> <span class="num">10</span> <span class="op">/</span> <span class="fn-name">int</span>(<span class="var">value</span>)
+<span class="kw">except</span> <span class="fn-name">IndexError</span>:
+    <span class="fn-name">print</span>(<span class="str">'List is empty'</span>)
+<span class="kw">except</span> <span class="fn-name">ValueError</span>:
+    <span class="fn-name">print</span>(<span class="str">'Value is not a valid number'</span>)
+<span class="kw">except</span> <span class="fn-name">ZeroDivisionError</span>:
+    <span class="fn-name">print</span>(<span class="str">'Cannot divide by zero'</span>)
+
+<span class="comment"># Catch multiple exceptions in one clause</span>
+<span class="kw">try</span>:
+    <span class="var">data</span> <span class="op">=</span> <span class="fn-name">parse_json</span>(<span class="var">user_input</span>)
+<span class="kw">except</span> (<span class="fn-name">ValueError</span>, <span class="fn-name">TypeError</span>):
+    <span class="fn-name">print</span>(<span class="str">'Invalid input format'</span>)
+
+<span class="comment"># Catch and inspect the exception</span>
+<span class="kw">try</span>:
+    <span class="var">config</span> <span class="op">=</span> <span class="fn-name">open</span>(<span class="str">'settings.json'</span>).<span class="fn-name">read</span>()
+<span class="kw">except</span> <span class="fn-name">FileNotFoundError</span>:
+    <span class="fn-name">print</span>(<span class="str">'Config file is missing'</span>)
+    <span class="fn-name">print</span>(<span class="str">'Using default settings'</span>)</pre>
+        </div>
+
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th>Exception Type</th>
+              <th>When Raised</th>
+              <th>Example</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>ValueError</code></td>
+              <td>Wrong value for operation</td>
+              <td><code>int('abc')</code></td>
+            </tr>
+            <tr>
+              <td><code>TypeError</code></td>
+              <td>Wrong type for operation</td>
+              <td><code>'text' + 5</code></td>
+            </tr>
+            <tr>
+              <td><code>IndexError</code></td>
+              <td>Index out of range</td>
+              <td><code>list[999]</code></td>
+            </tr>
+            <tr>
+              <td><code>KeyError</code></td>
+              <td>Dictionary key not found</td>
+              <td><code>dict['missing']</code></td>
+            </tr>
+            <tr>
+              <td><code>ZeroDivisionError</code></td>
+              <td>Division by zero</td>
+              <td><code>10 / 0</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Section 6: Exception as Variable -->
+      <section class="section" id="exception-as-variable">
+        <h2 class="section-title"><span class="section-icon">📝</span> Exception as Variable</h2>
+        <p class="section-intro">
+          Capture exception details using the <code>as</code> keyword to access error messages, tracebacks, and other information about what went wrong.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>exception_variable.py</span></div>
+          <pre class="code-content"><span class="comment"># Capture exception as variable</span>
+<span class="kw">try</span>:
+    <span class="var">age</span> <span class="op">=</span> <span class="fn-name">int</span>(<span class="fn-name">input</span>(<span class="str">'Age: '</span>))
+<span class="kw">except</span> <span class="fn-name">ValueError</span> <span class="kw">as</span> <span class="var">e</span>:
+    <span class="fn-name">print</span>(<span class="str">f'Error: {</span><span class="var">e</span><span class="str">}'</span>)  <span class="comment"># Print error message</span>
+
+<span class="comment"># Access full error information</span>
+<span class="kw">try</span>:
+    <span class="var">result</span> <span class="op">=</span> <span class="num">10</span> <span class="op">/</span> <span class="num">0</span>
+<span class="kw">except</span> <span class="fn-name">ZeroDivisionError</span> <span class="kw">as</span> <span class="var">error</span>:
+    <span class="fn-name">print</span>(<span class="str">f'Exception type: {</span><span class="fn-name">type</span>(<span class="var">error</span>)<span class="str">}'</span>)
+    <span class="fn-name">print</span>(<span class="str">f'Error message: {</span><span class="var">error</span><span class="str">}'</span>)
+
+<span class="comment"># Log error with context</span>
+<span class="kw">try</span>:
+    <span class="var">data</span> <span class="op">=</span> <span class="fn-name">load_data</span>(<span class="str">'user.json'</span>)
+<span class="kw">except</span> <span class="fn-name">Exception</span> <span class="kw">as</span> <span class="var">err</span>:
+    <span class="fn-name">print</span>(<span class="str">f'Failed to load data: {</span><span class="var">err</span><span class="str">}'</span>)
+    <span class="fn-name">print</span>(<span class="str">f'Error type: {</span><span class="var">err</span>.<span class="fn-name">__class__</span>.<span class="fn-name">__name__</span><span class="str">}'</span>)</pre>
+        </div>
+
+        <div class="callout info">
+          <div class="callout-title">Exception Object Properties</div>
+          <ul style="margin-top: 0.5rem; margin-left: 1.5rem;">
+            <li><code>str(e)</code> - Error message string</li>
+            <li><code>type(e)</code> - Exception class</li>
+            <li><code>e.args</code> - Tuple of arguments passed to exception</li>
+            <li><code>e.__traceback__</code> - Stack trace information</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Section 7: Raising Exceptions -->
+      <section class="section" id="raising-exceptions">
+        <h2 class="section-title"><span class="section-icon">⬆️</span> Raising Exceptions</h2>
+        <p class="section-intro">
+          Use the <code>raise</code> keyword to manually trigger exceptions when your code detects an invalid state. This signals to calling code that something went wrong.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>raising_exceptions.py</span></div>
+          <pre class="code-content"><span class="comment"># Raise exception with message</span>
+<span class="kw">def</span> <span class="fn-name">validate_age</span>(<span class="var">age</span>):
+    <span class="kw">if</span> <span class="var">age</span> <span class="op"><</span> <span class="num">0</span>:
+        <span class="kw">raise</span> <span class="fn-name">ValueError</span>(<span class="str">'Age cannot be negative'</span>)
+    <span class="kw">if</span> <span class="var">age</span> <span class="op">></span> <span class="num">150</span>:
+        <span class="kw">raise</span> <span class="fn-name">ValueError</span>(<span class="str">'Age seems unrealistic'</span>)
+    <span class="kw">return</span> <span class="var">age</span>
+
+<span class="comment"># Re-raise exception</span>
+<span class="kw">try</span>:
+    <span class="var">user_age</span> <span class="op">=</span> <span class="fn-name">int</span>(<span class="fn-name">input</span>(<span class="str">'Age: '</span>))
+    <span class="fn-name">validate_age</span>(<span class="var">user_age</span>)
+<span class="kw">except</span> <span class="fn-name">ValueError</span> <span class="kw">as</span> <span class="var">e</span>:
+    <span class="fn-name">print</span>(<span class="str">f'Validation error: {</span><span class="var">e</span><span class="str">}'</span>)
+    <span class="kw">raise</span>  <span class="comment"># Re-raise same exception</span>
+
+<span class="comment"># Catch and re-raise different exception</span>
+<span class="kw">try</span>:
+    <span class="var">result</span> <span class="op">=</span> <span class="fn-name">risky_operation</span>()
+<span class="kw">except</span> <span class="fn-name">IOError</span> <span class="kw">as</span> <span class="var">e</span>:
+    <span class="fn-name">print</span>(<span class="str">f'IO failed: {</span><span class="var">e</span><span class="str">}'</span>)
+    <span class="kw">raise</span> <span class="fn-name">RuntimeError</span>(<span class="str">'Operation failed'</span>)</pre>
+        </div>
+
+        <div class="callout warning">
+          <div class="callout-title">Be Specific When Raising</div>
+          <p>Always raise specific exception types with clear messages. This helps calling code understand what went wrong and handle it appropriately.</p>
+        </div>
+      </section>
+
+      <!-- Section 8: Custom Exceptions -->
+      <section class="section" id="custom-exceptions">
+        <h2 class="section-title"><span class="section-icon">🏗️</span> Custom Exceptions</h2>
+        <p class="section-intro">
+          Create your own exception classes by inheriting from <code>Exception</code>. This lets you define domain-specific errors that reflect your application's logic.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>custom_exceptions.py</span></div>
+          <pre class="code-content"><span class="comment"># Define custom exception classes</span>
+<span class="kw">class</span> <span class="fn-name">InsufficientFundsError</span>(<span class="fn-name">Exception</span>):
+    <span class="str">"""Raised when account has insufficient balance"""</span>
+    <span class="kw">pass</span>
+
+<span class="kw">class</span> <span class="fn-name">InvalidAccountError</span>(<span class="fn-name">Exception</span>):
+    <span class="str">"""Raised when account number is invalid"""</span>
+    <span class="kw">def</span> <span class="fn-name">__init__</span>(<span class="var">self</span>, <span class="var">account_id</span>):
+        <span class="var">self</span>.<span class="var">account_id</span> <span class="op">=</span> <span class="var">account_id</span>
+        <span class="fn-name">super</span>().<span class="fn-name">__init__</span>(<span class="str">f'Invalid account: {</span><span class="var">account_id</span><span class="str">}'</span>)
+
+<span class="comment"># Use custom exceptions</span>
+<span class="kw">def</span> <span class="fn-name">withdraw</span>(<span class="var">account_id</span>, <span class="var">amount</span>):
+    <span class="kw">if</span> <span class="var">account_id</span> <span class="op">not</span> <span class="op">in</span> <span class="var">accounts</span>:
+        <span class="kw">raise</span> <span class="fn-name">InvalidAccountError</span>(<span class="var">account_id</span>)
+
+    <span class="var">balance</span> <span class="op">=</span> <span class="var">accounts</span>[<span class="var">account_id</span>]
+    <span class="kw">if</span> <span class="var">balance</span> <span class="op"><</span> <span class="var">amount</span>:
+        <span class="kw">raise</span> <span class="fn-name">InsufficientFundsError</span>(<span class="str">'Not enough money'</span>)
+
+    <span class="kw">return</span> <span class="var">balance</span> <span class="op">-</span> <span class="var">amount</span>
+
+<span class="comment"># Catch custom exceptions</span>
+<span class="kw">try</span>:
+    <span class="fn-name">withdraw</span>(<span class="str">'ACC123'</span>, <span class="num">1000</span>)
+<span class="kw">except</span> <span class="fn-name">InvalidAccountError</span> <span class="kw">as</span> <span class="var">e</span>:
+    <span class="fn-name">print</span>(<span class="str">f'Bad account: {</span><span class="var">e</span>.<span class="var">account_id</span><span class="str">}'</span>)
+<span class="kw">except</span> <span class="fn-name">InsufficientFundsError</span>:
+    <span class="fn-name">print</span>(<span class="str">'Cannot complete withdrawal'</span>)</pre>
+        </div>
+
+        <div class="callout tip">
+          <div class="callout-title">Exception Hierarchy Pattern</div>
+          <p>Create a base exception for your application, then inherit specific exceptions from it. This lets callers catch all your app's errors with one clause: <code>except AppError:</code></p>
+        </div>
+      </section>
+
+      <!-- Section 9: Exception Chaining -->
+      <section class="section" id="exception-chaining">
+        <h2 class="section-title"><span class="section-icon">⛓️</span> Exception Chaining</h2>
+        <p class="section-intro">
+          When handling an exception and raising a new one, preserve the original error context using the <code>from</code> keyword or the implicit exception chain. This maintains the full error history for debugging.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>exception_chaining.py</span></div>
+          <pre class="code-content"><span class="comment"># Explicit chaining with 'from'</span>
+<span class="kw">try</span>:
+    <span class="var">file</span> <span class="op">=</span> <span class="fn-name">open</span>(<span class="str">'missing.txt'</span>)
+<span class="kw">except</span> <span class="fn-name">FileNotFoundError</span> <span class="kw">as</span> <span class="var">original_error</span>:
+    <span class="kw">raise</span> <span class="fn-name">RuntimeError</span>(<span class="str">'Cannot load config'</span>) <span class="kw">from</span> <span class="var">original_error</span>
+
+<span class="comment"># Access the cause</span>
+<span class="kw">try</span>:
+    <span class="fn-name">process_data</span>()
+<span class="kw">except</span> <span class="fn-name">ValueError</span> <span class="kw">as</span> <span class="var">e</span>:
+    <span class="var">original</span> <span class="op">=</span> <span class="var">e</span>.<span class="fn-name">__cause__</span>  <span class="comment"># Exception that caused this</span>
+    <span class="var">context</span> <span class="op">=</span> <span class="var">e</span>.<span class="fn-name">__context__</span>  <span class="comment"># Implicit exception context</span>
+
+<span class="comment"># Suppress exception context if not relevant</span>
+<span class="kw">try</span>:
+    <span class="var">result</span> <span class="op">=</span> <span class="fn-name">fetch_data</span>()
+<span class="kw">except</span> <span class="fn-name">NetworkError</span>:
+    <span class="kw">raise</span> <span class="fn-name">DataError</span>(<span class="str">'Data unavailable'</span>) <span class="kw">from</span> <span class="kw">None</span></pre>
+        </div>
+
+        <div class="callout info">
+          <div class="callout-title">Exception Attributes</div>
+          <ul style="margin-top: 0.5rem; margin-left: 1.5rem;">
+            <li><code>__cause__</code> - Exception explicitly raised with <code>from</code></li>
+            <li><code>__context__</code> - Exception that implicitly occurred</li>
+            <li><code>__suppress_context__</code> - Whether to show context in traceback</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Section 10: Context Managers -->
+      <section class="section" id="context-managers">
+        <h2 class="section-title"><span class="section-icon">📖</span> Context Managers</h2>
+        <p class="section-intro">
+          Context managers (the <code>with</code> statement) automatically handle setup and cleanup. They're perfect for resource management and ensure cleanup happens even if an exception occurs.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>context_managers.py</span></div>
+          <pre class="code-content"><span class="comment"># Using with statement for file handling</span>
+<span class="kw">with</span> <span class="fn-name">open</span>(<span class="str">'data.txt'</span>, <span class="str">'r'</span>) <span class="kw">as</span> <span class="var">file</span>:
+    <span class="var">content</span> <span class="op">=</span> <span class="var">file</span>.<span class="fn-name">read</span>()
+<span class="comment"># File is automatically closed here</span>
+
+<span class="comment"># Multiple resources</span>
+<span class="kw">with</span> <span class="fn-name">open</span>(<span class="str">'input.txt'</span>) <span class="kw">as</span> <span class="var">src</span>, \
+     <span class="fn-name">open</span>(<span class="str">'output.txt'</span>, <span class="str">'w'</span>) <span class="kw">as</span> <span class="var">dst</span>:
+    <span class="kw">for</span> <span class="var">line</span> <span class="kw">in</span> <span class="var">src</span>:
+        <span class="var">dst</span>.<span class="fn-name">write</span>(<span class="var">line</span>.<span class="fn-name">upper</span>())
+
+<span class="comment"># Create custom context manager</span>
+<span class="kw">class</span> <span class="fn-name">DatabaseConnection</span>:
+    <span class="kw">def</span> <span class="fn-name">__enter__</span>(<span class="var">self</span>):
+        <span class="fn-name">print</span>(<span class="str">'Connecting...'</span>)
+        <span class="kw">return</span> <span class="var">self</span>
+
+    <span class="kw">def</span> <span class="fn-name">__exit__</span>(<span class="var">self</span>, <span class="var">exc_type</span>, <span class="var">exc_val</span>, <span class="var">exc_tb</span>):
+        <span class="fn-name">print</span>(<span class="str">'Disconnecting...'</span>)
+        <span class="kw">return</span> <span class="kw">False</span>  <span class="comment"># Don't suppress exceptions</span>
+
+<span class="kw">with</span> <span class="fn-name">DatabaseConnection</span>() <span class="kw">as</span> <span class="var">db</span>:
+    <span class="var">db</span>.<span class="fn-name">execute</span>(<span class="str">'SELECT * FROM users'</span>)</pre>
+        </div>
+
+        <div class="callout info">
+          <div class="callout-title">__enter__ and __exit__</div>
+          <ul style="margin-top: 0.5rem; margin-left: 1.5rem;">
+            <li><code>__enter__</code> - Called when entering with block, returns resource</li>
+            <li><code>__exit__</code> - Called on exit (normal or exception), does cleanup</li>
+            <li>Return <code>True</code> from <code>__exit__</code> to suppress exceptions</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Section 11: Validation Patterns -->
+      <section class="section" id="validation-patterns">
+        <h2 class="section-title"><span class="section-icon">✔️</span> Validation Patterns</h2>
+        <p class="section-intro">
+          Use validation patterns to catch errors early and provide clear feedback. Guard clauses, assertions, and early returns keep code clean and errors predictable.
+        </p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>validation_patterns.py</span></div>
+          <pre class="code-content"><span class="comment"># Guard clause pattern</span>
+<span class="kw">def</span> <span class="fn-name">process_user</span>(<span class="var">user_data</span>):
+    <span class="kw">if</span> <span class="var">user_data</span> <span class="op">is</span> <span class="kw">None</span>:
+        <span class="kw">raise</span> <span class="fn-name">ValueError</span>(<span class="str">'User data required'</span>)
+    <span class="kw">if</span> <span class="str">'name'</span> <span class="op">not</span> <span class="op">in</span> <span class="var">user_data</span>:
+        <span class="kw">raise</span> <span class="fn-name">KeyError</span>(<span class="str">'Name field missing'</span>)
+    <span class="kw">if</span> <span class="fn-name">len</span>(<span class="var">user_data</span>[<span class="str">'name'</span>]) <span class="op">==</span> <span class="num">0</span>:
+        <span class="kw">raise</span> <span class="fn-name">ValueError</span>(<span class="str">'Name cannot be empty'</span>)
+
+    <span class="comment"># Main logic starts here</span>
+    <span class="kw">return</span> <span class="fn-name">save_to_database</span>(<span class="var">user_data</span>)
+
+<span class="comment"># Assert pattern for debugging</span>
+<span class="kw">def</span> <span class="fn-name">divide</span>(<span class="var">a</span>, <span class="var">b</span>):
+    <span class="fn-name">assert</span> <span class="var">b</span> <span class="op">!=</span> <span class="num">0</span>, <span class="str">'Divisor cannot be zero'</span>
+    <span class="kw">return</span> <span class="var">a</span> <span class="op">/</span> <span class="var">b</span>
+
+<span class="comment"># Type checking</span>
+<span class="kw">def</span> <span class="fn-name">increment</span>(<span class="var">value</span>):
+    <span class="kw">if</span> <span class="op">not</span> <span class="fn-name">isinstance</span>(<span class="var">value</span>, <span class="fn-name">int</span>):
+        <span class="kw">raise</span> <span class="fn-name">TypeError</span>(<span class="str">f'Expected int, got {</span><span class="fn-name">type</span>(<span class="var">value</span>)<span class="str">}'</span>)
+    <span class="kw">return</span> <span class="var">value</span> <span class="op">+</span> <span class="num">1</span></pre>
+        </div>
+
+        <div class="callout tip">
+          <div class="callout-title">Fail Fast, Fail Clear</div>
+          <p>Validate inputs at function entry. Raise specific exceptions with clear messages. This makes bugs easier to find and prevents invalid data from corrupting your system.</p>
+        </div>
+      </section>
+
+      <!-- Section 12: Real-World Patterns -->
+      <section class="section" id="real-world-patterns">
+        <h2 class="section-title"><span class="section-icon">🌍</span> Real-World Patterns</h2>
+        <p class="section-intro">
+          Practical patterns for production code: retry logic, graceful degradation, error accumulation, and logging. These techniques make systems robust and maintainable.
+        </p>
+
+        <h3 style="font-size: 1.3rem; color: var(--text); margin-top: 2rem; margin-bottom: 1rem;">Retry Pattern with Exponential Backoff</h3>
+        <p style="color: var(--text2); margin-bottom: 1rem;">Automatically retry failed operations with increasing delays.</p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>retry_pattern.py</span></div>
+          <pre class="code-content"><span class="kw">import</span> <span class="var">time</span>
+
+<span class="kw">def</span> <span class="fn-name">retry_with_backoff</span>(<span class="var">func</span>, <span class="var">max_attempts</span><span class="op">=</span><span class="num">3</span>):
+    <span class="var">attempt</span> <span class="op">=</span> <span class="num">1</span>
+    <span class="var">delay</span> <span class="op">=</span> <span class="num">1</span>  <span class="comment"># Start with 1 second</span>
+
+    <span class="kw">while</span> <span class="var">attempt</span> <span class="op"><=</span> <span class="var">max_attempts</span>:
+        <span class="kw">try</span>:
+            <span class="kw">return</span> <span class="fn-name">func</span>()
+        <span class="kw">except</span> <span class="fn-name">Exception</span> <span class="kw">as</span> <span class="var">e</span>:
+            <span class="kw">if</span> <span class="var">attempt</span> <span class="op">==</span> <span class="var">max_attempts</span>:
+                <span class="kw">raise</span>  <span class="comment"># Give up on last attempt</span>
+            <span class="fn-name">print</span>(<span class="str">f'Attempt {</span><span class="var">attempt</span><span class="str">} failed, retrying in {</span><span class="var">delay</span><span class="str">}s'</span>)
+            <span class="var">time</span>.<span class="fn-name">sleep</span>(<span class="var">delay</span>)
+            <span class="var">delay</span> <span class="op">*=</span> <span class="num">2</span>  <span class="comment"># Exponential backoff</span>
+            <span class="var">attempt</span> <span class="op">+=</span> <span class="num">1</span></pre>
+        </div>
+
+        <h3 style="font-size: 1.3rem; color: var(--text); margin-top: 2rem; margin-bottom: 1rem;">Graceful Degradation</h3>
+        <p style="color: var(--text2); margin-bottom: 1rem;">Provide fallback behavior when operations fail.</p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>graceful_degradation.py</span></div>
+          <pre class="code-content"><span class="kw">def</span> <span class="fn-name">get_user_data</span>(<span class="var">user_id</span>):
+    <span class="kw">try</span>:
+        <span class="comment"># Try to fetch from primary database</span>
+        <span class="kw">return</span> <span class="var">primary_db</span>.<span class="fn-name">get</span>(<span class="var">user_id</span>)
+    <span class="kw">except</span> <span class="fn-name">DatabaseError</span>:
+        <span class="kw">try</span>:
+            <span class="comment"># Fall back to cache</span>
+            <span class="kw">return</span> <span class="var">cache</span>.<span class="fn-name">get</span>(<span class="var">user_id</span>)
+        <span class="kw">except</span> <span class="fn-name">CacheError</span>:
+            <span class="comment"># Last resort: return default</span>
+            <span class="kw">return</span> {<span class="str">'id'</span>: <span class="var">user_id</span>, <span class="str">'status'</span>: <span class="str">'unknown'</span>}
+
+<span class="comment"># Error accumulation pattern</span>
+<span class="kw">def</span> <span class="fn-name">validate_users</span>(<span class="var">users</span>):
+    <span class="var">errors</span> <span class="op">=</span> []
+
+    <span class="kw">for</span> <span class="var">user</span> <span class="kw">in</span> <span class="var">users</span>:
+        <span class="kw">try</span>:
+            <span class="fn-name">validate_user_data</span>(<span class="var">user</span>)
+        <span class="kw">except</span> <span class="fn-name">ValidationError</span> <span class="kw">as</span> <span class="var">e</span>:
+            <span class="var">errors</span>.<span class="fn-name">append</span>({<span class="str">'user_id'</span>: <span class="var">user</span>[<span class="str">'id'</span>], <span class="str">'error'</span>: <span class="fn-name">str</span>(<span class="var">e</span>)})
+
+    <span class="kw">if</span> <span class="var">errors</span>:
+        <span class="kw">raise</span> <span class="fn-name">ValidationError</span>(<span class="str">f'{</span><span class="fn-name">len</span>(<span class="var">errors</span>)<span class="str">} users failed validation'</span>)
+
+    <span class="kw">return</span> <span class="kw">True</span></pre>
+        </div>
+
+        <h3 style="font-size: 1.3rem; color: var(--text); margin-top: 2rem; margin-bottom: 1rem;">Logging Exceptions</h3>
+        <p style="color: var(--text2); margin-bottom: 1rem;">Log detailed error information for debugging and monitoring.</p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span><span class="code-dot d1"></span><span class="code-dot d2"></span><span class="code-dot d3"></span></span><span>logging_exceptions.py</span></div>
+          <pre class="code-content"><span class="kw">import</span> <span class="var">logging</span>
+
+<span class="var">logger</span> <span class="op">=</span> <span class="fn-name">logging</span>.<span class="fn-name">getLogger</span>(<span class="fn-name">__name__</span>)
+
+<span class="kw">def</span> <span class="fn-name">process_payment</span>(<span class="var">payment_id</span>):
+    <span class="kw">try</span>:
+        <span class="var">result</span> <span class="op">=</span> <span class="fn-name">charge_card</span>(<span class="var">payment_id</span>)
+        <span class="var">logger</span>.<span class="fn-name">info</span>(<span class="str">f'Payment {</span><span class="var">payment_id</span><span class="str">} processed'</span>)
+        <span class="kw">return</span> <span class="var">result</span>
+    <span class="kw">except</span> <span class="fn-name">CardDeclinedError</span> <span class="kw">as</span> <span class="var">e</span>:
+        <span class="var">logger</span>.<span class="fn-name">warning</span>(<span class="str">f'Card declined: {</span><span class="var">e</span><span class="str">}'</span>)
+        <span class="kw">return</span> {<span class="str">'status'</span>: <span class="str">'declined'</span>}
+    <span class="kw">except</span> <span class="fn-name">Exception</span> <span class="kw">as</span> <span class="var">e</span>:
+        <span class="var">logger</span>.<span class="fn-name">error</span>(<span class="str">f'Payment failed: {</span><span class="var">e</span><span class="str">}'</span>, <span class="var">exc_info</span><span class="op">=</span><span class="kw">True</span>)
+        <span class="kw">raise</span></pre>
+        </div>
+
+        <div class="callout tip">
+          <div class="callout-title">Production Readiness</div>
+          <p>In production code, always log exceptions with full context. Use structured logging (JSON format) for easier analysis. Implement retry logic for transient failures and graceful degradation for resilience.</p>
+        </div>
+      </section>
+
+      <!-- Practice CTA -->
+      <div class="practice-cta">
+        <div class="cta-text">
+          <div class="cta-title">Ready to Practice?</div>
+          <div class="cta-sub">50 error handling challenges from easy to hard await.</div>
+        </div>
+        <a href="challenges_errors.html" class="cta-btn">Start Challenges →</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Sidebar navigation active state
+    const links = document.querySelectorAll('.sidebar-nav a');
+    const sections = document.querySelectorAll('.section');
+
+    function updateActiveLink() {
+      let current = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        if (pageYOffset >= sectionTop - 100) {
+          current = section.getAttribute('id');
+        }
+      });
+
+      links.forEach(link => {
+        link.parentElement.classList.remove('active');
+        if (link.getAttribute('href').slice(1) === current) {
+          link.parentElement.classList.add('active');
+        }
+      });
+    }
+
+    window.addEventListener('scroll', updateActiveLink);
+    updateActiveLink();
+  </script>
+</body>
+</html>
